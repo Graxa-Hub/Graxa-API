@@ -1,0 +1,15 @@
+meta {
+  name: findByCpf
+  type: http
+  seq: 2
+}
+
+get {
+  url: http:/localhost:8080/produtores/cpf/11122233344
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

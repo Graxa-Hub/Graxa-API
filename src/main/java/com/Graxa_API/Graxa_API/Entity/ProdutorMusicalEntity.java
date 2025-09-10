@@ -1,20 +1,17 @@
-package com.Graxa_API.Graxa_API.Model;
+package com.Graxa_API.Graxa_API.Entity;
 
 import jakarta.persistence.Entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-public class ProdutorMusical extends Usuario{
+public class ProdutorMusicalEntity extends UsuarioEntity {
 
 //    private List<Banda> bandas;
 
-    public ProdutorMusical() {
+    public ProdutorMusicalEntity() {
 //        this.bandas = new ArrayList<>();
     }
 
-    public ProdutorMusical(String nome, String email, String senha, String cpf, Boolean usuarioAtivo) {
+    public ProdutorMusicalEntity(String nome, String email, String senha, String cpf, Boolean usuarioAtivo) {
         super(nome, email, senha, cpf, usuarioAtivo);
 //        this.bandas = new ArrayList<>();
     }

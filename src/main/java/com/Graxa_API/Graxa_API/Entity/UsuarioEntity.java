@@ -1,29 +1,28 @@
-package com.Graxa_API.Graxa_API.Model;
+package com.Graxa_API.Graxa_API.Entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 
 @MappedSuperclass
-public abstract class Usuario {
+public abstract class UsuarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    @Column(unique = true)
     private String email;
     private String senha;
+    @Column(unique = true)
     private String cpf;
-    private Boolean usuarioAtivo;
-    public Usuario() {
+    private Boolean ativo;
+    public UsuarioEntity() {
     }
 
-    public Usuario(String nome, String email, String senha, String cpf, Boolean usuarioAtivo) {
+    public UsuarioEntity(String nome, String email, String senha, String cpf, Boolean ativo) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.cpf = cpf;
-        this.usuarioAtivo = usuarioAtivo;
+        this.ativo = ativo;
     }
 
     public String getCpf() {
@@ -62,11 +61,11 @@ public abstract class Usuario {
         this.senha = senha;
     }
 
-    public Boolean getStatusUsuarioAtivo() {
-        return usuarioAtivo;
+    public Boolean getAtivo() {
+        return ativo;
     }
 
-    public void setStatusUsuarioAtivo(Boolean statusUsuario) {
-        this.usuarioAtivo = statusUsuario;
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 }

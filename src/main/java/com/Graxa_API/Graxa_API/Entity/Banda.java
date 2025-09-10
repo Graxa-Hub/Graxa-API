@@ -1,4 +1,4 @@
-package com.Graxa_API.Graxa_API.Model;
+package com.Graxa_API.Graxa_API.Entity;
 
 import java.util.List;
 

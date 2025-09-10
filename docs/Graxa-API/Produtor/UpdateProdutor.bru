@@ -1,0 +1,25 @@
+meta {
+  name: UpdateProdutor
+  type: http
+  seq: 4
+}
+
+put {
+  url: http:/localhost:8080/produtores/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  { 
+     "nome": "Gabriel da Silva Sousa",
+     "email": "gabriel.sousa@sptech.school",
+     "senha": "1234",
+     "cpf": "11122233344",
+     "statusUsuarioAtivo": true
+  }
+}
+
+settings {
+  encodeUrl: true
+}

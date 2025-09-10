@@ -1,0 +1,11 @@
+{
+  "version": "1",
+  "name": "Graxa-API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "size": 0.0011882781982421875,
+  "filesCount": 6
+}

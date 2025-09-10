@@ -1,0 +1,25 @@
+meta {
+  name: CreateProdutor
+  type: http
+  seq: 3
+}
+
+post {
+  url: http:/localhost:8080/produtores
+  body: json
+  auth: inherit
+}
+
+body:json {
+  { 
+     "nome": "Gabriel da Silva Sousa",
+     "email": "gabriel.sousa@gmail.com",
+     "senha": "1234",
+     "cpf": "11122233344",
+     "ativo": true
+  }
+}
+
+settings {
+  encodeUrl: true
+}
