@@ -32,3 +32,37 @@ Caso tenha dúvidas ou sugestões, entre em contato com a equipe de desenvolvime
 - gabriel.sousa@sptech.school  
 - macari.pinho@sptech.school  
 - erickhlee@sptech.school  
+
+
+## 💡 Práticas de Branch e Commit
+
+Aqui na Graxa-API, seguimos a filosofia dos commits semânticos para deixar o histórico organizado e fácil de entender. Além disso, usamos o padrão **kebab-case** para os nomes de branch e mensagens de commit.
+
+### Exemplos de branches
+
+- `feat/adicionando-telas-de-login`  
+- `fix/corrigindo-bug-no-endpoint-de-usuario`  
+- `docs/atualizando-readme`  
+- `style/ajustando-formatacao-do-codigo`  
+- `refactor/otimizando-servico-de-autenticacao`  
+- `test/adicionando-testes-unitarios`  
+- `chore/atualizando-dependencias`
+
+### Exemplos de commits
+
+| Tipo   | Exemplo de commit                    | O que significa?                              |
+|--------|------------------------------------|----------------------------------------------|
+| feat   | `feat: adiciona suporte a autenticação via Google` | Nova funcionalidade implementada             |
+| fix    | `fix: corrige erro no endpoint de login`             | Correção de bug                              |
+| docs   | `docs: atualiza documentação do README`              | Atualizações em documentação                 |
+| style  | `style: padroniza espaçamento e indentação`          | Ajustes que não afetam o código (formatação)|
+| refactor | `refactor: simplifica lógica de validação`         | Mudança no código que não altera funcionalidades|
+| test   | `test: adiciona testes para serviço de autenticação` | Inclusão ou ajuste de testes                  |
+| chore  | `chore: atualiza versão das dependências`            | Tarefas administrativas e de manutenção     |
+
+---
+
+### Como escrever um commit perfeito
+
+```bash
+<tipo>: <descrição-em-kebab-case>
