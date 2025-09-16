@@ -16,8 +16,7 @@ Este repositório é responsável pelo backend do projeto Graxa, desenvolvido em
 
 - Linguagem: Java  
 - Framework: Spring Web  
-- Banco de Dados: (adicione aqui se já usar algum, ex: MySQL, PostgreSQL)  
-- Outros: (adicione outras tecnologias se houver)
+- Banco de Dados: 
 
 ## 📁 Repositórios Relacionados
 
