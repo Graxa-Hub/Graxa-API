@@ -1,9 +1,9 @@
 package com.Graxa_API.Graxa_API.Controller;
 
 import com.Graxa_API.Graxa_API.Entity.ProdutorMusicalEntity;
-//import com.Graxa_API.Graxa_API.dto.ProdutorMusical;
-import com.Graxa_API.Graxa_API.Repository.ProdutorMusicalRepository;
+import com.Graxa_API.Graxa_API.Service.ProdutorMusicalService;
 import com.Graxa_API.Graxa_API.dto.ProdutorMusicalDto;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/produtores")
 public class ProdutorMusicalController {
-    private final ProdutorMusicalRepository repository;
+    private final ProdutorMusicalService service;
 
-    public ProdutorMusicalController(ProdutorMusicalRepository repository) {
-        this.repository = repository;
+    public ProdutorMusicalController(ProdutorMusicalService service) {
+        this.service = service;
     }
 
     @GetMapping
     public ResponseEntity<?> getProdutor(){
         try{
-            return ResponseEntity.status(200).body(repository.findAll());
+            return service.getProdutor();
         }catch(Exception e){
             return ResponseEntity.status(500).body(e);
         }
@@ -28,15 +28,13 @@ public class ProdutorMusicalController {
 
     @GetMapping("{id}")
     public ResponseEntity<?> getProdutorId(@PathVariable Long id){
-        try{
-            return ResponseEntity.status(200).body(repository.findById(id));
-        }catch(Exception e){
-            return ResponseEntity.status(500).body(e);
-        }
+
+            return service.getProdutorId(id);
+
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody ProdutorMusicalDto produtor){
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody ProdutorMusicalDto produtor){
         ProdutorMusicalEntity produtorMusicalEntity = new ProdutorMusicalEntity();
         produtorMusicalEntity.setNome(produtor.getNome());
         produtorMusicalEntity.setEmail(produtor.getEmail());
@@ -44,7 +42,7 @@ public class ProdutorMusicalController {
         produtorMusicalEntity.setCpf(produtor.getCpf());
         produtorMusicalEntity.setAtivo(produtor.getAtivo());
         try{
-            return ResponseEntity.status(201).body(repository.save(produtorMusicalEntity));
+            return service.cadastrar(produtor);
         }catch(Exception e){
             return ResponseEntity.status(500).body(e);
         }
@@ -53,22 +51,7 @@ public class ProdutorMusicalController {
     @PutMapping("{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody ProdutorMusicalEntity produtor){
         try{
-           ProdutorMusicalEntity response =  repository.findById(id)
-                    .map(product -> {
-                        if (produtor.getNome() != null) {
-                            product.setNome(produtor.getNome());
-                        }
-                        if (produtor.getEmail() != null) {
-                            product.setEmail(produtor.getEmail());
-                        }
-                        if (produtor.getCpf() != null) {
-                            product.setCpf(produtor.getCpf());
-                        }
-                        return repository.save(product);
-                    })
-                    .orElseThrow(() -> new RuntimeException("Usuario não encontrado com o ID: " + id));
-
-            return ResponseEntity.status(200).body(response);
+           return service.atualizar(id, produtor);
         }catch(Exception e){
             return ResponseEntity.status(500).body(e);
         }
@@ -77,14 +60,7 @@ public class ProdutorMusicalController {
     @DeleteMapping("{id}")
     public ResponseEntity<?> desativar(@PathVariable Long id){
         try{
-            ProdutorMusicalEntity response =  repository.findById(id)
-                    .map(product -> {
-                        product.setAtivo(false);
-                        return repository.save(product);
-                    })
-                    .orElseThrow(() -> new RuntimeException("Usuario não encontrado com o ID: " + id));
-
-            return ResponseEntity.status(204).build();
+            return service.desativar(id);
         }catch(Exception e){
             return ResponseEntity.status(500).body(e);
         }
@@ -93,7 +69,7 @@ public class ProdutorMusicalController {
     @GetMapping("/ativos")
     public ResponseEntity<?> getUsuarioAtivo(){
         try{
-            return ResponseEntity.status(200).body(repository.findByAtivoTrueOrderByNomeAsc());
+            return service.getUsuarioAtivo();
         }catch(Exception e){
             return ResponseEntity.status(500).body(e);
         }
@@ -102,7 +78,7 @@ public class ProdutorMusicalController {
     @GetMapping("/email/{email}")
     public ResponseEntity<?> findUsuariosByEmail(@PathVariable String email){
         try{
-            return ResponseEntity.status(200).body(repository.findByEmail(email));
+            return service.findUsuariosByEmail(email);
         }catch(Exception e){
             return ResponseEntity.status(500).body(e);
         }
@@ -111,9 +87,11 @@ public class ProdutorMusicalController {
     @GetMapping("/cpf/{cpf}")
     public ResponseEntity<?> findUsuarioByCpf(@PathVariable String cpf){
         try{
-            return ResponseEntity.status(200).body(repository.findByCpf(cpf));
+            return service.findUsuarioByCpf(cpf);
         }catch(Exception e){
             return ResponseEntity.status(500).body(e);
         }
     }
+
+
 }
