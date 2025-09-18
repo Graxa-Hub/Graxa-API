@@ -2,7 +2,7 @@ package com.Graxa_API.Graxa_API.Repository;
 
 import com.Graxa_API.Graxa_API.Entity.ProdutorMusicalEntity;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;  
 
 import java.util.List;
 
