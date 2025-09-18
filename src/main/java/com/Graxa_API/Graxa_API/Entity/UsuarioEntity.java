@@ -2,12 +2,15 @@ package com.Graxa_API.Graxa_API.Entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @MappedSuperclass
 public abstract class UsuarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    private LocalDate dataNascimento;
     @Column(unique = true)
     private String email;
     private String senha;
@@ -43,6 +46,14 @@ public abstract class UsuarioEntity {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getEmail() {
