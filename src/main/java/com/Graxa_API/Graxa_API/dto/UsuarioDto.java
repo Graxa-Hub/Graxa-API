@@ -8,17 +8,66 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
-public record UsuarioDto() {
+public class UsuarioDto {
     @NotBlank(message = "Preencha o Nome")
-    static String nome;
+    private String nome;
     @Past(message = "Data de Nascimento Inválida")
-    static LocalDate dataNascimento;
+    private LocalDate dataNascimento;
     @Email(message = "O E-mail Deve Ser Valido!")
-    static String email;
+    private String email;
     @Size(min=8, message = "A senha deve conter ao menos 8 Caracteres")
-    static String senha;
+    private String senha;
     @CPF(message = "CPF Inválido")
-    static String cpf;
-     static Boolean ativo;
-     
+    private String cpf;
+    private Boolean ativo;
+
+
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
 }
