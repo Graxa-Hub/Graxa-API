@@ -1,6 +1,10 @@
 package com.Graxa_API.Graxa_API.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
@@ -20,13 +24,25 @@ public abstract class UsuarioEntity {
     public UsuarioEntity() {
     }
 
-    public UsuarioEntity(String nome, String email, String senha, String cpf, Boolean ativo) {
+    public UsuarioEntity(String nome, LocalDate dataNascimento, String email, String cpf, String senha, Boolean ativo) {
         this.nome = nome;
+        this.dataNascimento = dataNascimento;
         this.email = email;
+        this.cpf =cpf;
         this.senha = senha;
-        this.cpf = cpf;
         this.ativo = ativo;
     }
+
+    public UsuarioEntity(Long id, String nome, LocalDate dataNascimento, String email, String cpf, String senha, Boolean ativo) {
+        this.id = id;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.email = email;
+        this.cpf =cpf;
+        this.senha = senha;
+        this.ativo = ativo;
+    }
+
 
     public String getCpf() {
         return cpf;

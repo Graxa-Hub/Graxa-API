@@ -1,26 +1,18 @@
 package com.Graxa_API.Graxa_API.Entity;
 
+import com.Graxa_API.Graxa_API.dto.ProdutorMusical.RequestProdutorMusicalDto;
 import jakarta.persistence.Entity;
 
 @Entity
 public class ProdutorMusicalEntity extends UsuarioEntity {
 
-//    private List<Banda> bandas;
-
     public ProdutorMusicalEntity() {
-//        this.bandas = new ArrayList<>();
     }
 
-    public ProdutorMusicalEntity(String nome, String email, String senha, String cpf, Boolean usuarioAtivo) {
-        super(nome, email, senha, cpf, usuarioAtivo);
-//        this.bandas = new ArrayList<>();
+    public ProdutorMusicalEntity(RequestProdutorMusicalDto produtorMusicaoDto) {
+        super(produtorMusicaoDto.nome(), produtorMusicaoDto.dataNascimento() ,produtorMusicaoDto.email(), produtorMusicaoDto.cpf(), produtorMusicaoDto.senha(), produtorMusicaoDto.ativo());
     }
-
-//    public List<Banda> getBandas() {
-//        return bandas;
-//    }
-//
-//    public void setBandas(List<Banda> bandas) {
-//        this.bandas = bandas;
-//    }
+    public ProdutorMusicalEntity(Long id, RequestProdutorMusicalDto produtorMusicaoDto) {
+        super(id, produtorMusicaoDto.nome(), produtorMusicaoDto.dataNascimento() ,produtorMusicaoDto.email(), produtorMusicaoDto.cpf(), produtorMusicaoDto.senha(), produtorMusicaoDto.ativo());
+    }
 }
