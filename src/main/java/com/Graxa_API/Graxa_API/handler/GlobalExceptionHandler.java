@@ -1,4 +1,6 @@
 package com.Graxa_API.Graxa_API.handler;
+import com.Graxa_API.Graxa_API.Exception.CpfDuplicadoException;
+import com.Graxa_API.Graxa_API.Exception.EmailDuplicadoException;
 import com.Graxa_API.Graxa_API.Exception.UsuarioNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Exception.UsuariosNaoEncontradosException;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
+    @ExceptionHandler(UsuariosNaoEncontradosException.class)
     public ResponseEntity<Object> handleUsuariosNaoEncontradosException(UsuariosNaoEncontradosException e){
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
@@ -27,6 +30,23 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
+    @ExceptionHandler(CpfDuplicadoException.class)
+    public ResponseEntity<Object> handleCpfDuplicadoException(CpfDuplicadoException e){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("mensagem", e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body); // 409
+    }
+
+    @ExceptionHandler(EmailDuplicadoException.class)
+    public ResponseEntity<Object> handleEmailDuplicadoException(EmailDuplicadoException e) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("mensagem", e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body); // 409
 
 
-}
+    }
+    }

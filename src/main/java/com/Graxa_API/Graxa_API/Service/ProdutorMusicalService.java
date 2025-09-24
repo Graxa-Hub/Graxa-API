@@ -1,6 +1,8 @@
 package com.Graxa_API.Graxa_API.Service;
 
 import com.Graxa_API.Graxa_API.Entity.ProdutorMusicalEntity;
+import com.Graxa_API.Graxa_API.Exception.CpfDuplicadoException;
+import com.Graxa_API.Graxa_API.Exception.EmailDuplicadoException;
 import com.Graxa_API.Graxa_API.Exception.UsuarioNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Exception.UsuariosNaoEncontradosException;
 import com.Graxa_API.Graxa_API.Repository.ProdutorMusicalRepository;
@@ -22,15 +24,14 @@ public class ProdutorMusicalService {
     }
 
     public ResponseEntity<?> getProdutor(){
-        try{
+
             List<ProdutorMusicalEntity> produtores = repository.findAll();
             if(produtores.isEmpty()){
                 throw new UsuariosNaoEncontradosException();
             }
             return ResponseEntity.status(200).body(ResponseProdutorMusicalDto.toResponse(produtores));
-        }catch(Exception e){
-            return ResponseEntity.status(500).body(e);
-        }
+
+
     }
 
     public ResponseEntity<?> getProdutorId(@PathVariable Long id){
@@ -40,7 +41,14 @@ public class ProdutorMusicalService {
     }
 
 
-    public ResponseEntity<?> cadastrar(@RequestBody RequestProdutorMusicalDto produtor){
+    public ResponseEntity<Object> cadastrar(@RequestBody RequestProdutorMusicalDto produtor){
+        if (repository.existsByCpfAllIgnoreCase(produtor.cpf())) {
+            throw new CpfDuplicadoException();
+        }
+        if(repository.existsByEmailIgnoreCase(produtor.email())){
+            throw new EmailDuplicadoException();
+        }
+
         ProdutorMusicalEntity produtorMusicalEntity = new ProdutorMusicalEntity(produtor);
 
         return ResponseEntity.ok(ResponseProdutorMusicalDto.toResponse(repository.save(produtorMusicalEntity)));

@@ -11,5 +11,7 @@ public interface ProdutorMusicalRepository extends JpaRepository<ProdutorMusical
     List<ProdutorMusicalEntity> findByNomeContainingIgnoreCase(String nome);
     List<ProdutorMusicalEntity> findByAtivoTrueOrderByNomeAsc();
     List<ProdutorMusicalEntity> findByCpf(String cpf);
+    boolean existsByCpfAllIgnoreCase(String cpf);
 
+    boolean existsByEmailIgnoreCase(String email);
 }

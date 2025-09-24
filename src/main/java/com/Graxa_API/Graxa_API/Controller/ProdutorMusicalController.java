@@ -20,7 +20,8 @@ public class ProdutorMusicalController {
 
     @GetMapping
     public ResponseEntity<?> getProdutor(){
-            return service.getProdutor();
+
+        return service.getProdutor();
     }
 
     @GetMapping("{id}")

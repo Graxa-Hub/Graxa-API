@@ -10,9 +10,6 @@ public class ProdutorMusicalEntity extends UsuarioEntity {
     }
 
     public ProdutorMusicalEntity(RequestProdutorMusicalDto produtorMusicaoDto) {
-        super(produtorMusicaoDto.nome(), produtorMusicaoDto.dataNascimento() ,produtorMusicaoDto.email(), produtorMusicaoDto.cpf(), produtorMusicaoDto.senha(), produtorMusicaoDto.ativo());
-    }
-    public ProdutorMusicalEntity(Long id, RequestProdutorMusicalDto produtorMusicaoDto) {
-        super(id, produtorMusicaoDto.nome(), produtorMusicaoDto.dataNascimento() ,produtorMusicaoDto.email(), produtorMusicaoDto.cpf(), produtorMusicaoDto.senha(), produtorMusicaoDto.ativo());
+        super(produtorMusicaoDto.nome(), produtorMusicaoDto.dataNascimento(), produtorMusicaoDto.email(), produtorMusicaoDto.cpf(), produtorMusicaoDto.senha(), produtorMusicaoDto.ativo());
     }
 }
