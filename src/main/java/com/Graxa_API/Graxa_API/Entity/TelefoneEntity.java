@@ -10,6 +10,8 @@ public class TelefoneEntity {
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private UsuarioEntity usuario;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_telefone")
     private TipoTelefone tipoTelefone;
     private String numeroTelefone;
 

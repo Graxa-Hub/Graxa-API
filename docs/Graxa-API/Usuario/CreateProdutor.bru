@@ -5,22 +5,29 @@ meta {
 }
 
 post {
-  url: http:/localhost:8080/produtores
+  url: http:/localhost:8080/usuarios
   body: json
   auth: inherit
 }
 
 body:json {
-  { 
-     "nome": "Gabriel da Silva Sousa",
-    "dataNascimento": "2004-05-20",
-     "email": "gabriel.sousa@gmail.com",
-     "senha": "12345678",
-     "cpf": "47060193898",
-     "ativo": true
+  {
+    "nome": "Gabriel Sousa",
+    "dataNascimento": "2000-05-15",
+    "cpf": "123.456.789-09",
+    "tipoUsuario": "produtor",
+    "nomeUsuario": "gabrielsousa",
+    "email": "gabriel.sousa@example.com",
+    "senha": "minhasenha123",
+    "telefone": {
+      "ddd": "11",
+      "numero": "987654321"
+    }
   }
+  
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

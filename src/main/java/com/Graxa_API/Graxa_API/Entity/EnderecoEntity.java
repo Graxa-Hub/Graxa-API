@@ -1,17 +1,15 @@
 package com.Graxa_API.Graxa_API.Entity;
 
 import com.Graxa_API.Graxa_API.Enums.TipoEndereco;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class EnderecoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "tipo_endereco")
     private TipoEndereco tipoEndereco;
     private String cep;
     private String logradouro;

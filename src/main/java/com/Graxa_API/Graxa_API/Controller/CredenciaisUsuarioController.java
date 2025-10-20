@@ -2,6 +2,7 @@ package com.Graxa_API.Graxa_API.Controller;
 
 import com.Graxa_API.Graxa_API.Service.CredenciaisUsuarioService;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestCredenciaisUsuarioDto;
+import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestLoginDto;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.ResponseCredenciaisUsuarioDto;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,8 @@ public class CredenciaisUsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String identificador, @RequestParam String senha) {
-        return service.login(identificador, senha);
+    public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
+        return service.login(dto.identificador(), dto.senha());
     }
+
 }

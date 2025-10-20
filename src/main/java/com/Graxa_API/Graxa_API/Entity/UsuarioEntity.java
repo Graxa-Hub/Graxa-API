@@ -20,6 +20,8 @@ public class UsuarioEntity {
     @Column(unique = true)
     private String cpf;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_usuario")
     private TipoUsuario tipoUsuario;
     private Boolean ativo;
 

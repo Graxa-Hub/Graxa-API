@@ -13,12 +13,10 @@ public class EventoEntity {
 
     private String nomeEvento;
 
-    // 📍 Relacionamento com LocalEntity (descomente e ajuste quando tiver a entidade pronta)
      @ManyToOne
      @JoinColumn(name = "local_id")
      private LocalEntity local;
 
-    // 🎸 Relacionamento com bandas
     @ManyToMany
     @JoinTable(
             name = "show_banda",
