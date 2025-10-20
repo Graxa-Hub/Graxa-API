@@ -12,6 +12,8 @@ public class BandaEntity {
     private Long id;
     private String nome;
     private String descricao;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "genero")
     private Genero genero;
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
