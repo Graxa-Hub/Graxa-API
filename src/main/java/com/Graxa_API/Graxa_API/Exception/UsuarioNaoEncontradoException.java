@@ -5,4 +5,8 @@ public class UsuarioNaoEncontradoException extends RuntimeException {
 
         super("Usuário com ID: "+id+ " Não encontrado!");
     }
+    public UsuarioNaoEncontradoException(String cpf) {
+
+        super("Usuário com CPF: "+cpf+ " Não encontrado!");
+    }
 }
