@@ -11,7 +11,6 @@ import com.Graxa_API.Graxa_API.Repository.UsuarioRepository;
 import com.Graxa_API.Graxa_API.dto.BandaDto.RequestBandaDto;
 import com.Graxa_API.Graxa_API.dto.BandaDto.RequestIntegrantesDto;
 import com.Graxa_API.Graxa_API.dto.BandaDto.ResponseBandaDto;
-import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -53,7 +52,7 @@ public class BandaService {
         return ResponseEntity.status(201).body(ResponseBandaDto.toResponse(saved));
     }
 
-    public ResponseEntity<List<ResponseBandaDto>> adicionarIntegranteBanda(Long bandaId, RequestIntegrantesDto dto){
+    public ResponseEntity<ResponseBandaDto> adicionarIntegranteBanda(Long bandaId, RequestIntegrantesDto dto) {
         BandaEntity banda = repository.findById(bandaId)
                 .orElseThrow(() -> new BandaNaoEncontradaException(bandaId));
 
@@ -62,13 +61,10 @@ public class BandaService {
                         .orElseThrow(() -> new UsuarioNaoEncontradoException(id)))
                 .toList();
 
-
         banda.getIntegrantes().addAll(integrantes);
-
         repository.save(banda);
 
-        return ResponseEntity.ok().build();
-
-
+        return ResponseEntity.ok(ResponseBandaDto.toResponse(banda));
     }
+
 }

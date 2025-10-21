@@ -4,6 +4,7 @@ import com.Graxa_API.Graxa_API.Enums.Genero;
 import com.Graxa_API.Graxa_API.dto.BandaDto.RequestBandaDto;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,10 +23,18 @@ public class BandaEntity {
             joinColumns = @JoinColumn(name = "banda_id"),
             inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
-    private List<UsuarioEntity> integrantes;
+    private List<UsuarioEntity> integrantes = new ArrayList<>();
+
+    public BandaEntity() {
+    }
+
 
     public BandaEntity(RequestBandaDto banda) {
+        this.nome = banda.nome();
+        this.descricao = banda.descricao();
+        this.genero = banda.genero();
     }
+
 
     public Long getId() {
         return id;
