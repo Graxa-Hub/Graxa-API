@@ -14,9 +14,7 @@ public record ResponseUsuarioDto(
         LocalDate dataNascimento,
         String cpf,
         TipoUsuario tipoUsuario,
-        Boolean ativo,
-        String email,
-        ResponseEnderecoDto endereco
+        Boolean ativo
 ) {
     public static ResponseUsuarioDto toResponse(UsuarioEntity usuario) {
         ResponseEnderecoDto enderecoDto = usuario.getEndereco() != null
@@ -30,9 +28,7 @@ public record ResponseUsuarioDto(
                 usuario.getDataNascimento(),
                 usuario.getCpf(),
                 usuario.getTipoUsuario(),
-                usuario.getAtivo(),
-                usuario.getCredenciais() != null ? usuario.getCredenciais().getEmail() : null,
-                enderecoDto
+                usuario.getAtivo()
         );
     }
 

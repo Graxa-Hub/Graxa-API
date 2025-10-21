@@ -41,10 +41,8 @@ public class UsuarioEntity {
     @OneToMany(mappedBy = "responsavelAcao")
     private List<AcaoEntity> acoes;
 
-    // 🔧 Construtor padrão
     public UsuarioEntity() {}
 
-    // 🔧 Construtor com dados básicos (sem endereço)
     public UsuarioEntity(RequestUsuarioDto dto) {
         this.nome = dto.nome();
         this.dataNascimento = dto.dataNascimento();
@@ -53,7 +51,6 @@ public class UsuarioEntity {
         this.ativo = true; // padrão
     }
 
-    // 🔍 Getters e Setters
     public Long getId() { return id; }
 
     public String getNome() { return nome; }

@@ -44,7 +44,7 @@ public class UsuarioService {
         usuarioEntity.setAtivo(true);
 
         UsuarioEntity saved = repository.save(usuarioEntity);
-        return ResponseEntity.ok(ResponseUsuarioDto.toResponse(saved));
+        return ResponseEntity.status(201).body(ResponseUsuarioDto.toResponse(saved));
     }
 
     public ResponseEntity<ResponseUsuarioDto> atualizar(Long id, RequestUsuarioDto usuarioDto) {

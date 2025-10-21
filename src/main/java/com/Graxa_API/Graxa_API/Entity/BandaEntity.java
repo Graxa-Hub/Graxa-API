@@ -1,6 +1,7 @@
 package com.Graxa_API.Graxa_API.Entity;
 
 import com.Graxa_API.Graxa_API.Enums.Genero;
+import com.Graxa_API.Graxa_API.dto.BandaDto.RequestBandaDto;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public class BandaEntity {
             inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
     private List<UsuarioEntity> integrantes;
+
+    public BandaEntity(RequestBandaDto banda) {
+    }
 
     public Long getId() {
         return id;
