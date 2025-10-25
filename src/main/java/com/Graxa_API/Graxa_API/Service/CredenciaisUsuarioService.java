@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Service;
 
+import com.Graxa_API.Graxa_API.Config.GerenciadorTokenJwt;
 import com.Graxa_API.Graxa_API.Entity.CredenciaisUsuarioEntity;
 import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
 import com.Graxa_API.Graxa_API.Exception.CredencialNaoEncontradaException;
@@ -9,9 +10,17 @@ import com.Graxa_API.Graxa_API.Exception.SenhaInvalidaException;
 import com.Graxa_API.Graxa_API.Exception.UsuarioNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Repository.CredenciaisUsuarioRepository;
 import com.Graxa_API.Graxa_API.Repository.UsuarioRepository;
+import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.CredencialUsuarioDetailsDto;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestCredenciaisUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.ResponseCredenciaisUsuarioDto;
+import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.ResponseLoginDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,7 +31,16 @@ public class CredenciaisUsuarioService {
 
     private final CredenciaisUsuarioRepository repository;
     private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private GerenciadorTokenJwt gerenciadorTokenJwt;
+    @Autowired
+    private AuthenticationManager authenticatorManager;
     public CredenciaisUsuarioService(
             CredenciaisUsuarioRepository repository,
             UsuarioRepository usuarioRepository
@@ -52,7 +70,7 @@ public class CredenciaisUsuarioService {
                 usuario,
                 dto.nomeUsuario(),
                 dto.email(),
-                dto.senha() // senha salva sem encoder
+                passwordEncoder.encode(dto.senha())
         );
 
         CredenciaisUsuarioEntity salva = repository.save(novaCredencial);
@@ -85,27 +103,32 @@ public class CredenciaisUsuarioService {
         return ResponseEntity.ok().build();
     }
 
-    // Login por email ou nome de usuário (comparação simples)
+
+
+
+
     public ResponseEntity<?> login(String identificador, String senha) {
-        Optional<CredenciaisUsuarioEntity> credencial = repository.findByEmail(identificador);
+        // Autentica o usuário e recebe o Authentication diretamente
+        UsernamePasswordAuthenticationToken credentials =
+                new UsernamePasswordAuthenticationToken(identificador, senha);
 
-        if (credencial.isEmpty()) {
-            credencial = repository.findByNomeUsuario(identificador);
-        }
+        Authentication authentication = authenticationManager.authenticate(credentials);
 
-        if (credencial.isEmpty()) {
-            throw new LoginInvalidoException();
-        }
+        // Usa o principal retornado pela autenticação
+        CredencialUsuarioDetailsDto usuarioLogado = (CredencialUsuarioDetailsDto) authentication.getPrincipal();
 
-        CredenciaisUsuarioEntity usuarioCredencial = credencial.get();
+        // Atualiza o último acesso
+        CredenciaisUsuarioEntity entidade = repository.findById(usuarioLogado.usuarioId())
+                .orElseThrow(LoginInvalidoException::new);
 
-        if (!senha.equals(usuarioCredencial.getSenha())) {
-            throw new SenhaInvalidaException();
-        }
+        entidade.setDataHoraUltimoAcesso(LocalDateTime.now());
+        repository.save(entidade);
 
-        usuarioCredencial.setDataHoraUltimoAcesso(LocalDateTime.now());
-        repository.save(usuarioCredencial);
+        // Gera o token JWT
+        String token = gerenciadorTokenJwt.generateToken(authentication);
 
-        return ResponseEntity.ok(ResponseCredenciaisUsuarioDto.toResponse(usuarioCredencial));
+        return ResponseEntity.ok(ResponseLoginDto.toResponse(entidade, token));
     }
+
+
 }

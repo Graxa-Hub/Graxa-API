@@ -7,6 +7,7 @@ import com.Graxa_API.Graxa_API.dto.TelefoneDto.RequestTelefoneDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestCredenciaisUsuarioDto;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class UsuarioController {
     }
 
     @GetMapping
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<List<ResponseUsuarioDto>> getUsuarios() {
         return usuarioService.getUsuarios();
     }
@@ -37,6 +39,7 @@ public class UsuarioController {
         return usuarioService.getUsuarioPorId(id);
     }
     @PostMapping
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<ResponseUsuarioDto> cadastrar(@Valid @RequestBody RequestUsuarioDto usuarioDto) {
         ResponseEntity<ResponseUsuarioDto> usuarioCriado = usuarioService.cadastrar(usuarioDto);
 

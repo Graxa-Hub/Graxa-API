@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Genero {
     rock("rock"),
-    mpb("mpb");
+    mpb("mpb"),
+    alternativo("alternativo");
     private final String value;
 
 

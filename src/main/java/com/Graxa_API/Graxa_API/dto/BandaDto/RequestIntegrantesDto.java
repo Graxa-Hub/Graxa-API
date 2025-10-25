@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record RequestIntegrantesDto (
-        @NotNull Long id,
         @NotEmpty List<Long> integrantesIds
 ){
 
