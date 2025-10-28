@@ -57,7 +57,6 @@ public class SecurityConfiguracao {
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                         .requestMatchers(URLS_PERMITIDAS).permitAll()
                         .anyRequest().authenticated()
                 )

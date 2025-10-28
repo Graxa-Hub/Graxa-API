@@ -4,47 +4,52 @@ import com.Graxa_API.Graxa_API.Exception.CredencialNaoEncontradaException;
 import com.Graxa_API.Graxa_API.Exception.LoginInvalidoException;
 import com.Graxa_API.Graxa_API.Exception.NomeUsuarioDuplicadoException;
 import com.Graxa_API.Graxa_API.Exception.SenhaInvalidaException;
+import com.Graxa_API.Graxa_API.Utils.ErrorUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class CredenciaisExceptionHandler {
 
     @ExceptionHandler(CredencialNaoEncontradaException.class)
     public ResponseEntity<Object> handleCredencialNaoEncontrada(CredencialNaoEncontradaException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("mensagem", e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+        Map<String, String> erro = new HashMap<>();
+        erro.put("campo", "credencial");
+        erro.put("mensagem", e.getMessage());
+
+        return ErrorUtils.buildErrorResponse(HttpStatus.NOT_FOUND, "Erro de credencial", List.of(erro));
     }
 
     @ExceptionHandler(SenhaInvalidaException.class)
     public ResponseEntity<Object> handleSenhaInvalida(SenhaInvalidaException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("mensagem", e.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+        Map<String, String> erro = new HashMap<>();
+        erro.put("campo", "senha");
+        erro.put("mensagem", e.getMessage());
+
+        return ErrorUtils.buildErrorResponse(HttpStatus.UNAUTHORIZED, "Senha inválida", List.of(erro));
     }
 
     @ExceptionHandler(LoginInvalidoException.class)
     public ResponseEntity<Object> handleLoginInvalido(LoginInvalidoException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("mensagem", e.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+        Map<String, String> erro = new HashMap<>();
+        erro.put("campo", "login");
+        erro.put("mensagem", e.getMessage());
+
+        return ErrorUtils.buildErrorResponse(HttpStatus.UNAUTHORIZED, "Login inválido", List.of(erro));
     }
 
     @ExceptionHandler(NomeUsuarioDuplicadoException.class)
     public ResponseEntity<Object> handleNomeUsuarioDuplicado(NomeUsuarioDuplicadoException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("mensagem", e.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+        Map<String, String> erro = new HashMap<>();
+        erro.put("campo", "nomeUsuario");
+        erro.put("mensagem", e.getMessage());
+
+        return ErrorUtils.buildErrorResponse(HttpStatus.CONFLICT, "Nome de usuário duplicado", List.of(erro));
     }
 }
