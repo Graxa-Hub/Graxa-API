@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum TipoEvento {
 
 
-        produtor("produtor"),
-        musico("musico");
+        viagem("viagem"),
+        show("show");
         private final String value;
         TipoEvento(String value) {
             this.value = value;

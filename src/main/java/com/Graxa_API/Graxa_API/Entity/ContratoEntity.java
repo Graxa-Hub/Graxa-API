@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Entity;
 
+import com.Graxa_API.Graxa_API.Entity.Evento.ShowEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ public class ContratoEntity {
 
     @OneToOne
     @JoinColumn(name = "evento_id", nullable = false)
-    private EventoEntity evento;
+    private ShowEntity evento;
 
 
     public ContratoEntity() {}
@@ -29,6 +30,6 @@ public class ContratoEntity {
     public String getCaminhoArquivoContrato() { return caminhoArquivoContrato; }
     public void setCaminhoArquivoContrato(String caminhoArquivoContrato) { this.caminhoArquivoContrato = caminhoArquivoContrato; }
 
-    public EventoEntity getEvento() { return evento; }
-    public void setEvento(EventoEntity evento) { this.evento = evento; }
+    public ShowEntity getEvento() { return evento; }
+    public void setEvento(ShowEntity evento) { this.evento = evento; }
 }

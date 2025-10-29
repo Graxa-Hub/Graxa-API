@@ -1,0 +1,71 @@
+package com.Graxa_API.Graxa_API.Entity.Evento;
+
+import com.Graxa_API.Graxa_API.Entity.BandaEntity;
+import com.Graxa_API.Graxa_API.Entity.LocalEntity;
+import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
+public class ShowEntity extends EventoEntity {
+
+    @ManyToOne
+    @JoinColumn(name = "local_id", nullable = false)
+    private LocalEntity local;
+
+    @ManyToMany
+    @JoinTable(
+            name = "show_banda",
+            joinColumns = @JoinColumn(name = "show_id"),
+            inverseJoinColumns = @JoinColumn(name = "banda_id")
+    )
+    private List<BandaEntity> bandas;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private UsuarioEntity responsavelEvento;
+
+    private LocalDateTime dataHoraEvento;
+
+
+    // Construtor vazio obrigatório para JPA
+    public ShowEntity() {
+
+    }
+
+    // Getters e Setters
+    public LocalEntity getLocal() {
+        return local;
+    }
+
+    public void setLocal(LocalEntity local) {
+        this.local = local;
+    }
+
+    public List<BandaEntity> getBandas() {
+        return bandas;
+    }
+
+    public void setBandas(List<BandaEntity> bandas) {
+        this.bandas = bandas;
+    }
+
+    public UsuarioEntity getResponsavelEvento() {
+        return responsavelEvento;
+    }
+
+    public void setResponsavelEvento(UsuarioEntity responsavelEvento) {
+        this.responsavelEvento = responsavelEvento;
+    }
+
+    public LocalDateTime getDataHoraEvento() {
+        return dataHoraEvento;
+    }
+
+    public void setDataHoraEvento(LocalDateTime dataHoraEvento) {
+        this.dataHoraEvento = dataHoraEvento;
+    }
+
+}
