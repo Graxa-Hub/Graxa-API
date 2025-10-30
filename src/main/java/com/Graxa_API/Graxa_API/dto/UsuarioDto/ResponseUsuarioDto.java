@@ -1,6 +1,6 @@
 package com.Graxa_API.Graxa_API.dto.UsuarioDto;
 
-import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Enums.TipoUsuario;
 import com.Graxa_API.Graxa_API.dto.EnderecoDto.ResponseEnderecoDto;
 
@@ -16,7 +16,7 @@ public record ResponseUsuarioDto(
         TipoUsuario tipoUsuario,
         Boolean ativo
 ) {
-    public static ResponseUsuarioDto toResponse(UsuarioEntity usuario) {
+    public static ResponseUsuarioDto toResponse(ColaboradorEntity usuario) {
         ResponseEnderecoDto enderecoDto = usuario.getEndereco() != null
                 ? ResponseEnderecoDto.toResponse(usuario.getEndereco())
                 : null;
@@ -32,7 +32,7 @@ public record ResponseUsuarioDto(
         );
     }
 
-    public static List<ResponseUsuarioDto> toResponse(List<UsuarioEntity> usuarios) {
+    public static List<ResponseUsuarioDto> toResponse(List<ColaboradorEntity> usuarios) {
         return usuarios.stream()
                 .map(ResponseUsuarioDto::toResponse)
                 .toList();

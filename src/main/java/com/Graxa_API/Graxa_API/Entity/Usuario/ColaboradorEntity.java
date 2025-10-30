@@ -1,5 +1,6 @@
-package com.Graxa_API.Graxa_API.Entity;
+package com.Graxa_API.Graxa_API.Entity.Usuario;
 
+import com.Graxa_API.Graxa_API.Entity.*;
 import com.Graxa_API.Graxa_API.Enums.TipoUsuario;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
 import jakarta.persistence.*;
@@ -8,22 +9,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class UsuarioEntity {
+public class ColaboradorEntity extends UsuarioEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    private String nome;
+
+
     private LocalDate dataNascimento;
 
-    @Column(unique = true)
-    private String cpf;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_usuario")
     private TipoUsuario tipoUsuario;
-    private Boolean ativo;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id")
@@ -41,32 +37,20 @@ public class UsuarioEntity {
     @OneToMany(mappedBy = "responsavelAcao")
     private List<AcaoEntity> acoes;
 
-    public UsuarioEntity() {}
+    public ColaboradorEntity() {}
 
-    public UsuarioEntity(RequestUsuarioDto dto) {
-        this.nome = dto.nome();
-        this.dataNascimento = dto.dataNascimento();
-        this.cpf = dto.cpf();
-        this.tipoUsuario = dto.tipoUsuario();
-        this.ativo = true; // padrão
-    }
 
-    public Long getId() { return id; }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+
+
 
     public LocalDate getDataNascimento() { return dataNascimento; }
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
-    public String getCpf() { return cpf; }
-    public void setCpf(String cpf) { this.cpf = cpf; }
 
     public TipoUsuario getTipoUsuario() { return tipoUsuario; }
     public void setTipoUsuario(TipoUsuario tipoUsuario) { this.tipoUsuario = tipoUsuario; }
 
-    public Boolean getAtivo() { return ativo; }
-    public void setAtivo(Boolean ativo) { this.ativo = ativo; }
 
     public EnderecoEntity getEndereco() { return endereco; }
     public void setEndereco(EnderecoEntity endereco) { this.endereco = endereco; }

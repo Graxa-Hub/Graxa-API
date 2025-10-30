@@ -1,0 +1,20 @@
+meta {
+  name: BuscarTurne
+  type: http
+  seq: 2
+}
+
+get {
+  url: http:/localhost:8080/turne
+  body: none
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjE4NTM4NTAsImV4cCI6MTc2NTQ1Mzg1MH0.tkqRuDtI0hSOFCyUQQOEMdCVdmEMe03oZtKMmPHBQCGiqwpCuH2hTQDtHPl087ah4Qrdp8-pxdtaccNBXhsSbg
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

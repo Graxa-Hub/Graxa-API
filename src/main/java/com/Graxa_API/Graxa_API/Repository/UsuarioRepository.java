@@ -1,21 +1,21 @@
 package com.Graxa_API.Graxa_API.Repository;
 
-import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
+public interface UsuarioRepository extends JpaRepository<ColaboradorEntity, Long> {
 
 
 
-    List<UsuarioEntity> findByNomeContainingIgnoreCase(String nome);
+    List<ColaboradorEntity> findByNomeContainingIgnoreCase(String nome);
 
-    List<UsuarioEntity> findByAtivoTrueOrderByNomeAsc();
+    List<ColaboradorEntity> findByAtivoTrueOrderByNomeAsc();
 
-    List<UsuarioEntity> findByCpf(String cpf);
+    List<ColaboradorEntity> findByCpf(String cpf);
 
     boolean existsByCpfAllIgnoreCase(String cpf);
 
-    List<UsuarioEntity> findByTipoUsuarioIn(List<String> tipos);
+    List<ColaboradorEntity> findByTipoUsuarioIn(List<String> tipos);
 }

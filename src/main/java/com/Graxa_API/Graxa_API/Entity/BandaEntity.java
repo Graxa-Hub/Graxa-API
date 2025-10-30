@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Entity;
 
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Enums.Genero;
 import com.Graxa_API.Graxa_API.dto.BandaDto.RequestBandaDto;
 import jakarta.persistence.*;
@@ -23,7 +24,7 @@ public class BandaEntity {
             joinColumns = @JoinColumn(name = "banda_id"),
             inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
-    private List<UsuarioEntity> integrantes = new ArrayList<>();
+    private List<ColaboradorEntity> integrantes = new ArrayList<>();
 
     public BandaEntity() {
     }
@@ -65,11 +66,11 @@ public class BandaEntity {
         this.genero = genero;
     }
 
-    public List<UsuarioEntity> getIntegrantes() {
+    public List<ColaboradorEntity> getIntegrantes() {
         return integrantes;
     }
 
-    public void setIntegrantes(List<UsuarioEntity> integrantes) {
+    public void setIntegrantes(List<ColaboradorEntity> integrantes) {
         this.integrantes = integrantes;
     }
 }

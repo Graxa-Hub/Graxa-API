@@ -1,6 +1,6 @@
 package com.Graxa_API.Graxa_API.dto.UsuarioDto;
 
-import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Enums.TipoUsuario;
 
 import com.Graxa_API.Graxa_API.dto.EnderecoDto.ResponseEnderecoDto;
@@ -21,7 +21,7 @@ public record ResponseDetalhesUsuarioDto(
         List<String> bandas,
         List<String> acoes
 ) {
-    public static ResponseDetalhesUsuarioDto toResponse(UsuarioEntity usuario) {
+    public static ResponseDetalhesUsuarioDto toResponse(ColaboradorEntity usuario) {
         ResponseEnderecoDto enderecoDto = usuario.getEndereco() != null
                 ? ResponseEnderecoDto.toResponse(usuario.getEndereco())
                 : null;

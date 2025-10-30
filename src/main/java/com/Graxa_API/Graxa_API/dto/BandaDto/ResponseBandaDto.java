@@ -1,7 +1,6 @@
 package com.Graxa_API.Graxa_API.dto.BandaDto;
 
 import com.Graxa_API.Graxa_API.Entity.BandaEntity;
-import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
 import com.Graxa_API.Graxa_API.Enums.Genero;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
 import jakarta.validation.constraints.NotBlank;

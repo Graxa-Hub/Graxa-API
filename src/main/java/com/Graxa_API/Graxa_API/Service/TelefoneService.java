@@ -1,7 +1,7 @@
 package com.Graxa_API.Graxa_API.Service;
 
 import com.Graxa_API.Graxa_API.Entity.TelefoneEntity;
-import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Exception.TelefoneNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Exception.UsuarioNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Repository.TelefoneRepository;
@@ -28,7 +28,7 @@ public class TelefoneService {
 
     @Transactional
     public ResponseEntity<ResponseTelefoneDto> criarTelefoneParaUsuario(Long usuarioId, RequestTelefoneDto dto) {
-        UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
+        ColaboradorEntity usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
 
         TelefoneEntity telefone = new TelefoneEntity();

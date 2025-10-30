@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Entity;
 
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,7 +13,7 @@ public class CredenciaisUsuarioEntity {
 
     @OneToOne
     @JoinColumn(name = "usuario_id", nullable = false, updatable = false)
-    private UsuarioEntity usuario;
+    private ColaboradorEntity usuario;
 
     private String nomeUsuario;
 
@@ -25,7 +26,7 @@ public class CredenciaisUsuarioEntity {
 
     protected CredenciaisUsuarioEntity() {}
 
-    public CredenciaisUsuarioEntity(UsuarioEntity usuario, String nomeUsuario, String email, String senha) {
+    public CredenciaisUsuarioEntity(ColaboradorEntity usuario, String nomeUsuario, String email, String senha) {
         this.usuario = usuario;
         this.nomeUsuario = nomeUsuario;
         this.email = email;
@@ -36,7 +37,7 @@ public class CredenciaisUsuarioEntity {
         return id;
     }
 
-    public UsuarioEntity getUsuario() {
+    public ColaboradorEntity getUsuario() {
         return usuario;
     }
 

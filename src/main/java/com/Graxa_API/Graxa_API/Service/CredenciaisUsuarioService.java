@@ -2,11 +2,10 @@ package com.Graxa_API.Graxa_API.Service;
 
 import com.Graxa_API.Graxa_API.Config.GerenciadorTokenJwt;
 import com.Graxa_API.Graxa_API.Entity.CredenciaisUsuarioEntity;
-import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Exception.CredencialNaoEncontradaException;
 import com.Graxa_API.Graxa_API.Exception.LoginInvalidoException;
 import com.Graxa_API.Graxa_API.Exception.NomeUsuarioDuplicadoException;
-import com.Graxa_API.Graxa_API.Exception.SenhaInvalidaException;
 import com.Graxa_API.Graxa_API.Exception.UsuarioNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Repository.CredenciaisUsuarioRepository;
 import com.Graxa_API.Graxa_API.Repository.UsuarioRepository;
@@ -19,12 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class CredenciaisUsuarioService {
@@ -59,7 +56,7 @@ public class CredenciaisUsuarioService {
 
     // Criar nova credencial (senha armazenada em texto plano)
     public ResponseEntity<?> criarCredencial(RequestCredenciaisUsuarioDto dto) {
-        UsuarioEntity usuario = usuarioRepository.findById(dto.usuarioId())
+        ColaboradorEntity usuario = usuarioRepository.findById(dto.usuarioId())
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(dto.usuarioId()));
 
         if (repository.findByNomeUsuario(dto.nomeUsuario()).isPresent()) {

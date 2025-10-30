@@ -3,7 +3,7 @@ package com.Graxa_API.Graxa_API.Controller;
 import com.Graxa_API.Graxa_API.Config.GerenciadorTokenJwt;
 import com.Graxa_API.Graxa_API.Service.CredenciaisUsuarioService;
 import com.Graxa_API.Graxa_API.Service.TelefoneService;
-import com.Graxa_API.Graxa_API.Service.UsuarioService;
+import com.Graxa_API.Graxa_API.Service.ColaboradorService;
 import com.Graxa_API.Graxa_API.dto.TelefoneDto.RequestTelefoneDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private ColaboradorService colaboradorService;
 
     @Autowired
     private CredenciaisUsuarioService credenciaisService;
@@ -43,7 +43,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registrar(@Valid @RequestBody RequestUsuarioDto usuarioDto) {
-        ResponseEntity<ResponseUsuarioDto> usuarioCriado = usuarioService.cadastrar(usuarioDto);
+        ResponseEntity<ResponseUsuarioDto> usuarioCriado = colaboradorService.cadastrar(usuarioDto);
 
         if (usuarioCriado.getBody() == null) {
             return ResponseEntity.badRequest().body("Erro ao cadastrar usuário");

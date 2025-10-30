@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Entity;
 
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Enums.TipoAcao;
 import jakarta.persistence.*;
 
@@ -14,7 +15,7 @@ public class AcaoEntity {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
-    private UsuarioEntity responsavelAcao;
+    private ColaboradorEntity responsavelAcao;
 
     @Enumerated(EnumType.STRING)
     private TipoAcao tipoAcao;
@@ -26,11 +27,11 @@ public class AcaoEntity {
         return id;
     }
 
-    public UsuarioEntity getResponsavelAcao() {
+    public ColaboradorEntity getResponsavelAcao() {
         return responsavelAcao;
     }
 
-    public void setResponsavelAcao(UsuarioEntity responsavelAcao) {
+    public void setResponsavelAcao(ColaboradorEntity responsavelAcao) {
         this.responsavelAcao = responsavelAcao;
     }
 

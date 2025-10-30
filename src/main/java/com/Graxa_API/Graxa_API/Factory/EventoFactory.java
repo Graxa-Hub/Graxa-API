@@ -5,7 +5,7 @@ import com.Graxa_API.Graxa_API.Entity.Evento.ShowEntity;
 import com.Graxa_API.Graxa_API.Entity.Evento.ViagemEntity;
 import com.Graxa_API.Graxa_API.Entity.LocalEntity;
 import com.Graxa_API.Graxa_API.Entity.TurneEntity;
-import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Repository.LocalRepository;
 import com.Graxa_API.Graxa_API.Repository.TurneRepository;
 import com.Graxa_API.Graxa_API.Repository.UsuarioRepository;
@@ -55,7 +55,7 @@ public class EventoFactory {
                 .orElseThrow(() -> new EntityNotFoundException("Local não encontrado"));
         show.setLocal(local);
 
-        UsuarioEntity usuario = usuarioRepository
+        ColaboradorEntity usuario = usuarioRepository
                 .findById(dto.responsavelId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
         show.setResponsavelEvento(usuario);

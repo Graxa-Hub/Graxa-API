@@ -2,10 +2,9 @@ package com.Graxa_API.Graxa_API.Entity.Evento;
 
 import com.Graxa_API.Graxa_API.Entity.BandaEntity;
 import com.Graxa_API.Graxa_API.Entity.LocalEntity;
-import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class ShowEntity extends EventoEntity {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
-    private UsuarioEntity responsavelEvento;
+    private ColaboradorEntity responsavelEvento;
 
 
 
@@ -56,11 +55,11 @@ public class ShowEntity extends EventoEntity {
         this.bandas = bandas;
     }
 
-    public UsuarioEntity getResponsavelEvento() {
+    public ColaboradorEntity getResponsavelEvento() {
         return responsavelEvento;
     }
 
-    public void setResponsavelEvento(UsuarioEntity responsavelEvento) {
+    public void setResponsavelEvento(ColaboradorEntity responsavelEvento) {
         this.responsavelEvento = responsavelEvento;
     }
 

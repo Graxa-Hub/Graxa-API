@@ -1,7 +1,7 @@
 package com.Graxa_API.Graxa_API.Service;
 
 import com.Graxa_API.Graxa_API.Entity.BandaEntity;
-import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Exception.BandaDuplicadaException;
 import com.Graxa_API.Graxa_API.Exception.BandaNaoEncontradaException;
 import com.Graxa_API.Graxa_API.Exception.BandasNaoEncontradasException;
@@ -56,7 +56,7 @@ public class BandaService {
         BandaEntity banda = repository.findById(bandaId)
                 .orElseThrow(() -> new BandaNaoEncontradaException(bandaId));
 
-        List<UsuarioEntity> integrantes = dto.integrantesIds().stream()
+        List<ColaboradorEntity> integrantes = dto.integrantesIds().stream()
                 .map(id -> usuarioRepository.findById(id)
                         .orElseThrow(() -> new UsuarioNaoEncontradoException(id)))
                 .toList();

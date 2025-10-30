@@ -1,0 +1,32 @@
+meta {
+  name: criarViagem
+  type: http
+  seq: 1
+}
+
+post {
+  url: http:/localhost:8080/viagem
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjE4NTM4NTAsImV4cCI6MTc2NTQ1Mzg1MH0.tkqRuDtI0hSOFCyUQQOEMdCVdmEMe03oZtKMmPHBQCGiqwpCuH2hTQDtHPl087ah4Qrdp8-pxdtaccNBXhsSbg
+}
+
+body:json {
+  {
+    "nomeEvento": "Deslocamento para Recife",
+    "dataInicio": "2025-11-03T06:30:00",
+    "dataFim": "2025-11-03T09:00:00",
+    "descricao": "Viagem aérea da equipe e equipamentos para o show em Recife",
+    "turneId": 1,
+    "tipoViagem": "aereo"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

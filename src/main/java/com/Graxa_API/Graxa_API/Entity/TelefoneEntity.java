@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Entity;
 
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Enums.TipoTelefone;
 import jakarta.persistence.*;
 @Entity
@@ -9,7 +10,7 @@ public class TelefoneEntity {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
-    private UsuarioEntity usuario;
+    private ColaboradorEntity usuario;
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_telefone")
     private TipoTelefone tipoTelefone;
@@ -19,11 +20,11 @@ public class TelefoneEntity {
         return id;
     }
 
-    public UsuarioEntity getUsuario() {
+    public ColaboradorEntity getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(UsuarioEntity usuario) {
+    public void setUsuario(ColaboradorEntity usuario) {
         this.usuario = usuario;
     }
 
