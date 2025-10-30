@@ -19,7 +19,8 @@ public abstract class EventoEntity {
     @ManyToOne
     @JoinColumn(name = "turne_id")
     private TurneEntity turne;
-
+    @Column(nullable = false)
+    private Boolean ativo = true;
 
     public Long getId() {
         return id;
@@ -63,5 +64,13 @@ public abstract class EventoEntity {
 
     public void setTurne(TurneEntity turne) {
         this.turne = turne;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 }

@@ -7,21 +7,21 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record RequestViagemDto(
-        @NotBlank
+        @NotBlank(message = "O nome da viagem é obrigatório")
         String nomeEvento,
 
-        @NotNull
+        @NotNull(message = "A data de início é obrigatória")
         LocalDateTime dataInicio,
 
-        @NotNull
+        @NotNull(message = "A data de fim é obrigatória")
         LocalDateTime dataFim,
 
         String descricao,
 
-        @NotNull
+        @NotNull(message = "O ID da turnê é obrigatório")
         Long turneId,
 
-        @NotNull
+        @NotNull(message = "O tipo da viagem é obrigatório")
         TipoViagem tipoViagem
 ) {
 }

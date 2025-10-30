@@ -29,8 +29,7 @@ public class ShowEntity extends EventoEntity {
     @JoinColumn(name = "usuario_id", nullable = false)
     private UsuarioEntity responsavelEvento;
 
-    @Column(nullable = false)
-    private Boolean ativo = true;
+
 
 
 
@@ -65,12 +64,4 @@ public class ShowEntity extends EventoEntity {
         this.responsavelEvento = responsavelEvento;
     }
 
-
-    public Boolean getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
-    }
 }
