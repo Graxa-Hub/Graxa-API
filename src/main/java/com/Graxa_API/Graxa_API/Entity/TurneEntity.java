@@ -20,7 +20,7 @@ public class TurneEntity {
 
     @OneToMany(mappedBy = "turne", cascade = CascadeType.ALL)
     private List<EventoEntity> eventos;
-
+    private boolean ativo = true;
     // Construtor vazio obrigatório para JPA
     public TurneEntity() {}
 
@@ -59,5 +59,13 @@ public class TurneEntity {
 
     public void setDataHoraFimTurne(LocalDateTime dataHoraFimTurne) {
         this.dataHoraFimTurne = dataHoraFimTurne;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 }
