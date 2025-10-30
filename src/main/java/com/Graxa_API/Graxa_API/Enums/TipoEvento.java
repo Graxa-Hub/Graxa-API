@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TipoEvento {
-
-
         viagem("viagem"),
         show("show");
         private final String value;

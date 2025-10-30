@@ -3,6 +3,8 @@ package com.Graxa_API.Graxa_API.dto.EnderecoDto;
 import com.Graxa_API.Graxa_API.Entity.EnderecoEntity;
 import com.Graxa_API.Graxa_API.Enums.TipoEndereco;
 
+import java.util.List;
+
 public record ResponseEnderecoDto(
         Long id,
         TipoEndereco tipoEndereco,
@@ -28,6 +30,12 @@ public record ResponseEnderecoDto(
                 endereco.getEstado(),
                 endereco.getPais()
         );
+    }
+
+    public static List<ResponseEnderecoDto> toResponse(List<EnderecoEntity> entities) {
+        return entities.stream()
+                .map(ResponseEnderecoDto::toResponse)
+                .toList();
     }
 
 }
