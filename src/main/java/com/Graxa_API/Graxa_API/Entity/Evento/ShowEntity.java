@@ -6,6 +6,7 @@ import com.Graxa_API.Graxa_API.Entity.UsuarioEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,13 +22,17 @@ public class ShowEntity extends EventoEntity {
             joinColumns = @JoinColumn(name = "show_id"),
             inverseJoinColumns = @JoinColumn(name = "banda_id")
     )
-    private List<BandaEntity> bandas;
+    private List<BandaEntity> bandas = new ArrayList<>();
+
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private UsuarioEntity responsavelEvento;
 
-    private LocalDateTime dataHoraEvento;
+    @Column(nullable = false)
+    private Boolean ativo = true;
+
+
 
 
     // Construtor vazio obrigatório para JPA
@@ -60,12 +65,12 @@ public class ShowEntity extends EventoEntity {
         this.responsavelEvento = responsavelEvento;
     }
 
-    public LocalDateTime getDataHoraEvento() {
-        return dataHoraEvento;
+
+    public Boolean getAtivo() {
+        return ativo;
     }
 
-    public void setDataHoraEvento(LocalDateTime dataHoraEvento) {
-        this.dataHoraEvento = dataHoraEvento;
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
-
 }

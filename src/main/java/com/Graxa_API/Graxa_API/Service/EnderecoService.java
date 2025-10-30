@@ -80,6 +80,6 @@ public class EnderecoService {
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok(ResponseEnderecoDto.toResponseList(enderecos));
+        return ResponseEntity.ok(ResponseEnderecoDto.toResponse(enderecos));
     }
 }

@@ -14,5 +14,6 @@ public record RequestTurneDto(
 
         @NotNull
         LocalDateTime dataHoraFimTurne
+
 ) {
 }

@@ -1,11 +1,11 @@
 meta {
-  name: criarTurne
+  name: CriarEndereco
   type: http
   seq: 1
 }
 
 post {
-  url: http:/localhost:8080/turne
+  url: http:/localhost:8080/enderecos
   body: json
   auth: inherit
 }
@@ -16,9 +16,15 @@ headers {
 
 body:json {
   {
-    "nomeTurne": "Turnê Mundial Graxa",
-    "dataHoraInicioTurne": "2025-11-01T20:00:00",
-    "dataHoraFimTurne": "2025-12-01T23:00:00"
+    "cep": "12345678",
+    "rua": "Rua das Flores",
+    "numero": "100",
+    "bairro": "Centro",
+    "cidade": "São Paulo",
+    "estado": "SP",
+    "logradouro": "Avenida Principal",
+    "tipoEndereco": "local",
+    "pais": "Brasil"
   }
   
   

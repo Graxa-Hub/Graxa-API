@@ -13,7 +13,9 @@ import com.Graxa_API.Graxa_API.dto.ShowDto.RequestShowDto;
 import com.Graxa_API.Graxa_API.dto.ViagemDto.RequestViagemDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EventoFactory {
     public EventoEntity criarEvento(Object dto) {
         if (dto instanceof RequestShowDto showDto) {
