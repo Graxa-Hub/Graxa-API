@@ -27,9 +27,6 @@ public class ColaboradorEntity extends UsuarioEntity{
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private CredenciaisUsuarioEntity credenciais;
 
-    @ManyToMany(mappedBy = "integrantes")
-    private List<BandaEntity> bandas;
-
     @OneToMany(mappedBy = "responsavelAcao")
     private List<AcaoEntity> acoes;
 
@@ -56,9 +53,6 @@ public class ColaboradorEntity extends UsuarioEntity{
 
     public CredenciaisUsuarioEntity getCredenciais() { return credenciais; }
     public void setCredenciais(CredenciaisUsuarioEntity credenciais) { this.credenciais = credenciais; }
-
-    public List<BandaEntity> getBandas() { return bandas; }
-    public void setBandas(List<BandaEntity> bandas) { this.bandas = bandas; }
 
     public List<AcaoEntity> getAcoes() { return acoes; }
     public void setAcoes(List<AcaoEntity> acoes) { this.acoes = acoes; }

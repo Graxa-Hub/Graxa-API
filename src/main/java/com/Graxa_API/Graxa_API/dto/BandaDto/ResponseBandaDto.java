@@ -2,6 +2,7 @@ package com.Graxa_API.Graxa_API.dto.BandaDto;
 
 import com.Graxa_API.Graxa_API.Entity.BandaEntity;
 import com.Graxa_API.Graxa_API.Enums.Genero;
+import com.Graxa_API.Graxa_API.dto.ArtistaDto.ResponseArtistaDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -13,12 +14,12 @@ public record ResponseBandaDto (
         @NotBlank String nome,
         @NotBlank String descricao,
         @NotBlank Genero genero,
-        @NotEmpty List<ResponseUsuarioDto> integrantes
+        @NotEmpty List<ResponseArtistaDto> integrantes
 ){
     public static ResponseBandaDto toResponse(BandaEntity entity){
-        List<ResponseUsuarioDto> integrantesDto = entity.getIntegrantes()
+        List<ResponseArtistaDto> integrantesDto = entity.getIntegrantes()
                 .stream()
-                .map(ResponseUsuarioDto::toResponse)
+                .map(ResponseArtistaDto::toResponse)
                 .toList();
         return new ResponseBandaDto(
                 entity.getId(),
