@@ -4,7 +4,8 @@ import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Exception.CpfDuplicadoException;
 import com.Graxa_API.Graxa_API.Exception.UsuarioNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Exception.UsuariosNaoEncontradosException;
-import com.Graxa_API.Graxa_API.Repository.UsuarioRepository;
+import com.Graxa_API.Graxa_API.Factory.UsuarioFactory;
+import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,12 @@ import java.util.List;
 @Service
 public class ColaboradorService {
 
-    private final UsuarioRepository repository;
+    private final ColaboradorRepository repository;
+    private final UsuarioFactory factory;
 
-    public ColaboradorService(UsuarioRepository repository) {
+    public ColaboradorService(ColaboradorRepository repository, UsuarioFactory factory) {
         this.repository = repository;
+        this.factory = factory;
     }
 
     public ResponseEntity<List<ResponseUsuarioDto>> listarTodos() {
@@ -40,13 +43,7 @@ public class ColaboradorService {
             throw new CpfDuplicadoException();
         }
 
-        ColaboradorEntity colaborador = new ColaboradorEntity();
-        colaborador.setNome(dto.nome());
-        colaborador.setCpf(dto.cpf());
-        colaborador.setDataNascimento(dto.dataNascimento());
-        colaborador.setTipoUsuario(dto.tipoUsuario());
-        colaborador.setAtivo(true);
-
+        ColaboradorEntity colaborador = (ColaboradorEntity) factory.criarUsuario(dto);
         ColaboradorEntity salvo = repository.save(colaborador);
         return ResponseEntity.status(201).body(ResponseUsuarioDto.toResponse(salvo));
     }

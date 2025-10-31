@@ -8,7 +8,7 @@ import com.Graxa_API.Graxa_API.Exception.LoginInvalidoException;
 import com.Graxa_API.Graxa_API.Exception.NomeUsuarioDuplicadoException;
 import com.Graxa_API.Graxa_API.Exception.UsuarioNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Repository.CredenciaisUsuarioRepository;
-import com.Graxa_API.Graxa_API.Repository.UsuarioRepository;
+import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.CredencialUsuarioDetailsDto;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestCredenciaisUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.ResponseCredenciaisUsuarioDto;
@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 public class CredenciaisUsuarioService {
 
     private final CredenciaisUsuarioRepository repository;
-    private final UsuarioRepository usuarioRepository;
+    private final ColaboradorRepository colaboradorRepository;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -40,10 +40,10 @@ public class CredenciaisUsuarioService {
     private AuthenticationManager authenticatorManager;
     public CredenciaisUsuarioService(
             CredenciaisUsuarioRepository repository,
-            UsuarioRepository usuarioRepository
+            ColaboradorRepository colaboradorRepository
     ) {
         this.repository = repository;
-        this.usuarioRepository = usuarioRepository;
+        this.colaboradorRepository = colaboradorRepository;
     }
 
     // Buscar credencial por ID
@@ -56,7 +56,7 @@ public class CredenciaisUsuarioService {
 
     // Criar nova credencial (senha armazenada em texto plano)
     public ResponseEntity<?> criarCredencial(RequestCredenciaisUsuarioDto dto) {
-        ColaboradorEntity usuario = usuarioRepository.findById(dto.usuarioId())
+        ColaboradorEntity usuario = colaboradorRepository.findById(dto.usuarioId())
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(dto.usuarioId()));
 
         if (repository.findByNomeUsuario(dto.nomeUsuario()).isPresent()) {

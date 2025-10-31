@@ -8,7 +8,7 @@ import com.Graxa_API.Graxa_API.Entity.TurneEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Repository.LocalRepository;
 import com.Graxa_API.Graxa_API.Repository.TurneRepository;
-import com.Graxa_API.Graxa_API.Repository.UsuarioRepository;
+import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
 import com.Graxa_API.Graxa_API.dto.ShowDto.RequestShowDto;
 import com.Graxa_API.Graxa_API.dto.ViagemDto.RequestViagemDto;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,7 +34,7 @@ public class EventoFactory {
     private LocalRepository localRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private ColaboradorRepository colaboradorRepository;
 
     private ShowEntity criarShow(RequestShowDto dto) {
         ShowEntity show = new ShowEntity();
@@ -55,7 +55,7 @@ public class EventoFactory {
                 .orElseThrow(() -> new EntityNotFoundException("Local não encontrado"));
         show.setLocal(local);
 
-        ColaboradorEntity usuario = usuarioRepository
+        ColaboradorEntity usuario = colaboradorRepository
                 .findById(dto.responsavelId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
         show.setResponsavelEvento(usuario);

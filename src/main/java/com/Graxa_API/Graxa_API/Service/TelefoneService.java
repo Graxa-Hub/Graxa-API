@@ -5,7 +5,7 @@ import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Exception.TelefoneNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Exception.UsuarioNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Repository.TelefoneRepository;
-import com.Graxa_API.Graxa_API.Repository.UsuarioRepository;
+import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
 import com.Graxa_API.Graxa_API.dto.TelefoneDto.RequestTelefoneDto;
 import com.Graxa_API.Graxa_API.dto.TelefoneDto.ResponseTelefoneDto;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +19,16 @@ import java.util.stream.Collectors;
 public class TelefoneService {
 
     private final TelefoneRepository telefoneRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final ColaboradorRepository colaboradorRepository;
 
-    public TelefoneService(TelefoneRepository telefoneRepository, UsuarioRepository usuarioRepository) {
+    public TelefoneService(TelefoneRepository telefoneRepository, ColaboradorRepository colaboradorRepository) {
         this.telefoneRepository = telefoneRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.colaboradorRepository = colaboradorRepository;
     }
 
     @Transactional
     public ResponseEntity<ResponseTelefoneDto> criarTelefoneParaUsuario(Long usuarioId, RequestTelefoneDto dto) {
-        ColaboradorEntity usuario = usuarioRepository.findById(usuarioId)
+        ColaboradorEntity usuario = colaboradorRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
 
         TelefoneEntity telefone = new TelefoneEntity();
@@ -49,7 +49,7 @@ public class TelefoneService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<List<ResponseTelefoneDto>> listarPorUsuario(Long usuarioId) {
-        if (!usuarioRepository.existsById(usuarioId)) {
+        if (!colaboradorRepository.existsById(usuarioId)) {
             throw new UsuarioNaoEncontradoException(usuarioId);
         }
         List<TelefoneEntity> lista = telefoneRepository.findByUsuarioId(usuarioId);

@@ -16,6 +16,9 @@ public abstract class UsuarioEntity {
     @Column(unique = true)
     private String cpf;
 
+    @Column(name = "foto_nome")
+    private String fotoNome;
+
     // Getters e Setters
     public Long getId() { return id; }
 
@@ -27,4 +30,7 @@ public abstract class UsuarioEntity {
 
     public String getCpf() { return cpf; }
     public void setCpf(String cpf) { this.cpf = cpf; }
+
+    public String getFotoNome() { return fotoNome; }
+    public void setFotoNome(String fotoNome) { this.fotoNome = fotoNome; }
 }

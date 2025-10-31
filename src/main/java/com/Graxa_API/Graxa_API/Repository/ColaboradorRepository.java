@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface UsuarioRepository extends JpaRepository<ColaboradorEntity, Long> {
+public interface ColaboradorRepository extends JpaRepository<ColaboradorEntity, Long> {
 
 
 

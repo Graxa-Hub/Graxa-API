@@ -23,7 +23,7 @@ public class ShowService {
     private final BandaRepository bandaRepository;
     private final TurneRepository turneRepository;
     private final LocalRepository localRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final ColaboradorRepository colaboradorRepository;
     private final EventoFactory eventoFactory;
 
     public ShowService(
@@ -31,14 +31,14 @@ public class ShowService {
             BandaRepository bandaRepository,
             TurneRepository turneRepository,
             LocalRepository localRepository,
-            UsuarioRepository usuarioRepository,
+            ColaboradorRepository colaboradorRepository,
             EventoFactory eventoFactory
     ) {
         this.repository = repository;
         this.bandaRepository = bandaRepository;
         this.turneRepository = turneRepository;
         this.localRepository = localRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.colaboradorRepository = colaboradorRepository;
         this.eventoFactory = eventoFactory;
     }
 
@@ -93,7 +93,7 @@ public class ShowService {
                     .orElseThrow(() -> new EntityNotFoundException("Local não encontrado")));
         }
         if (dto.responsavelId() != null) {
-            show.setResponsavelEvento(usuarioRepository.findById(dto.responsavelId())
+            show.setResponsavelEvento(colaboradorRepository.findById(dto.responsavelId())
                     .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado")));
         }
 

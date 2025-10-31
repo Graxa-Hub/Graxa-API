@@ -10,10 +10,6 @@ import java.util.List;
 
 @Entity
 public class ColaboradorEntity extends UsuarioEntity{
-
-
-
-
     private LocalDate dataNascimento;
 
 
