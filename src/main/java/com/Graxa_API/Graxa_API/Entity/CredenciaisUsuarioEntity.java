@@ -24,14 +24,9 @@ public class CredenciaisUsuarioEntity {
 
     private LocalDateTime dataHoraUltimoAcesso;
 
-    protected CredenciaisUsuarioEntity() {}
+    public CredenciaisUsuarioEntity() {}
 
-    public CredenciaisUsuarioEntity(ColaboradorEntity usuario, String nomeUsuario, String email, String senha) {
-        this.usuario = usuario;
-        this.nomeUsuario = nomeUsuario;
-        this.email = email;
-        this.senha = senha;
-    }
+
 
     public Long getId() {
         return id;
@@ -43,6 +38,10 @@ public class CredenciaisUsuarioEntity {
 
     public String getNomeUsuario() {
         return nomeUsuario;
+    }
+
+    public void setUsuario(ColaboradorEntity usuario) {
+        this.usuario = usuario;
     }
 
     public void setNomeUsuario(String nomeUsuario) {

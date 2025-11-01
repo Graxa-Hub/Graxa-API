@@ -5,9 +5,9 @@ import com.Graxa_API.Graxa_API.Service.CredenciaisUsuarioService;
 import com.Graxa_API.Graxa_API.Service.TelefoneService;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
-import com.Graxa_API.Graxa_API.dto.TelefoneDto.RequestTelefoneDto;
-import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestCredenciaisUsuarioDto;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/colaboradores")
+@Tag(name = "Colaboradores", description = "Endpoints relacionados à gestão de usuários colaboradores")
 public class ColaboradorController {
 
     private final ColaboradorService colaboradorService;
@@ -32,72 +33,43 @@ public class ColaboradorController {
         this.telefoneService = telefoneService;
     }
 
-    // 🔹 Listar todos os colaboradores
+    @Operation(summary = "Lista todos os colaboradores", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping
-    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<List<ResponseUsuarioDto>> listarTodos() {
         return colaboradorService.listarTodos();
     }
 
-    // 🔹 Buscar colaborador por ID
+    @Operation(summary = "Busca colaborador pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/{id}")
     public ResponseEntity<ResponseUsuarioDto> buscarPorId(@PathVariable Long id) {
         return colaboradorService.buscarPorId(id);
     }
 
-    // 🔹 Cadastrar novo colaborador
-    @PostMapping
-    @SecurityRequirement(name = "Bearer")
-    public ResponseEntity<ResponseUsuarioDto> cadastrar(@Valid @RequestBody RequestUsuarioDto dto) {
-        ResponseEntity<ResponseUsuarioDto> colaboradorCriado = colaboradorService.cadastrar(dto);
-
-        if (colaboradorCriado.getBody() != null) {
-            Long colaboradorId = colaboradorCriado.getBody().id();
-
-            // Criar credenciais
-            RequestCredenciaisUsuarioDto credenciaisDto = new RequestCredenciaisUsuarioDto(
-                    dto.nomeUsuario(),
-                    colaboradorId,
-                    dto.email(),
-                    dto.senha()
-            );
-            credenciaisService.criarCredencial(credenciaisDto);
-
-            // Criar telefone
-            RequestTelefoneDto telefoneDto = dto.telefone();
-            if (telefoneDto != null) {
-                telefoneService.criarTelefoneParaUsuario(colaboradorId, telefoneDto);
-            }
-        }
-
-        return colaboradorCriado;
-    }
-
-    // 🔹 Atualizar colaborador
+    @Operation(summary = "Atualiza os dados de um colaborador", security = @SecurityRequirement(name = "BearerAuth"))
     @PutMapping("/{id}")
     public ResponseEntity<ResponseUsuarioDto> atualizar(@PathVariable Long id, @RequestBody RequestUsuarioDto dto) {
         return colaboradorService.atualizar(id, dto);
     }
 
-    // 🔹 Desativar colaborador
+    @Operation(summary = "Desativa um colaborador pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> desativar(@PathVariable Long id) {
         return colaboradorService.desativar(id);
     }
 
-    // 🔹 Listar colaboradores ativos
+    @Operation(summary = "Lista todos os colaboradores ativos", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/ativos")
     public ResponseEntity<List<ResponseUsuarioDto>> listarAtivos() {
         return colaboradorService.listarAtivos();
     }
 
-    // 🔹 Buscar colaborador por CPF
+    @Operation(summary = "Busca colaborador pelo CPF", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/cpf/{cpf}")
     public ResponseEntity<ResponseUsuarioDto> buscarPorCpf(@PathVariable String cpf) {
         return colaboradorService.buscarPorCpf(cpf);
     }
 
-    // 🔹 Buscar colaboradores por tipo
+    @Operation(summary = "Busca colaboradores por tipo de usuário", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/tipo")
     public ResponseEntity<List<ResponseUsuarioDto>> buscarPorTipos(@RequestParam List<String> tipos) {
         return colaboradorService.buscarPorTipos(tipos);

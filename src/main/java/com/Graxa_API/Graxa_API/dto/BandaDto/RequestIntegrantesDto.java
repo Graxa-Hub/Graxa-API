@@ -1,15 +1,14 @@
 package com.Graxa_API.Graxa_API.dto.BandaDto;
 
-import com.Graxa_API.Graxa_API.Enums.Genero;
-import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
-import jakarta.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record RequestIntegrantesDto (
-        @NotEmpty List<Long> integrantesIds
-){
+@Schema(description = "DTO para adicionar integrantes a uma banda")
+public record RequestIntegrantesDto(
 
-}
+        @NotEmpty
+        @Schema(description = "Lista de IDs dos usuários que serão adicionados como integrantes", example = "[1, 2, 3]")
+        List<Long> integrantesIds
+) {}

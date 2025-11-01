@@ -63,12 +63,12 @@ public class CredenciaisUsuarioService {
             throw new NomeUsuarioDuplicadoException(dto.nomeUsuario());
         }
 
-        CredenciaisUsuarioEntity novaCredencial = new CredenciaisUsuarioEntity(
-                usuario,
-                dto.nomeUsuario(),
-                dto.email(),
-                passwordEncoder.encode(dto.senha())
-        );
+        CredenciaisUsuarioEntity novaCredencial = new CredenciaisUsuarioEntity();
+        novaCredencial.setUsuario(usuario);
+        novaCredencial.setNomeUsuario(dto.nomeUsuario());
+        novaCredencial.setEmail(dto.email());
+        novaCredencial.setSenha(passwordEncoder.encode(dto.senha()));
+
 
         CredenciaisUsuarioEntity salva = repository.save(novaCredencial);
         return ResponseEntity.ok(ResponseCredenciaisUsuarioDto.toResponse(salva));
