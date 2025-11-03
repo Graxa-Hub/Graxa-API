@@ -3,7 +3,7 @@ package com.Graxa_API.Graxa_API.Enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TipoEndereco {
+public enum     TipoEndereco {
     LOCAL("local"),
     USUARIO("usuario");
 

@@ -2,8 +2,8 @@ package com.Graxa_API.Graxa_API.Enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 public enum TipoUsuario {
-    produtor("produtor"),
-    musico("musico");
+    PRODUTOR("produtor"),
+    MUSICO("musico");
     private final String value;
     TipoUsuario(String value) {
         this.value = value;

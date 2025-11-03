@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Positive;
 public record RequestEnderecoDto(
 
         @NotNull(message = "O tipo de endereço é obrigatório")
-        @Schema(description = "Tipo do endereço (ex: RESIDENCIAL, COMERCIAL)", example = "RESIDENCIAL")
+        @Schema(description = "Tipo do endereço (ex: RESIDENCIAL, COMERCIAL)", example = "local")
         TipoEndereco tipoEndereco,
 
         @NotBlank(message = "O CEP é obrigatório")

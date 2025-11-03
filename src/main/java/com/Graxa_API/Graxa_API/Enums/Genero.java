@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Genero {
-    rock("rock"),
-    mpb("mpb"),
-    alternativo("alternativo");
+    ROCK("rock"),
+    MPB("mpb"),
+    ALTERNATIVO("alternativo");
     private final String value;
 
 

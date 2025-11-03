@@ -2,8 +2,8 @@ package com.Graxa_API.Graxa_API.Enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 public enum TipoTelefone {
-    celular("celular"),
-    fixo("fixo");
+    CELULAR("celular"),
+    FIXO("fixo");
     private final String value;  // Campo para armazenar o valor como string
 
     TipoTelefone(String value) {

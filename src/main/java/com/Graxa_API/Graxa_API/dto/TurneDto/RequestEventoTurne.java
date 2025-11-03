@@ -10,7 +10,7 @@ public record RequestEventoTurne(
         @NotNull
         Long turneId,
 
-        @Schema(description = "ID do evento a ser vinculado à turnê", example = "42")
+        @Schema(description = "ID do evento a ser vinculado à turnê", example = "1")
         @NotNull
         Long eventoId
 ) {}

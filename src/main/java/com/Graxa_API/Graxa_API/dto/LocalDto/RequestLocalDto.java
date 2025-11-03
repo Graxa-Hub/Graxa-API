@@ -13,7 +13,7 @@ public record RequestLocalDto(
         String nome,
 
         @NotNull(message = "O ID do endereço é obrigatório")
-        @Schema(description = "ID do endereço vinculado ao local", example = "5")
+        @Schema(description = "ID do endereço vinculado ao local", example = "1")
         Long idEndereco,
 
         @NotNull(message = "A capacidade é obrigatória")

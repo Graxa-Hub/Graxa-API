@@ -25,14 +25,14 @@ public record RequestShowDto(
         String descricao,
 
         @NotNull
-        @Schema(description = "ID da turnê associada ao show", example = "3")
+        @Schema(description = "ID da turnê associada ao show", example = "1")
         Long turneId,
 
         @NotNull
-        @Schema(description = "ID do local onde o show será realizado", example = "7")
+        @Schema(description = "ID do local onde o show será realizado", example = "1")
         Long localId,
 
         @NotNull
-        @Schema(description = "ID do colaborador responsável pelo evento", example = "12")
+        @Schema(description = "ID do colaborador responsável pelo evento", example = "1")
         Long responsavelId
 ) {}

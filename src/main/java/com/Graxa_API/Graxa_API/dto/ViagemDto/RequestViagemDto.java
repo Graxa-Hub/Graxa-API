@@ -26,10 +26,10 @@ public record RequestViagemDto(
         String descricao,
 
         @NotNull(message = "O ID da turnê é obrigatório")
-        @Schema(description = "ID da turnê vinculada à viagem", example = "4")
+        @Schema(description = "ID da turnê vinculada à viagem", example = "1")
         Long turneId,
 
         @NotNull(message = "O tipo da viagem é obrigatório")
-        @Schema(description = "Tipo da viagem (ex: DESLOCAMENTO, RETORNO)", example = "DESLOCAMENTO")
+        @Schema(description = "Tipo da viagem (ex: aereo, terrestre)", example = "aereo")
         TipoViagem tipoViagem
 ) {}

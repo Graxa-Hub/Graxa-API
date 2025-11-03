@@ -9,6 +9,6 @@ import java.util.List;
 public record RequestIntegrantesDto(
 
         @NotEmpty
-        @Schema(description = "Lista de IDs dos usuários que serão adicionados como integrantes", example = "[1, 2, 3]")
+        @Schema(description = "Lista de IDs dos usuários que serão adicionados como integrantes", example = "[1]")
         List<Long> integrantesIds
 ) {}
