@@ -1,0 +1,15 @@
+meta {
+  name: findByEmail
+  type: http
+  seq: 7
+}
+
+get {
+  url: http:/localhost:8080/produtores/gabriel.sousa@gmail.com
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

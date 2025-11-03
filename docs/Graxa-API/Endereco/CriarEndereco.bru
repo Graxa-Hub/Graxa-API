@@ -1,0 +1,36 @@
+meta {
+  name: CriarEndereco
+  type: http
+  seq: 1
+}
+
+post {
+  url: http:/localhost:8080/enderecos
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjE4MDAwMDEsImV4cCI6MTc2NTQwMDAwMX0.V2DnwvOkN06UgaIgZdPIVT03ieSH35qj2Dwx-vYLTBJtaZCJoq4cUet2Lr5j2YcgPYSWSwtmCE1jROpZuGVc4w
+}
+
+body:json {
+  {
+    "cep": "12345678",
+    "rua": "Rua das Flores",
+    "numero": "100",
+    "bairro": "Centro",
+    "cidade": "São Paulo",
+    "estado": "SP",
+    "logradouro": "Avenida Principal",
+    "tipoEndereco": "local",
+    "pais": "Brasil"
+  }
+  
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

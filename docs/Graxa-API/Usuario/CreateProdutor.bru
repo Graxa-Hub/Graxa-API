@@ -1,0 +1,33 @@
+meta {
+  name: CreateProdutor
+  type: http
+  seq: 3
+}
+
+post {
+  url: http:/localhost:8080/auth/register
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "Gabriel Sousa",
+    "dataNascimento": "2000-05-15",
+    "cpf": "47060193898",
+    "tipoUsuario": "produtor",
+    "nomeUsuario": "gabrielsousa",
+    "email": "gabriel.sousa@example.com",
+    "senha": "minhasenha123",
+    "telefone": {
+      "tipoTelefone":"celular",
+      "numeroTelefone": "11987654321"
+    }
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

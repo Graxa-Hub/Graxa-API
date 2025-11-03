@@ -1,0 +1,25 @@
+meta {
+  name: adicionarIntegrantes
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/bandas/1/integrantes
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjE0Mjk2NDgsImV4cCI6MTc2NTAyOTY0OH0.NvdRv9SqXg5zZnGe3fV59HqCh8POPkSMY54sqCyC6DIDBjS8OM13G_wKKgNiJ5THft68ncThDXxbNBkQ378uJg
+}
+
+body:json {
+  [
+    { "integrantesIds":[1] }
+    ]
+}
+
+settings {
+  encodeUrl: true
+}

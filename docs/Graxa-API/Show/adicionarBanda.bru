@@ -1,0 +1,28 @@
+meta {
+  name: adicionarBanda
+  type: http
+  seq: 2
+}
+
+put {
+  url: http:/localhost:8080/shows/bandas
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjE4MDA3NzgsImV4cCI6MTc2NTQwMDc3OH0.hh6iz0Io6kJ9PpIOjgWbLC_Ai_DRnCPqTCWwjBqvYzgoAN7Vx3rsjppVMJ-RL_SuSLjiN_x_i8vcKqY3WmBr-w
+}
+
+body:json {
+  {
+    "showId": 1,
+    "bandasIds": [1]
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

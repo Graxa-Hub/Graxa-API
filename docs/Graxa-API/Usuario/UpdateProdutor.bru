@@ -1,0 +1,26 @@
+meta {
+  name: UpdateProdutor
+  type: http
+  seq: 4
+}
+
+put {
+  url: http:/localhost:8080/usuarios/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "Gabriel Sousa",
+    "dataNascimento": "2000-05-15",
+    "cpf": "123.456.789-09",
+    "tipoUsuario": "musico"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

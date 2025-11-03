@@ -1,0 +1,28 @@
+meta {
+  name: createBanda
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/bandas
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjE0MzA1MTcsImV4cCI6MTc2NTAzMDUxN30.PhHEGEOoMoLQTxJ5k_PQHRcXzUBgumZzc2AZco1rvVfjNLIXHAwyPUeCDuS_i4g9vKMYm-oLFPiBIfXiebJNEQ
+}
+
+body:json {
+  {
+    "nome": "Radiohead",
+    "descricao": "Banda britânica de rock alternativo formada em 1985",
+    "genero": "ALTERNATIVO"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,37 @@
+meta {
+  name: criarShow
+  type: http
+  seq: 1
+}
+
+post {
+  url: http:/localhost:8080/shows
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjE4MDAwMDEsImV4cCI6MTc2NTQwMDAwMX0.V2DnwvOkN06UgaIgZdPIVT03ieSH35qj2Dwx-vYLTBJtaZCJoq4cUet2Lr5j2YcgPYSWSwtmCE1jROpZuGVc4w
+}
+
+body:json {
+  {
+    "nomeEvento": "Show Graxa SP",
+    "dataInicio": "2025-11-10T20:00:00",
+    "dataFim": "2025-11-10T23:00:00",
+    "descricao": "Show épico em SP",
+    "turneId": 1,
+    "localId": 1,
+    "responsavelId": 1
+  }
+  
+}
+
+vars:post-response {
+  token: environment.set("accessToken", response.body.token);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
