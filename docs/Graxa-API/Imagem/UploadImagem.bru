@@ -1,0 +1,24 @@
+meta {
+  name: UploadImagem
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/imagens/upload
+  body: multipartForm
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjIzNzY0OTUsImV4cCI6MTc2NTk3NjQ5NX0.byiYiURpnr52G3AnbO7wGW-s4W2q4T92z3Pib38Pb80xqdARXDC8ONlIQmm34y4VSaNFcDHr6YHPcuPwT84lIQ
+}
+
+body:multipart-form {
+  arquivo: @file(/home/gabriel/Transferências/declaracao_matricula_page-0001.jpg)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

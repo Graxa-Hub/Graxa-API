@@ -12,17 +12,12 @@ public class AcaoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private ColaboradorEntity responsavelAcao;
-
     @Enumerated(EnumType.STRING)
     private TipoAcao tipoAcao;
-
     private LocalDateTime dataHoraAcao;
-
-
     public Long getId() {
         return id;
     }

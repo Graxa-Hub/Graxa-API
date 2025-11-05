@@ -1,0 +1,20 @@
+meta {
+  name: DownloadImagem
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/imagens/download/declaracao_matricula_page-0001.jpg
+  body: none
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjIzNzY0OTUsImV4cCI6MTc2NTk3NjQ5NX0.byiYiURpnr52G3AnbO7wGW-s4W2q4T92z3Pib38Pb80xqdARXDC8ONlIQmm34y4VSaNFcDHr6YHPcuPwT84lIQ
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
