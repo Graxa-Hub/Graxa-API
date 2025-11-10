@@ -5,8 +5,8 @@ meta {
 }
 
 post {
-  url: http:/localhost:8080/turne
-  body: json
+  url: http:/localhost:8080/turnes
+  body: multipartForm
   auth: inherit
 }
 
@@ -22,6 +22,19 @@ body:json {
   }
   
   
+}
+
+body:multipart-form {
+  dados: '''
+    {
+      "nomeTurne": "Turnê Mundial Graxa",
+      "dataHoraInicioTurne": "2025-11-01T20:00:00",
+      "dataHoraFimTurne": "2025-12-01T23:00:00"
+    }
+  ''' @contentType(
+  
+  application/json)
+  imagem: @file(C:\Users\gabri\Downloads\Picture.png) @contentType(file)
 }
 
 settings {

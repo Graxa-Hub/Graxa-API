@@ -11,21 +11,17 @@ public record ResponseTurneDto(
         String nomeTurne,
         LocalDateTime dataHoraInicioTurne,
         LocalDateTime dataHoraFimTurne,
-        List<EventoDto> eventos
+        String nomeImagem,
+        String descricao
 ) {
-    public static ResponseTurneDto toResponse(TurneEntity turne) {
-        List<EventoDto> eventos = turne.getEventos() != null
-                ? turne.getEventos().stream()
-                .map(EventoDto::toResumo)
-                .toList()
-                : List.of();
-
+    public static ResponseTurneDto toResponse(TurneEntity entity) {
         return new ResponseTurneDto(
-                turne.getId(),
-                turne.getNomeTurne(),
-                turne.getDataHoraInicioTurne(),
-                turne.getDataHoraFimTurne(),
-                eventos
+                entity.getId(),
+                entity.getNomeTurne(),
+                entity.getDataHoraInicioTurne(),
+                entity.getDataHoraFimTurne(),
+                entity.getNomeImagem(),
+                entity.getDescricao()
         );
     }
 

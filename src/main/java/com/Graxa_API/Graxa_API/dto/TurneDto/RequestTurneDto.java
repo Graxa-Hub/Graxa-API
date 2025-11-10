@@ -19,6 +19,9 @@ public record RequestTurneDto(
 
         @Schema(description = "Data e hora de encerramento da turnê", example = "2025-12-20T23:00:00")
         @NotNull
-        LocalDateTime dataHoraFimTurne
+        LocalDateTime dataHoraFimTurne,
 
+        @Schema(description = "Descrição da turnê", example = "Turnê especial com shows em várias cidades do Brasil")
+        String descricao
 ) {}
+

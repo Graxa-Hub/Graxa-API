@@ -14,58 +14,40 @@ public class TurneEntity {
     private Long id;
 
     private String nomeTurne;
-
     private LocalDateTime dataHoraInicioTurne;
     private LocalDateTime dataHoraFimTurne;
 
     @OneToMany(mappedBy = "turne", cascade = CascadeType.ALL)
     private List<EventoEntity> eventos;
+
     private boolean ativo = true;
-    // Construtor vazio obrigatório para JPA
+
+    private String nomeImagem;
+
+    // Novo campo
+    private String descricao;
+
     public TurneEntity() {}
 
     // Getters e Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public String getNomeTurne() {
-        return nomeTurne;
-    }
+    public String getNomeTurne() { return nomeTurne; }
+    public void setNomeTurne(String nomeTurne) { this.nomeTurne = nomeTurne; }
 
-    public void setNomeTurne(String nomeTurne) {
-        this.nomeTurne = nomeTurne;
-    }
+    public LocalDateTime getDataHoraInicioTurne() { return dataHoraInicioTurne; }
+    public void setDataHoraInicioTurne(LocalDateTime dataHoraInicioTurne) { this.dataHoraInicioTurne = dataHoraInicioTurne; }
 
-    public List<EventoEntity> getEventos() {
-        return eventos;
-    }
+    public LocalDateTime getDataHoraFimTurne() { return dataHoraFimTurne; }
+    public void setDataHoraFimTurne(LocalDateTime dataHoraFimTurne) { this.dataHoraFimTurne = dataHoraFimTurne; }
 
-    public void setEventos(List<EventoEntity> eventos) {
-        this.eventos = eventos;
-    }
+    public boolean isAtivo() { return ativo; }
+    public void setAtivo(boolean ativo) { this.ativo = ativo; }
 
-    public LocalDateTime getDataHoraInicioTurne() {
-        return dataHoraInicioTurne;
-    }
+    public String getNomeImagem() { return nomeImagem; }
+    public void setNomeImagem(String nomeImagem) { this.nomeImagem = nomeImagem; }
 
-    public void setDataHoraInicioTurne(LocalDateTime dataHoraInicioTurne) {
-        this.dataHoraInicioTurne = dataHoraInicioTurne;
-    }
-
-    public LocalDateTime getDataHoraFimTurne() {
-        return dataHoraFimTurne;
-    }
-
-    public void setDataHoraFimTurne(LocalDateTime dataHoraFimTurne) {
-        this.dataHoraFimTurne = dataHoraFimTurne;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
 }
+

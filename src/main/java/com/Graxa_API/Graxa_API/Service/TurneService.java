@@ -7,7 +7,6 @@ import com.Graxa_API.Graxa_API.Repository.TurneRepository;
 import com.Graxa_API.Graxa_API.dto.TurneDto.RequestTurneDto;
 import com.Graxa_API.Graxa_API.dto.TurneDto.ResponseTurneDto;
 import jakarta.transaction.Transactional;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ public class TurneService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseTurneDto> criarTurne(RequestTurneDto dto) {
+    public ResponseEntity<ResponseTurneDto> criarTurne(RequestTurneDto dto, String nomeImagem) {
         if (turneRepository.existsByNomeTurne(dto.nomeTurne())) {
             throw new TurneJaExistenteException(dto.nomeTurne());
         }
@@ -33,7 +32,9 @@ public class TurneService {
         turne.setNomeTurne(dto.nomeTurne());
         turne.setDataHoraInicioTurne(dto.dataHoraInicioTurne());
         turne.setDataHoraFimTurne(dto.dataHoraFimTurne());
+        turne.setDescricao(dto.descricao()); // novo campo
         turne.setAtivo(true);
+        turne.setNomeImagem(nomeImagem);
 
         TurneEntity salvo = turneRepository.save(turne);
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseTurneDto.toResponse(salvo));
@@ -52,13 +53,18 @@ public class TurneService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseTurneDto> atualizarTurne(Long id, RequestTurneDto dto) {
+    public ResponseEntity<ResponseTurneDto> atualizarTurne(Long id, RequestTurneDto dto, String nomeImagem) {
         TurneEntity turne = turneRepository.findByIdAndAtivoTrue(id)
                 .orElseThrow(() -> new TurneNaoEncontradaException(id));
 
         turne.setNomeTurne(dto.nomeTurne());
         turne.setDataHoraInicioTurne(dto.dataHoraInicioTurne());
         turne.setDataHoraFimTurne(dto.dataHoraFimTurne());
+        turne.setDescricao(dto.descricao()); // novo campo
+
+        if (nomeImagem != null && !nomeImagem.isBlank()) {
+            turne.setNomeImagem(nomeImagem);
+        }
 
         TurneEntity atualizado = turneRepository.save(turne);
         return ResponseEntity.ok(ResponseTurneDto.toResponse(atualizado));
@@ -80,11 +86,7 @@ public class TurneService {
                 .map(ResponseTurneDto::toResponse)
                 .toList();
 
-        if (turnes.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
 
         return ResponseEntity.ok(turnes);
     }
 }
-
