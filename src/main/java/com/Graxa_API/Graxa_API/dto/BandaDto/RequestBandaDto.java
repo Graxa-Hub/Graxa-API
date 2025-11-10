@@ -3,6 +3,7 @@ package com.Graxa_API.Graxa_API.dto.BandaDto;
 import com.Graxa_API.Graxa_API.Enums.Genero;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "DTO para criação de uma banda")
 public record RequestBandaDto(
@@ -16,11 +17,11 @@ public record RequestBandaDto(
         String descricao,
 
         @Schema(description = "Gênero musical da banda", example = "ROCK")
-        @NotBlank(message = "Gênero musical é obrigatório")
+        @NotNull(message = "Gênero musical é obrigatório")
         Genero genero,
 
         @Schema(description = "ID do representante da banda", example = "5")
-        @NotBlank(message = "Representante é obrigatório")
+        @NotNull(message = "Representante é obrigatório")
         Long representanteId
 
 ) {}
