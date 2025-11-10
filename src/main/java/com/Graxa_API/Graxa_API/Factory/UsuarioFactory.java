@@ -4,7 +4,9 @@ import com.Graxa_API.Graxa_API.Entity.CredenciaisUsuarioEntity;
 import com.Graxa_API.Graxa_API.Entity.TelefoneEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ArtistaEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.RepresentanteEntity;
 import com.Graxa_API.Graxa_API.dto.ArtistaDto.RequestArtistaDto;
+import com.Graxa_API.Graxa_API.dto.RepresentanteDto.RequestRepresentanteDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,10 @@ public class UsuarioFactory {
             return criarArtista(artistaDto);
         } else if (dto instanceof RequestUsuarioDto colaboradorDto) {
             return criarColaborador(colaboradorDto);
-        } else {
+        }else if(dto instanceof RequestRepresentanteDto representanteDto){
+            return criarRepresentante(representanteDto);
+        }
+        else {
             throw new IllegalArgumentException("Tipo de DTO desconhecido");
         }
     }
@@ -37,6 +42,13 @@ public class UsuarioFactory {
         artista.setFotoNome(dto.fotoNome());
         artista.setAtivo(true);
         return artista;
+    }
+
+    private RepresentanteEntity criarRepresentante(RequestRepresentanteDto dto) {
+        RepresentanteEntity representante = new RepresentanteEntity();
+        representante.setNome(dto.nome());
+        representante.setEmail(dto.email());
+        return representante;
     }
 
     private ColaboradorEntity criarColaborador(RequestUsuarioDto dto) {

@@ -1,0 +1,27 @@
+meta {
+  name: Criar Representantes
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/representantes
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjI3ODY5NDMsImV4cCI6MTc2NjM4Njk0M30.aRDhHmcG1FCKqxEVPEzdayzcxtwvc_s4vD5FjHpg2ZO-xpovFYl4iaBTPJmbj7CbNIYMovE2CakIi9HqDgLo7Q
+}
+
+body:json {
+  {
+    "nome": "Michelle Marcelino",
+    "email": "michelle@gmail.com"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -8,15 +8,19 @@ import jakarta.validation.constraints.NotBlank;
 public record RequestBandaDto(
 
         @Schema(description = "Nome da banda", example = "Os Incríveis")
-        @NotBlank
+        @NotBlank(message = "Nome da banda é obrigatório")
         String nome,
 
         @Schema(description = "Descrição da banda", example = "Banda de rock alternativo formada em São Paulo")
-        @NotBlank
+        @NotBlank(message = "Descrição da banda é obrigatória")
         String descricao,
 
         @Schema(description = "Gênero musical da banda", example = "ROCK")
-        @NotBlank
-        Genero genero
+        @NotBlank(message = "Gênero musical é obrigatório")
+        Genero genero,
+
+        @Schema(description = "ID do representante da banda", example = "5")
+        @NotBlank(message = "Representante é obrigatório")
+        Long representanteId
 
 ) {}

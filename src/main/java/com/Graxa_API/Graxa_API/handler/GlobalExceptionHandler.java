@@ -69,4 +69,6 @@ public class GlobalExceptionHandler {
 
         return ErrorUtils.buildErrorResponse(HttpStatus.BAD_REQUEST, "Erro de validação", errors);
     }
+
+
 }
