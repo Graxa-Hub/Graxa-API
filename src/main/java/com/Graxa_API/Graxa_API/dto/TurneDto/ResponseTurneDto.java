@@ -12,7 +12,9 @@ public record ResponseTurneDto(
         LocalDateTime dataHoraInicioTurne,
         LocalDateTime dataHoraFimTurne,
         String nomeImagem,
-        String descricao
+        String descricao,
+        Long bandaId,
+        String bandaNome
 ) {
     public static ResponseTurneDto toResponse(TurneEntity entity) {
         return new ResponseTurneDto(
@@ -21,7 +23,9 @@ public record ResponseTurneDto(
                 entity.getDataHoraInicioTurne(),
                 entity.getDataHoraFimTurne(),
                 entity.getNomeImagem(),
-                entity.getDescricao()
+                entity.getDescricao(),
+                entity.getBanda() != null ? entity.getBanda().getId() : null,
+                entity.getBanda() != null ? entity.getBanda().getNome() : null
         );
     }
 

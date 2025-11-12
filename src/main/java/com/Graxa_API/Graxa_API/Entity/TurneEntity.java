@@ -21,6 +21,9 @@ public class TurneEntity {
     private List<EventoEntity> eventos;
 
     private boolean ativo = true;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "banda_id", nullable = false)
+    private BandaEntity banda;
 
     private String nomeImagem;
 
@@ -49,5 +52,21 @@ public class TurneEntity {
 
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
+
+    public BandaEntity getBanda() {
+        return banda;
+    }
+
+    public void setBanda(BandaEntity banda) {
+        this.banda = banda;
+    }
+
+    public List<EventoEntity> getEventos() {
+        return eventos;
+    }
+
+    public void setEventos(List<EventoEntity> eventos) {
+        this.eventos = eventos;
+    }
 }
 

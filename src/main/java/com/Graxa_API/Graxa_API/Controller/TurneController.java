@@ -36,10 +36,11 @@ public class TurneController {
             @RequestPart("imagem") MultipartFile imagem
     ) throws IOException {
         // Salva a imagem na pasta
+        ResponseEntity<ResponseTurneDto> response = turneService.criarTurne(dto, imagem.getOriginalFilename().toString());
         ImagemEntity imagemSalva = imagemService.salvarImagem(imagem).getBody();
 
-        // Passa só o nome do arquivo para o TurneService
-        return turneService.criarTurne(dto, imagemSalva.getNomeArquivo());
+
+        return response;
     }
 
     @Operation(summary = "Busca uma turnê pelo ID", security = @SecurityRequirement(name = "BearerAuth"))

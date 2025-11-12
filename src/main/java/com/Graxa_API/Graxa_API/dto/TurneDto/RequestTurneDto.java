@@ -22,6 +22,11 @@ public record RequestTurneDto(
         LocalDateTime dataHoraFimTurne,
 
         @Schema(description = "Descrição da turnê", example = "Turnê especial com shows em várias cidades do Brasil")
-        String descricao
+        String descricao,
+
+        @Schema(description = "ID da banda responsável pela turnê", example = "1")
+        @NotNull
+        Long bandaId
 ) {}
+
 

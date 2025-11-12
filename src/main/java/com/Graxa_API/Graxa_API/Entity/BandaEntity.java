@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Entity;
 
+import com.Graxa_API.Graxa_API.Entity.Evento.EventoEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ArtistaEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.RepresentanteEntity;
 import com.Graxa_API.Graxa_API.Enums.Genero;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+
 public class BandaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,8 @@ public class BandaEntity {
 
     @Column(name = "nome_foto")
     private String nomeFoto;
+    @OneToMany(mappedBy = "banda", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<TurneEntity> turnes = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "representante_id", nullable = false)
@@ -39,8 +43,6 @@ public class BandaEntity {
     private List<ArtistaEntity> integrantes = new ArrayList<>();
 
     public BandaEntity() {}
-
-    // Getters e Setters
 
     public Long getId() {
         return id;
