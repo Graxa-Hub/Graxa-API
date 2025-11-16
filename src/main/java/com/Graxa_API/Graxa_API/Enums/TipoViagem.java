@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TipoViagem {
     AEREO("aereo"),
-    TERRESTRE("terrestre");
+    TERRESTRE("terrestre"),
+    ONIBUS("onibus"),
+    CARRO("carro"),
+    VAN("van");
     private final String value;
     TipoViagem(String value) {
         this.value = value;

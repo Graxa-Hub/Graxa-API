@@ -6,7 +6,7 @@ meta {
 
 post {
   url: http://localhost:8080/bandas
-  body: json
+  body: multipartForm
   auth: inherit
 }
 
@@ -23,6 +23,20 @@ body:json {
   
 }
 
+body:multipart-form {
+  dados: '''
+    {
+      "nome": "Radiohead",
+      "descricao": "Banda britânica de rock alternativo formada em 1985",
+      "genero": "ALTERNATIVO",
+      "representanteId":"1"
+    }
+    
+  ''' @contentType(application/json)
+  foto: @file(C:\Users\gabri\Downloads\mariaGadu.jpeg) @contentType(file)
+}
+
 settings {
   encodeUrl: true
+  timeout: 0
 }
