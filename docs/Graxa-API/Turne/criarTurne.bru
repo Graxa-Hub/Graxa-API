@@ -1,43 +1,15 @@
 meta {
-  name: criarTurne
+  name: CriarTurne
   type: http
-  seq: 1
+  seq: 2
 }
 
-post {
-  url: http:/localhost:8080/turnes
-  body: multipartForm
+get {
+  url: http://localhost:8080/turnes
+  body: none
   auth: inherit
-}
-
-headers {
-  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjE4MDAwMDEsImV4cCI6MTc2NTQwMDAwMX0.V2DnwvOkN06UgaIgZdPIVT03ieSH35qj2Dwx-vYLTBJtaZCJoq4cUet2Lr5j2YcgPYSWSwtmCE1jROpZuGVc4w
-}
-
-body:json {
-  {
-    "nomeTurne": "Turnê Mundial Graxa",
-    "dataHoraInicioTurne": "2025-11-01T20:00:00",
-    "dataHoraFimTurne": "2025-12-01T23:00:00"
-  }
-  
-  
-}
-
-body:multipart-form {
-  dados: '''
-    {
-      "nomeTurne": "Turnê Mundial Graxa",
-      "dataHoraInicioTurne": "2025-11-01T20:00:00",
-      "dataHoraFimTurne": "2025-12-01T23:00:00"
-    }
-  ''' @contentType(
-  
-  application/json)
-  imagem: @file(C:\Users\gabri\Downloads\Picture.png) @contentType(file)
 }
 
 settings {
   encodeUrl: true
-  timeout: 0
 }

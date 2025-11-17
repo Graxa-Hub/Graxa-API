@@ -24,8 +24,11 @@ public class CredenciaisUsuarioEntity {
 
     private LocalDateTime dataHoraUltimoAcesso;
 
-    public CredenciaisUsuarioEntity() {}
+    private String codigoRecuperacao;
 
+    private LocalDateTime codigoExpiraEm;
+
+    public CredenciaisUsuarioEntity() {}
 
 
     public Long getId() {
@@ -70,5 +73,21 @@ public class CredenciaisUsuarioEntity {
 
     public void setDataHoraUltimoAcesso(LocalDateTime dataHoraUltimoAcesso) {
         this.dataHoraUltimoAcesso = dataHoraUltimoAcesso;
+    }
+
+    public String getCodigoRecuperacao() {
+        return codigoRecuperacao;
+    }
+
+    public void setCodigoRecuperacao(String codigoRecuperacao) {
+        this.codigoRecuperacao = codigoRecuperacao;
+    }
+
+    public LocalDateTime getCodigoExpiraEm() {
+        return codigoExpiraEm;
+    }
+
+    public void setCodigoExpiraEm(LocalDateTime codigoExpiraEm) {
+        this.codigoExpiraEm = codigoExpiraEm;
     }
 }

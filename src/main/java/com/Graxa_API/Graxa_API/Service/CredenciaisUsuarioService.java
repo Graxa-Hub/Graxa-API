@@ -22,12 +22,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class CredenciaisUsuarioService {
 
     private final CredenciaisUsuarioRepository repository;
     private final ColaboradorRepository colaboradorRepository;
+    private final EmailService emailService;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -40,10 +43,45 @@ public class CredenciaisUsuarioService {
     private AuthenticationManager authenticatorManager;
     public CredenciaisUsuarioService(
             CredenciaisUsuarioRepository repository,
-            ColaboradorRepository colaboradorRepository
+            ColaboradorRepository colaboradorRepository, EmailService emailService
     ) {
         this.repository = repository;
         this.colaboradorRepository = colaboradorRepository;
+        this.emailService = emailService;
+    }
+
+    public ResponseEntity<?> enviarCodigoRecuperacao(String email) {
+        Optional<CredenciaisUsuarioEntity> credencialOpt = repository.findByEmail(email);
+
+        if (credencialOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("E-mail inválido ou não cadastrado.");
+        }
+
+        CredenciaisUsuarioEntity credencial = credencialOpt.get();
+
+        // gerar código de recuperação
+        String codigo = gerarCodigo();
+
+        // salvar no banco
+        credencial.setCodigoRecuperacao(codigo);
+        credencial.setCodigoExpiraEm(LocalDateTime.now().plusMinutes(10));
+
+        repository.save(credencial);
+
+        // enviar e-mail (apenas exemplo)
+        emailService.enviar(
+                credencial.getEmail(),
+                "Código de Recuperação de Senha",
+                "Seu código de recuperação é: " + codigo
+        );
+
+        return ResponseEntity.ok("Código enviado para o e-mail informado.");
+    }
+
+    private String gerarCodigo() {
+        int min = 100000;
+        int max = 999999;
+        return String.valueOf((int)(Math.random() * (max - min + 1)) + min);
     }
 
     // Buscar credencial por ID

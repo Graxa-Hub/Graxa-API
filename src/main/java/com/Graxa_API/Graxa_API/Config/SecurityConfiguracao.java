@@ -47,7 +47,12 @@ public class SecurityConfiguracao {
             "/actuator/**",
             "/h2-console/login.do",
             "/h2-console/**",
-            "/error/**"
+            "/error/**",
+            "/credenciais/recuperar-senha",
+            "/credenciais/validar-codigo",
+            "/credenciais/resetar-senha"
+
+
     };
 
     @Bean

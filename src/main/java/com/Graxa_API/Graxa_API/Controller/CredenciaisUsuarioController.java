@@ -1,6 +1,7 @@
 package com.Graxa_API.Graxa_API.Controller;
 
 import com.Graxa_API.Graxa_API.Service.CredenciaisUsuarioService;
+import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RecuperarSenhaDto;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestCredenciaisUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestLoginDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +22,18 @@ public class CredenciaisUsuarioController {
         this.service = service;
     }
 
+    @Operation(summary = "Envia código de recuperação para o e-mail informado")
+    @PostMapping("/recuperar-senha")
+    public ResponseEntity<?> recuperarSenha(@RequestBody RecuperarSenhaDto dto) {
+        return service.enviarCodigoRecuperacao(dto.email());
+    }
+
+    @Operation(summary = "Realiza login com credenciais do usuário")
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
+        return service.login(dto.identificador(), dto.senha());
+    }
+
     @Operation(summary = "Busca credencial de usuário pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/{id}")
     public ResponseEntity<?> getCredencialPorId(@PathVariable Long id) {
@@ -39,9 +52,7 @@ public class CredenciaisUsuarioController {
         return service.deletarCredencial(id);
     }
 
-    @Operation(summary = "Realiza login com credenciais do usuário")
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
-        return service.login(dto.identificador(), dto.senha());
-    }
+
+
+
 }
