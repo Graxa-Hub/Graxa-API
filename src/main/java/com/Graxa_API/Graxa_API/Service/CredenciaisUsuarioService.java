@@ -50,6 +50,49 @@ public class CredenciaisUsuarioService {
         this.emailService = emailService;
     }
 
+    public ResponseEntity<?> resetarSenha(String email, String novaSenha) {
+        Optional<CredenciaisUsuarioEntity> credOpt = repository.findByEmail(email);
+
+        if (credOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("E-mail inválido.");
+        }
+
+        CredenciaisUsuarioEntity cred = credOpt.get();
+
+        // Atualiza e limpa código
+        cred.setSenha(passwordEncoder.encode(novaSenha));
+        cred.setCodigoRecuperacao(null);
+        cred.setCodigoExpiraEm(null);
+
+        repository.save(cred);
+
+        return ResponseEntity.ok("Senha alterada com sucesso!");
+    }
+
+    public ResponseEntity<?> validarCodigo(String email, String codigo) {
+        Optional<CredenciaisUsuarioEntity> credencialOpt = repository.findByEmail(email);
+
+        if (credencialOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("E-mail inválido.");
+        }
+
+        CredenciaisUsuarioEntity cred = credencialOpt.get();
+
+        if (cred.getCodigoRecuperacao() == null) {
+            return ResponseEntity.badRequest().body("Nenhum código solicitado.");
+        }
+
+        if (!cred.getCodigoRecuperacao().equals(codigo)) {
+            return ResponseEntity.badRequest().body("Código inválido.");
+        }
+
+        if (cred.getCodigoExpiraEm().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.badRequest().body("Código expirado.");
+        }
+
+        return ResponseEntity.ok("Código válido.");
+    }
+
     public ResponseEntity<?> enviarCodigoRecuperacao(String email) {
         Optional<CredenciaisUsuarioEntity> credencialOpt = repository.findByEmail(email);
 
