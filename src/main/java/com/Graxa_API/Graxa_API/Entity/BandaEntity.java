@@ -33,7 +33,7 @@ public class BandaEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "representante_id", nullable = false)
     private RepresentanteEntity representante;
-
+    private Boolean ativo = true;
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "banda_integrante",
@@ -94,5 +94,13 @@ public class BandaEntity {
 
     public void setIntegrantes(List<ArtistaEntity> integrantes) {
         this.integrantes = integrantes;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 }

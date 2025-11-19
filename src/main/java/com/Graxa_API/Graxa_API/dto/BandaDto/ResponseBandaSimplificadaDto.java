@@ -10,7 +10,8 @@ public record ResponseBandaSimplificadaDto(
         String nome,
         String descricao,
         Genero genero,
-        String nomeFoto
+        String nomeFoto,
+        Boolean ativo
 ) {
     public static ResponseBandaSimplificadaDto toResponse(BandaEntity entity) {
         return new ResponseBandaSimplificadaDto(
@@ -18,7 +19,8 @@ public record ResponseBandaSimplificadaDto(
                 entity.getNome(),
                 entity.getDescricao(),
                 entity.getGenero(),
-                entity.getNomeFoto()
+                entity.getNomeFoto(),
+                entity.getAtivo()
         );
     }
 

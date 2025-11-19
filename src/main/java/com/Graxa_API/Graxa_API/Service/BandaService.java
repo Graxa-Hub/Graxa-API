@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BandaService {
@@ -42,11 +43,11 @@ public class BandaService {
     }
 
     public ResponseEntity<List<ResponseBandaDto>> getBandas() {
-        List<BandaEntity> bandas = repository.findAll();
-        if (bandas.isEmpty()) {
-            throw new BandasNaoEncontradasException();
+        Optional<List<BandaEntity>> bandas = repository.findByAtivoTrue();
+        if (bandas.get().isEmpty()) {
+            return ResponseEntity.ok().build();
         }
-        return ResponseEntity.ok(ResponseBandaDto.toResponse(bandas));
+        return ResponseEntity.ok(ResponseBandaDto.toResponse(bandas.get()));
     }
 
     public ResponseEntity<ResponseBandaDto> getBandaPorId(Long id) {
@@ -129,5 +130,24 @@ public class BandaService {
         repository.save(banda);
 
         return ResponseEntity.ok(ResponseBandaDto.toResponse(banda));
+    }
+
+    @Transactional
+    public void deletarBanda(Long bandaId) {
+        ResponseEntity<ResponseBandaDto> responseBanda = getBandaPorId(bandaId);
+        if (!responseBanda.getStatusCode().isError()) {
+            Optional<BandaEntity> bandaOpt = repository.findById(bandaId);
+            if (bandaOpt.isPresent()) {
+                BandaEntity banda = bandaOpt.get();
+                banda.setAtivo(false);
+
+                // Safe delete em todos os integrantes
+                if (banda.getIntegrantes() != null) {
+                    banda.getIntegrantes().forEach(integrante -> integrante.setAtivo(false));
+                }
+
+                repository.save(banda); // Salva as alterações
+            }
+        }
     }
 }

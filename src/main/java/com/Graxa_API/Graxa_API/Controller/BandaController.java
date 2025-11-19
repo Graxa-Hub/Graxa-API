@@ -64,4 +64,11 @@ public class BandaController {
     ) {
         return service.adicionarIntegranteBanda(id, dto);
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Realizer um safe delete á banda")
+    public ResponseEntity<Void> deletarBanda(@PathVariable Long id){
+        service.deletarBanda(id);
+        return ResponseEntity.noContent().build();
+    }
 }

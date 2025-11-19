@@ -1,9 +1,6 @@
 package com.Graxa_API.Graxa_API.handler;
 
-import com.Graxa_API.Graxa_API.Exception.CpfDuplicadoException;
-import com.Graxa_API.Graxa_API.Exception.EmailDuplicadoException;
-import com.Graxa_API.Graxa_API.Exception.UsuarioNaoEncontradoException;
-import com.Graxa_API.Graxa_API.Exception.UsuariosNaoEncontradosException;
+import com.Graxa_API.Graxa_API.Exception.*;
 import com.Graxa_API.Graxa_API.Utils.ErrorUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +31,14 @@ public class GlobalExceptionHandler {
         erro.put("mensagem", e.getMessage());
 
         return ErrorUtils.buildErrorResponse(HttpStatus.NOT_FOUND, "Nenhum usuário encontrado", List.of(erro));
+    }
+
+    @ExceptionHandler(BandaNaoEncontradaException.class)
+    public ResponseEntity<Object> handleBandaNaoEncontradaException(BandaNaoEncontradaException e) {
+        Map<String, String> erro = new HashMap<>();
+        erro.put("mensagem", e.getMessage());
+
+        return ErrorUtils.buildErrorResponse(HttpStatus.NOT_FOUND, "", List.of(erro));
     }
 
     @ExceptionHandler(CpfDuplicadoException.class)

@@ -6,6 +6,7 @@ import com.Graxa_API.Graxa_API.dto.ArtistaDto.ResponseArtistaDto;
 import com.Graxa_API.Graxa_API.dto.RepresentanteDto.ResponseRepresentanteDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public record ResponseBandaDto(
         Long id,
@@ -14,7 +15,8 @@ public record ResponseBandaDto(
         Genero genero,
         String nomeFoto, // ✅ NOVO: Nome do arquivo da foto
         ResponseRepresentanteDto representante, // ✅ NOVO: Dados do representante
-        List<ResponseArtistaDto> integrantes
+        List<ResponseArtistaDto> integrantes,
+        Boolean ativo
 ) {
     public static ResponseBandaDto toResponse(BandaEntity entity) {
         List<ResponseArtistaDto> integrantesDto = entity.getIntegrantes()
@@ -34,7 +36,8 @@ public record ResponseBandaDto(
                 entity.getGenero(),
                 entity.getNomeFoto(), // ✅ NOVO
                 representanteDto,     // ✅ NOVO
-                integrantesDto
+                integrantesDto,
+                entity.getAtivo()
         );
     }
 
@@ -43,4 +46,6 @@ public record ResponseBandaDto(
                 .map(ResponseBandaDto::toResponse)
                 .toList();
     }
+
+
 }
