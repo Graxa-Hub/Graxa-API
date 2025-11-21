@@ -17,9 +17,7 @@ public record ResponseUsuarioDto(
         Boolean ativo
 ) {
     public static ResponseUsuarioDto toResponse(ColaboradorEntity usuario) {
-        ResponseEnderecoDto enderecoDto = usuario.getEndereco() != null
-                ? ResponseEnderecoDto.toResponse(usuario.getEndereco())
-                : null;
+
 
 
         return new ResponseUsuarioDto(

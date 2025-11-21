@@ -62,7 +62,8 @@ class TurneServiceTest {
 
         ImagemEntity imagemEntity = new ImagemEntity();
         imagemEntity.setNomeArquivo("uid123.jpg");
-        when(imagemService.salvarImagem(any())).thenReturn(ResponseEntity.ok(imagemEntity));
+        when(imagemService.salvarImagem(any())).thenReturn(imagemEntity);
+
 
         TurneEntity salvo = new TurneEntity();
         salvo.setId(10L);
@@ -73,7 +74,8 @@ class TurneServiceTest {
 
         ResponseEntity<ResponseTurneDto> response = turneService.criarTurne(dto, mockFile);
 
-        assertEquals(201, response.getStatusCodeValue());
+        assertEquals(201, response.getStatusCode().value());
+
         assertEquals("Rock Brasil", response.getBody().nomeTurne());
         verify(turneRepository).save(any(TurneEntity.class));
         verify(imagemService).salvarImagem(any());
@@ -127,7 +129,8 @@ class TurneServiceTest {
 
         ResponseEntity<ResponseTurneDto> response = turneService.buscarPorId(1L);
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
+
         assertEquals("Rock Brasil", response.getBody().nomeTurne());
     }
 
@@ -148,7 +151,8 @@ class TurneServiceTest {
 
         ResponseEntity<List<ResponseTurneDto>> response = turneService.listarAtivas();
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
+
         assertEquals(1, response.getBody().size());
         assertEquals("Rock Brasil", response.getBody().get(0).nomeTurne());
     }

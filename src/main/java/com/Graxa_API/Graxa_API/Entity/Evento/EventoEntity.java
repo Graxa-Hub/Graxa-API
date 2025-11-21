@@ -26,6 +26,10 @@ public abstract class EventoEntity {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getNomeEvento() {
         return nomeEvento;
     }

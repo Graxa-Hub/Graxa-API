@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Entity.Evento;
 
+import com.Graxa_API.Graxa_API.Entity.AlocacaoEntity;
 import com.Graxa_API.Graxa_API.Entity.BandaEntity;
 import com.Graxa_API.Graxa_API.Entity.LocalEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
@@ -27,6 +28,10 @@ public class ShowEntity extends EventoEntity {
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private ColaboradorEntity responsavelEvento;
+
+    // ✅ Lista de alocações de colaboradores
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AlocacaoEntity> alocacoes = new ArrayList<>();
 
 
 
@@ -63,4 +68,11 @@ public class ShowEntity extends EventoEntity {
         this.responsavelEvento = responsavelEvento;
     }
 
+    public List<AlocacaoEntity> getAlocacoes() {
+        return alocacoes;
+    }
+
+    public void setAlocacoes(List<AlocacaoEntity> alocacoes) {
+        this.alocacoes = alocacoes;
+    }
 }
