@@ -1,8 +1,7 @@
 package com.Graxa_API.Graxa_API.Controller;
 
 import com.Graxa_API.Graxa_API.Service.CredenciaisUsuarioService;
-import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestCredenciaisUsuarioDto;
-import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestLoginDto;
+import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +18,30 @@ public class CredenciaisUsuarioController {
 
     public CredenciaisUsuarioController(CredenciaisUsuarioService service) {
         this.service = service;
+    }
+
+    @Operation(summary = "Valida o código enviado ao usuário")
+    @PostMapping("/validar-codigo")
+    public ResponseEntity<?> validarCodigo(@RequestBody ValidarCodigoDto dto) {
+        return service.validarCodigo(dto.email(), dto.codigo());
+    }
+
+    @Operation(summary = "Reseta a senha do usuário")
+    @PostMapping("/resetar-senha")
+    public ResponseEntity<?> resetarSenha(@RequestBody ResetarSenhaDto dto) {
+        return service.resetarSenha(dto.email(), dto.novaSenha());
+    }
+
+    @Operation(summary = "Envia código de recuperação para o e-mail informado")
+    @PostMapping("/recuperar-senha")
+    public ResponseEntity<?> recuperarSenha(@RequestBody RecuperarSenhaDto dto) {
+        return service.enviarCodigoRecuperacao(dto.email());
+    }
+
+    @Operation(summary = "Realiza login com credenciais do usuário")
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
+        return service.login(dto.identificador(), dto.senha());
     }
 
     @Operation(summary = "Busca credencial de usuário pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
@@ -39,9 +62,7 @@ public class CredenciaisUsuarioController {
         return service.deletarCredencial(id);
     }
 
-    @Operation(summary = "Realiza login com credenciais do usuário")
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
-        return service.login(dto.identificador(), dto.senha());
-    }
+
+
+
 }

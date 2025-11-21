@@ -3,7 +3,7 @@ package com.Graxa_API.Graxa_API.Entity.Usuario;
 import jakarta.persistence.*;
 
 @MappedSuperclass
-public abstract class UsuarioEntity {
+public abstract class   UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
