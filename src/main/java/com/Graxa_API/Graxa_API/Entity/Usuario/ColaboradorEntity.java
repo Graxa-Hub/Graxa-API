@@ -6,13 +6,14 @@ import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class ColaboradorEntity extends UsuarioEntity{
+    public ColaboradorEntity() {}
+
     private LocalDate dataNascimento;
-
-
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_usuario")
     private TipoUsuario tipoUsuario;
@@ -28,11 +29,11 @@ public class ColaboradorEntity extends UsuarioEntity{
     private CredenciaisUsuarioEntity credenciais;
 
     @OneToMany(mappedBy = "responsavelAcao")
-    private List<AcaoEntity> acoes;
+    private List<AcaoEntity> acoes = new ArrayList<>();
 
-    public ColaboradorEntity() {}
-
-
+    // Relacionamento inverso: um colaborador pode ter várias notificações
+    @OneToMany(mappedBy = "colaborador", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NotificacaoEntity> notificacoes = new ArrayList<>();
 
 
 
@@ -56,4 +57,12 @@ public class ColaboradorEntity extends UsuarioEntity{
 
     public List<AcaoEntity> getAcoes() { return acoes; }
     public void setAcoes(List<AcaoEntity> acoes) { this.acoes = acoes; }
+
+    public List<NotificacaoEntity> getNotificacoes() {
+        return notificacoes;
+    }
+
+    public void setNotificacoes(List<NotificacaoEntity> notificacoes) {
+        this.notificacoes = notificacoes;
+    }
 }
