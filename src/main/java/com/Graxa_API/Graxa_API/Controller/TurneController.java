@@ -1,7 +1,5 @@
 package com.Graxa_API.Graxa_API.Controller;
 
-import com.Graxa_API.Graxa_API.Entity.ImagemEntity;
-import com.Graxa_API.Graxa_API.Service.ImagemService;
 import com.Graxa_API.Graxa_API.Service.TurneService;
 import com.Graxa_API.Graxa_API.dto.TurneDto.RequestTurneDto;
 import com.Graxa_API.Graxa_API.dto.TurneDto.ResponseTurneDto;
@@ -22,11 +20,9 @@ import java.util.List;
 public class TurneController {
 
     private final TurneService turneService;
-    private final ImagemService imagemService;
 
-    public TurneController(TurneService turneService, ImagemService imagemService) {
+    public TurneController(TurneService turneService) {
         this.turneService = turneService;
-        this.imagemService = imagemService;
     }
 
     @Operation(summary = "Cria uma nova turnê", security = @SecurityRequirement(name = "BearerAuth"))
@@ -35,12 +31,8 @@ public class TurneController {
             @RequestPart("dados") @Valid RequestTurneDto dto,
             @RequestPart("imagem") MultipartFile imagem
     ) throws IOException {
-        // Salva a imagem na pasta
-        ResponseEntity<ResponseTurneDto> response = turneService.criarTurne(dto, imagem.getOriginalFilename().toString());
-        ImagemEntity imagemSalva = imagemService.salvarImagem(imagem).getBody();
-
-
-        return response;
+        // ✅ delega direto para o service
+        return turneService.criarTurne(dto, imagem);
     }
 
     @Operation(summary = "Busca uma turnê pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
@@ -62,12 +54,8 @@ public class TurneController {
             @RequestPart("dados") @Valid RequestTurneDto dto,
             @RequestPart(value = "imagem", required = false) MultipartFile imagem
     ) throws IOException {
-        String nomeImagem = null;
-        if (imagem != null && !imagem.isEmpty()) {
-            ImagemEntity imagemSalva = imagemService.salvarImagem(imagem).getBody();
-            nomeImagem = imagemSalva.getNomeArquivo();
-        }
-        return turneService.atualizarTurne(id, dto, nomeImagem);
+        // ✅ delega direto para o service
+        return turneService.atualizarTurne(id, dto, imagem);
     }
 
     @Operation(summary = "Deleta uma turnê pelo ID", security = @SecurityRequirement(name = "BearerAuth"))

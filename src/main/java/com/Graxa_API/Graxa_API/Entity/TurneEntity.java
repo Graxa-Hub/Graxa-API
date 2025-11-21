@@ -35,6 +35,10 @@ public class TurneEntity {
     // Getters e Setters
     public Long getId() { return id; }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getNomeTurne() { return nomeTurne; }
     public void setNomeTurne(String nomeTurne) { this.nomeTurne = nomeTurne; }
 

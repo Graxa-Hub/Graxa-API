@@ -22,7 +22,7 @@ public class ImagemController {
     @PostMapping("/upload")
     public ResponseEntity<ImagemEntity> uploadImagem(@RequestParam("arquivo") MultipartFile arquivo) throws IOException {
         try{
-            ImagemEntity img = imagemService.salvarImagem(arquivo).getBody();
+            ImagemEntity img = imagemService.salvarImagem(arquivo);
             return ResponseEntity.ok(img);
         }catch (Exception e){
             return ResponseEntity.internalServerError().build();

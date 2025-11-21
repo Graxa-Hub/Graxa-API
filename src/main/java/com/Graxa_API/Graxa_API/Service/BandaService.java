@@ -74,8 +74,8 @@ public class BandaService {
 
         // Salva a imagem se foi enviada
         if (foto != null && !foto.isEmpty()) {
-            ResponseEntity<ImagemEntity> imagemResponse = imagemService.salvarImagem(foto);
-            ImagemEntity imagemSalva = imagemResponse.getBody();
+            ImagemEntity imagemResponse = imagemService.salvarImagem(foto);
+            ImagemEntity imagemSalva = imagemResponse;
 
             if (imagemSalva != null) {
                 banda.setNomeFoto(imagemSalva.getNomeArquivo());
@@ -104,8 +104,8 @@ public class BandaService {
 
         // Atualiza a imagem se foi enviada nova
         if (foto != null && !foto.isEmpty()) {
-            ResponseEntity<ImagemEntity> imagemResponse = imagemService.salvarImagem(foto);
-            ImagemEntity imagemSalva = imagemResponse.getBody();
+            ImagemEntity imagemResponse = imagemService.salvarImagem(foto);
+            ImagemEntity imagemSalva = imagemResponse;
 
             if (imagemSalva != null) {
                 banda.setNomeFoto(imagemSalva.getNomeArquivo());
