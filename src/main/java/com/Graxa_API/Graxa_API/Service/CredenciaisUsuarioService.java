@@ -166,7 +166,7 @@ public class CredenciaisUsuarioService {
 
         credencial.setNomeUsuario(dto.nomeUsuario());
         credencial.setEmail(dto.email());
-        credencial.setSenha(dto.senha()); // senha atualizada sem encoder
+        credencial.setSenha(passwordEncoder.encode(dto.senha()));
 
         CredenciaisUsuarioEntity atualizada = repository.save(credencial);
         return ResponseEntity.ok(ResponseCredenciaisUsuarioDto.toResponse(atualizada));
