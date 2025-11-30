@@ -59,6 +59,15 @@ public class GerenciadorTokenJwt {
                 .parseClaimsJws(token).getBody();
     }
 
+    public boolean validaTokenSomente(String token, String username) {
+        try {
+            String usernameToken = getUsernameFromToken(token);
+            return usernameToken.equals(username) && !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private SecretKey parseSecret() {
         return Keys.hmacShaKeyFor(this.secret.getBytes(StandardCharsets.UTF_8));
     }

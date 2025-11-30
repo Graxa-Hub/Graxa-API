@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AutenticacaoFilter extends OncePerRequestFilter {
 
@@ -43,55 +44,42 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        String username = null;
+        String jwtToken = null;
 
-        // Se não tem token → segue fluxo normal
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
+        String requestTokenHeader = request.getHeader("Authorization");
+
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+            jwtToken = requestTokenHeader.substring(7);
+
+            try {
+                username = jwtTokenManager.getUsernameFromToken(jwtToken);
+            } catch (ExpiredJwtException e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
         }
 
-        String jwtToken = authHeader.substring(7);
-        String username;
-
-        try {
-            username = jwtTokenManager.getUsernameFromToken(jwtToken);
-        } catch (ExpiredJwtException e) {
-            LOGGER.warn("Token expirado");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        } catch (Exception e) {
-            LOGGER.warn("Token inválido: {}", e.getMessage());
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // Se ok, autentica no contexto
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = autenticacaoService.loadUserByUsername(username);
+            // agora valida apenas o token, sem acessar o banco
+            if (jwtTokenManager.validaTokenSomente(jwtToken, username)) {
 
-            if (jwtTokenManager.validaeToke(jwtToken, userDetails)) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(username, null, List.of());
 
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
 
         filterChain.doFilter(request, response);
     }
+
 }
