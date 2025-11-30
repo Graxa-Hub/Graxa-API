@@ -19,6 +19,7 @@ public class AutenticacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String identificador) throws UsernameNotFoundException {
+        System.out.println("loadUserByUsername chamado para: " + identificador);
         Optional<CredenciaisUsuarioEntity> credencial = repository.findByEmail(identificador);
 
         if (credencial.isEmpty()) {

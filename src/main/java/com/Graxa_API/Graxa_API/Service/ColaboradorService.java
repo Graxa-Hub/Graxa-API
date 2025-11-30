@@ -56,6 +56,9 @@ public class ColaboradorService {
         if (dto.cpf() != null) usuario.setCpf(dto.cpf());
         if (dto.dataNascimento() != null) usuario.setDataNascimento(dto.dataNascimento());
         if (dto.tipoUsuario() != null) usuario.setTipoUsuario(dto.tipoUsuario());
+        if (dto.fotoNome() != null && !dto.fotoNome().isBlank()) {
+            usuario.setFotoNome(dto.fotoNome());
+        }
 
         ColaboradorEntity atualizado = repository.save(usuario);
         return ResponseEntity.ok(ResponseUsuarioDto.toResponse(atualizado));

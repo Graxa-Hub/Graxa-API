@@ -15,6 +15,9 @@ import java.time.LocalDate;
 @Schema(description = "DTO para cadastro de usuário colaborador")
 public record RequestUsuarioDto(
 
+        @Schema(description = "Nome do arquivo da foto", example = "abc123.png")
+        String fotoNome,
+
         @Schema(description = "Nome completo do usuário", example = "Gabriel Souza")
         @NotBlank(message = "Preencha o nome")
         String nome,
@@ -47,4 +50,6 @@ public record RequestUsuarioDto(
         @Schema(description = "Telefone principal do usuário")
         @NotNull(message = "Telefone obrigatório")
         RequestTelefoneDto telefone
+
+
 ) {}

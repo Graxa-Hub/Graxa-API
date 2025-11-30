@@ -34,6 +34,8 @@ public class SecurityConfiguracao {
 
     @Autowired
     AutenticacaoEntryPoint autenticacaoJwtEntrypoint;
+
+    // URLs liberadas
     private static final String[] URLS_PERMITIDAS = {
             "/swagger-ui.html**",
             "/swagger-ui/**",
@@ -45,20 +47,23 @@ public class SecurityConfiguracao {
             "/api/public/**",
             "/auth/**",
             "/actuator/**",
-            "/h2-console/login.do",
             "/h2-console/**",
             "/error/**",
+
+            // SENHA
             "/credenciais/recuperar-senha",
             "/credenciais/validar-codigo",
-            "/credenciais/resetar-senha"
+            "/credenciais/resetar-senha",
+            "/credenciais/login",
 
-
+            // IMAGENS -- AGORA PÚBLICAS
+            "/imagens/download/**"
     };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+
+        http.headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
@@ -68,6 +73,7 @@ public class SecurityConfiguracao {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(autenticacaoJwtEntrypoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        // JWT FILTER
         http.addFilterBefore(jwtAuthenticationFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -75,10 +81,9 @@ public class SecurityConfiguracao {
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.authenticationProvider(new AutenticacaoProvider(autenticacaoService, passwordEncoder()));
-
-        return authenticationManagerBuilder.build();
+        AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authBuilder.userDetailsService(autenticacaoService).passwordEncoder(passwordEncoder());
+        return authBuilder.build();
     }
 
     @Bean
@@ -87,7 +92,7 @@ public class SecurityConfiguracao {
     }
 
     @Bean
-    public GerenciadorTokenJwt jwtAuthenticationUtilBean(){
+    public GerenciadorTokenJwt jwtAuthenticationUtilBean() {
         return new GerenciadorTokenJwt();
     }
 
@@ -99,7 +104,7 @@ public class SecurityConfiguracao {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuracao = new CorsConfiguration();
-        configuracao.applyPermitDefaultValues(); // Permite origens padrão (como localhost)
+        configuracao.applyPermitDefaultValues();
 
         configuracao.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
@@ -108,8 +113,7 @@ public class SecurityConfiguracao {
                 HttpMethod.DELETE.name(),
                 HttpMethod.PATCH.name(),
                 HttpMethod.OPTIONS.name(),
-                HttpMethod.HEAD.name(),
-                HttpMethod.TRACE.name()
+                HttpMethod.HEAD.name()
         ));
 
         configuracao.setExposedHeaders(List.of(HttpHeaders.CONTENT_DISPOSITION));

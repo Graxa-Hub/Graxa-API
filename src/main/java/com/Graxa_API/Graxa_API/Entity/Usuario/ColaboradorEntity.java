@@ -36,8 +36,6 @@ public class ColaboradorEntity extends UsuarioEntity{
     private List<NotificacaoEntity> notificacoes = new ArrayList<>();
 
 
-
-
     public LocalDate getDataNascimento() { return dataNascimento; }
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
