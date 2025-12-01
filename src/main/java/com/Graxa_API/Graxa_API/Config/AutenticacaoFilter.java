@@ -15,11 +15,12 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.List;
 
+public class AutenticacaoFilter extends OncePerRequestFilter {
 
-public class AutenticacaoFilter  extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AutenticacaoFilter.class);
+
     private final AutenticacaoService autenticacaoService;
     private final GerenciadorTokenJwt jwtTokenManager;
 
@@ -29,42 +30,56 @@ public class AutenticacaoFilter  extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+
+        return path.startsWith("/imagens/download")
+                || path.startsWith("/credenciais/login")
+                || path.startsWith("/credenciais/recuperar-senha")
+                || path.startsWith("/credenciais/validar-codigo")
+                || path.startsWith("/credenciais/resetar-senha")
+                || path.startsWith("/swagger")
+                || path.startsWith("/v3/api-docs")
+                || path.startsWith("/h2-console");
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
         String username = null;
         String jwtToken = null;
 
         String requestTokenHeader = request.getHeader("Authorization");
 
-        if(Objects.nonNull(requestTokenHeader) && requestTokenHeader.startsWith("Bearer ")){
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
 
-            try{
+            try {
                 username = jwtTokenManager.getUsernameFromToken(jwtToken);
-            } catch(ExpiredJwtException exception) {
-                LOGGER.info("[FALHA AUTENTICACAO] - Token expirado, usuario: {} - {}",
-                        exception.getClaims().getSubject(), exception.getMessage());
-                LOGGER.trace("[FALHA AUTENTICACAO] - stack trace: %s", exception);
-
+            } catch (ExpiredJwtException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
         }
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            addUsernameInContext(request, username, jwtToken);
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            // agora valida apenas o token, sem acessar o banco
+            if (jwtTokenManager.validaTokenSomente(jwtToken, username)) {
+
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(username, null, List.of());
+
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
 
         filterChain.doFilter(request, response);
     }
-        private void addUsernameInContext(HttpServletRequest request, String username, String jwtToken){
-            UserDetails userDetails = autenticacaoService.loadUserByUsername(username);
-
-            if(jwtTokenManager.validaeToke(jwtToken, userDetails)){
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            }
-        }
-
 
 }

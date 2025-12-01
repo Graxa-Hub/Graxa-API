@@ -14,7 +14,8 @@ public record ResponseUsuarioDto(
         LocalDate dataNascimento,
         String cpf,
         TipoUsuario tipoUsuario,
-        Boolean ativo
+        Boolean ativo,
+        String fotoNome
 ) {
     public static ResponseUsuarioDto toResponse(ColaboradorEntity usuario) {
 
@@ -26,7 +27,8 @@ public record ResponseUsuarioDto(
                 usuario.getDataNascimento(),
                 usuario.getCpf(),
                 usuario.getTipoUsuario(),
-                usuario.getAtivo()
+                usuario.getAtivo(),
+                usuario.getFotoNome()
         );
     }
 

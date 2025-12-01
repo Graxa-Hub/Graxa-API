@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 @RestController
@@ -33,8 +35,11 @@ public class ImagemController {
     public ResponseEntity<byte[]> downloadImagem(@PathVariable String nomeArquivo) {
         try{
             byte[] dados = imagemService.baixarImagem(nomeArquivo);
-            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment filename =/"+nomeArquivo+ "/")
-            .contentType(MediaType.IMAGE_JPEG).body(dados);
+            String contentType = Files.probeContentType(Paths.get("uploads/" + nomeArquivo));
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .body(dados);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
