@@ -10,5 +10,5 @@ public interface CredenciaisUsuarioRepository extends JpaRepository<CredenciaisU
     boolean existsByEmailIgnoreCase(String email);
     Optional<CredenciaisUsuarioEntity> findByEmail(String email);
     Optional<CredenciaisUsuarioEntity> findByNomeUsuario(String nomeUsuario);
-
+    Optional<CredenciaisUsuarioEntity> findByUsuarioId(Long usuarioId);
 }

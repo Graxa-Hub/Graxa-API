@@ -191,12 +191,12 @@ public class CredenciaisUsuarioService {
                 new UsernamePasswordAuthenticationToken(identificador, senha);
 
         Authentication authentication = authenticationManager.authenticate(credentials);
-
+        System.out.println(authentication);
         // Usa o principal retornado pela autenticação
         CredencialUsuarioDetailsDto usuarioLogado = (CredencialUsuarioDetailsDto) authentication.getPrincipal();
 
         // Atualiza o último acesso
-        CredenciaisUsuarioEntity entidade = repository.findById(usuarioLogado.usuarioId())
+        CredenciaisUsuarioEntity entidade = repository.findByUsuarioId(usuarioLogado.usuarioId())
                 .orElseThrow(LoginInvalidoException::new);
 
         entidade.setDataHoraUltimoAcesso(LocalDateTime.now());

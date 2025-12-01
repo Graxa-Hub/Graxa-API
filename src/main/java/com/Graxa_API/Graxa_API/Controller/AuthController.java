@@ -64,6 +64,7 @@ public class AuthController {
     @Operation(summary = "Realiza login e retorna o token de autenticação")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
+
         return credenciaisService.login(dto.identificador(), dto.senha());
     }
 }
