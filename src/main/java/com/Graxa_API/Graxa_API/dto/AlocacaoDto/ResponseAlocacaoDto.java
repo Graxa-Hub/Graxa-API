@@ -2,6 +2,7 @@ package com.Graxa_API.Graxa_API.dto.AlocacaoDto;
 
 import com.Graxa_API.Graxa_API.Entity.AlocacaoEntity;
 import com.Graxa_API.Graxa_API.Enums.StatusAlocacao;
+import com.Graxa_API.Graxa_API.dto.ShowDto.ResponseResumoShowDto;
 import com.Graxa_API.Graxa_API.dto.ShowDto.ResponseShowDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public record ResponseAlocacaoDto(
         Long id,
-        ResponseShowDto show,
+        ResponseResumoShowDto show,
         ResponseUsuarioDto colaborador,
         StatusAlocacao status,
         boolean ativo,
@@ -20,7 +21,7 @@ public record ResponseAlocacaoDto(
     public static ResponseAlocacaoDto toResponse(AlocacaoEntity entity) {
         return new ResponseAlocacaoDto(
                 entity.getId(),
-                ResponseShowDto.toResponse(entity.getShow()),
+                ResponseResumoShowDto.toResponse(entity.getShow()),
                 ResponseUsuarioDto.toResponse(entity.getColaborador()),
                 entity.getStatus(),
                 entity.isAtivo(),
