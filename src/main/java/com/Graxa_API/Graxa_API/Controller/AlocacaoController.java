@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Controller;
 
+import com.Graxa_API.Graxa_API.Enums.StatusAlocacao;
 import com.Graxa_API.Graxa_API.Service.AlocacaoService;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.RequestAlocacaoDto;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.ResponseAlocacaoDto;
@@ -27,9 +28,9 @@ public class AlocacaoController {
     @PutMapping("/{id}/responder")
     public ResponseEntity<ResponseAlocacaoDto> responderAlocacao(
             @PathVariable Long id,
-            @RequestParam boolean aceita
+            @RequestParam StatusAlocacao status
     ) {
-        ResponseAlocacaoDto response = alocacaoService.responderAlocacao(id, aceita);
+        ResponseAlocacaoDto response = alocacaoService.responderAlocacao(id, status);
         return ResponseEntity.ok(response);
     }
 

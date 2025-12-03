@@ -97,7 +97,7 @@ class AlocacaoControllerTest {
     @WithMockUser
     void deveResponderAlocacaoAceita() throws Exception {
         Mockito.when(alocacaoService.responderAlocacao(eq(1L), eq(true)))
-                .thenReturn(mockResponse(StatusAlocacao.ACEITA));
+                .thenReturn(mockResponse(StatusAlocacao.ACEITO));
 
         mockMvc.perform(put("/alocacoes/1/responder")
                         .param("aceita", "true")

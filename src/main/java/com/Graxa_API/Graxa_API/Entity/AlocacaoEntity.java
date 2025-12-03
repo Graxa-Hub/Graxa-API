@@ -14,11 +14,11 @@ public class AlocacaoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER) // ✅ EAGER para trazer show completo
     @JoinColumn(name = "show_id", nullable = false)
     private ShowEntity show;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER) // ✅ EAGER para trazer colaborador completo
     @JoinColumn(name = "colaborador_id", nullable = false)
     private ColaboradorEntity colaborador;
 
@@ -27,9 +27,10 @@ public class AlocacaoEntity {
 
     private boolean ativo = true;
 
-    private LocalDateTime dataHoraCriacao;   // quando a alocação foi feita
-    private LocalDateTime dataHoraResposta;  // quando colaborador aceitou/recusou
+    private LocalDateTime dataHoraCriacao;
+    private LocalDateTime dataHoraResposta;
 
+    // Getters e Setters (mantém todos iguais)
     public Long getId() {
         return id;
     }

@@ -40,12 +40,27 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
                 || path.startsWith("/credenciais/resetar-senha")
                 || path.startsWith("/swagger")
                 || path.startsWith("/v3/api-docs")
-                || path.startsWith("/h2-console");
+                || path.startsWith("/h2-console")
+                || path.startsWith("/ws/") // ✅ ADICIONAR: Liberar WebSocket
+                || path.startsWith("/notificacoes/status/websocket"); // ✅ ADICIONAR: Status WebSocket
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        // ✅ ADICIONAR: Headers CORS para todas as requisições
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Max-Age", "3600");
+
+        // ✅ ADICIONAR: Tratar requisições OPTIONS (preflight)
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
 
         String username = null;
         String jwtToken = null;
@@ -81,5 +96,4 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
 }

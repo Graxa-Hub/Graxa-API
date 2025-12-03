@@ -11,26 +11,28 @@ public class NotificacaoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // ✅ MUDANÇA: LAZY para EAGER
     @JoinColumn(name = "colaborador_id", nullable = false)
     private ColaboradorEntity colaborador;
 
+    // ✅ MUDANÇA: De LAZY para EAGER para carregar alocação automaticamente
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "alocacao_id")
+    private AlocacaoEntity alocacao;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 500)
     private String mensagem;
-
 
     @Column(nullable = false, length = 50)
     private String tipo;
 
-
     @Column(nullable = false)
     private boolean lida = false;
-
 
     @Column(nullable = false)
     private LocalDateTime dataCriacao = LocalDateTime.now();
 
+    // Getters e Setters (mantém todos iguais)
     public Long getId() {
         return id;
     }
@@ -77,5 +79,13 @@ public class NotificacaoEntity {
 
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
+    }
+
+    public AlocacaoEntity getAlocacao() {
+        return alocacao;
+    }
+
+    public void setAlocacao(AlocacaoEntity alocacao) {
+        this.alocacao = alocacao;
     }
 }

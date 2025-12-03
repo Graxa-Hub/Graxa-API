@@ -60,11 +60,11 @@ public class AlocacaoService {
     }
 
     @Transactional
-    public ResponseAlocacaoDto responderAlocacao(Long alocacaoId, boolean aceita) {
+    public ResponseAlocacaoDto responderAlocacao(Long alocacaoId, StatusAlocacao status) {
         AlocacaoEntity alocacao = alocacaoRepository.findById(alocacaoId)
                 .orElseThrow(() -> new RuntimeException("Alocação não encontrada"));
 
-        alocacao.setStatus(aceita ? StatusAlocacao.ACEITA : StatusAlocacao.RECUSADA);
+        alocacao.setStatus(status);
         alocacao.setDataHoraResposta(LocalDateTime.now());
 
         AlocacaoEntity atualizado = alocacaoRepository.save(alocacao);

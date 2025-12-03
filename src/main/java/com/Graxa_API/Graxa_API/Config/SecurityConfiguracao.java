@@ -57,7 +57,12 @@ public class SecurityConfiguracao {
             "/credenciais/login",
 
             // IMAGENS -- AGORA PÚBLICAS
-            "/imagens/download/**"
+            "/imagens/download/**",
+
+            // ✅ WEBSOCKET - URLs liberadas
+            "/ws/**",                                    // Endpoint de conexão WebSocket
+            "/sockjs-node/**",                          // SockJS fallback
+            "/notificacoes/status/websocket"            // Status público do WebSocket
     };
 
     @Bean
@@ -104,7 +109,10 @@ public class SecurityConfiguracao {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuracao = new CorsConfiguration();
-        configuracao.applyPermitDefaultValues();
+
+        // ✅ CORRIGIR: Permitir origens específicas do frontend
+        configuracao.setAllowedOriginPatterns(Arrays.asList("*")); // Permite todas as origens
+        // Ou específico: configuracao.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173"));
 
         configuracao.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
@@ -116,7 +124,14 @@ public class SecurityConfiguracao {
                 HttpMethod.HEAD.name()
         ));
 
-        configuracao.setExposedHeaders(List.of(HttpHeaders.CONTENT_DISPOSITION));
+        // ✅ CORRIGIR: Headers e credenciais para CORS
+        configuracao.setAllowedHeaders(Arrays.asList("*"));
+        configuracao.setAllowCredentials(true);
+        configuracao.setExposedHeaders(Arrays.asList(
+                HttpHeaders.CONTENT_DISPOSITION,
+                HttpHeaders.AUTHORIZATION,
+                "X-Total-Count" // Para paginação, se usar
+        ));
 
         UrlBasedCorsConfigurationSource origem = new UrlBasedCorsConfigurationSource();
         origem.registerCorsConfiguration("/**", configuracao);

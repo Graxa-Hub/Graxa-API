@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum StatusAlocacao {
     PENDENTE("pendente"),
-    ACEITA("aceita"),
-    RECUSADA("recusada");
+    ACEITO("aceito"),
+    RECUSADO("recusado"),
+    CANCELADO("cancelado");
 
     private final String value;
 

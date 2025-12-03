@@ -1,0 +1,115 @@
+package com.Graxa_API.Graxa_API.Service;
+
+import com.Graxa_API.Graxa_API.dto.NotificacaoDto.ResponseNotificacaoDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
+
+@Service
+public class NotificacaoWebSocketService {
+
+    private static final Logger logger = LoggerFactory.getLogger(NotificacaoWebSocketService.class);
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
+    // Envia notificação para um colaborador específico
+    public void enviarNotificacaoParaColaborador(String username, ResponseNotificacaoDto notificacao) {
+        try {
+            logger.info("Enviando notificação WebSocket para {}: {}", username, notificacao.mensagem());
+
+            // Envia para o tópico pessoal do usuário
+            messagingTemplate.convertAndSendToUser(
+                    username,
+                    "/queue/notificacoes",
+                    notificacao
+            );
+
+            // Também envia contador atualizado
+            Map<String, Object> update = Map.of(
+                    "tipo", "nova_notificacao",
+                    "notificacao", notificacao,
+                    "timestamp", System.currentTimeMillis()
+            );
+
+            messagingTemplate.convertAndSendToUser(
+                    username,
+                    "/queue/updates",
+                    update
+            );
+
+        } catch (Exception e) {
+            logger.error("Erro ao enviar notificação WebSocket para {}: {}", username, e.getMessage());
+        }
+    }
+
+    // Envia atualização de contador para um colaborador
+    public void enviarContadorParaColaborador(String username, long contadorNaoLidas) {
+        try {
+            Map<String, Object> update = Map.of(
+                    "tipo", "contador_atualizado",
+                    "naoLidas", contadorNaoLidas,
+                    "timestamp", System.currentTimeMillis()
+            );
+
+            messagingTemplate.convertAndSendToUser(
+                    username,
+                    "/queue/contador",
+                    update
+            );
+
+        } catch (Exception e) {
+            logger.error("Erro ao enviar contador WebSocket para {}: {}", username, e.getMessage());
+        }
+    }
+
+    // Envia para todos os colaboradores (broadcast)
+    public void enviarParaTodos(String mensagem) {
+        try {
+            Map<String, Object> broadcast = Map.of(
+                    "tipo", "broadcast",
+                    "mensagem", mensagem,
+                    "timestamp", System.currentTimeMillis()
+            );
+
+            messagingTemplate.convertAndSend("/topic/broadcast", broadcast);
+
+        } catch (Exception e) {
+            logger.error("Erro ao enviar broadcast WebSocket: {}", e.getMessage());
+        }
+    }
+
+    // Envia notificação de alocação aceita/recusada
+    public void enviarRespostaAlocacao(String username, String nomeColaborador, String nomeShow, boolean aceito) {
+        try {
+            String mensagem = String.format(
+                    "%s %s a alocação para o show '%s'",
+                    nomeColaborador,
+                    aceito ? "aceitou" : "recusou",
+                    nomeShow
+            );
+
+            Map<String, Object> resposta = Map.of(
+                    "tipo", "resposta_alocacao",
+                    "mensagem", mensagem,
+                    "aceito", aceito,
+                    "colaborador", nomeColaborador,
+                    "show", nomeShow,
+                    "timestamp", System.currentTimeMillis()
+            );
+
+            messagingTemplate.convertAndSendToUser(
+                    username,
+                    "/queue/alocacao-resposta",
+                    resposta
+            );
+
+        } catch (Exception e) {
+            logger.error("Erro ao enviar resposta de alocação WebSocket: {}", e.getMessage());
+        }
+    }
+}
