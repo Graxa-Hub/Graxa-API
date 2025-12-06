@@ -53,7 +53,8 @@ public class AlocacaoService {
         notificacaoService.criarNotificacao(
                 colaborador.getId(),
                 "Você foi alocado para o show " + show.getNomeEvento(),
-                "ALOCACAO_SHOW"
+                "ALOCACAO_SHOW",
+                salvo.getId()
         );
 
         return ResponseAlocacaoDto.toResponse(salvo);
