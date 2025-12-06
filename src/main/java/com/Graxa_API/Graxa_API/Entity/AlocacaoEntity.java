@@ -3,6 +3,7 @@ package com.Graxa_API.Graxa_API.Entity;
 import com.Graxa_API.Graxa_API.Entity.Evento.ShowEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Enums.StatusAlocacao;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class AlocacaoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER) // ✅ EAGER para trazer show completo
     @JoinColumn(name = "show_id", nullable = false)
     private ShowEntity show;

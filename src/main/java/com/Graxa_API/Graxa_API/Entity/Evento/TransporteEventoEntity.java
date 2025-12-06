@@ -1,6 +1,7 @@
 package com.Graxa_API.Graxa_API.Entity.Evento;
 
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class TransporteEventoEntity {
     private Long id;
 
     // Referência ao show
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "show_id", nullable = false)
     private ShowEntity show;
