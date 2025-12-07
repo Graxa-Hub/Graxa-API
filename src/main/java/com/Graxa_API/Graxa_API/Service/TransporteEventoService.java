@@ -6,6 +6,7 @@ import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Repository.TransporteEventoRepository;
 import com.Graxa_API.Graxa_API.Repository.ShowRepository;
 import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
+import com.Graxa_API.Graxa_API.dto.Logistica.TransporteDTO;
 import com.Graxa_API.Graxa_API.dto.Transporte.TransporteEventoCreateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,8 +47,19 @@ public class TransporteEventoService {
         return transporteEventoRepository.save(t);
     }
 
-    public List<TransporteEventoEntity> listarPorShow(Long showId) {
-        return transporteEventoRepository.findByShowId(showId);
+    public List<TransporteDTO> listarPorShow(Long showId) {
+        return transporteEventoRepository.findByShowId(showId)
+                .stream()
+                .map(t -> new TransporteDTO(
+                        t.getId(),
+                        t.getColaborador().getId(),
+                        t.getTipo(),
+                        t.getSaida() != null ? t.getSaida().toString() : null,
+                        t.getDestino(),
+                        t.getMotorista(),
+                        t.getObservacao()
+                ))
+                .toList();
     }
 
     public void remover(Long id) {

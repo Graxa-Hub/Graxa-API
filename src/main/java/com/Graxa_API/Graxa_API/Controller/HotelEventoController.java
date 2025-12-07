@@ -3,6 +3,7 @@ package com.Graxa_API.Graxa_API.Controller;
 import com.Graxa_API.Graxa_API.Entity.Evento.HotelEventoEntity;
 import com.Graxa_API.Graxa_API.Service.HotelEventoService;
 import com.Graxa_API.Graxa_API.dto.Hotel.HotelEventoCreateDTO;
+import com.Graxa_API.Graxa_API.dto.Logistica.HotelDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +25,8 @@ public class HotelEventoController {
     }
 
     @GetMapping("/show/{showId}")
-    public ResponseEntity<List<HotelEventoEntity>> listarPorShow(@PathVariable Long showId) {
-        List<HotelEventoEntity> lista = hotelEventoService.listarPorShow(showId);
-        return ResponseEntity.ok(lista);
+    public ResponseEntity<List<HotelDTO>> listarPorShow(@PathVariable Long showId) {
+        return ResponseEntity.ok(hotelEventoService.listarPorShow(showId));
     }
 
     @DeleteMapping("/{id}")

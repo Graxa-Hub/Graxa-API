@@ -7,6 +7,7 @@ import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
 import com.Graxa_API.Graxa_API.Repository.HotelEventoRepository;
 import com.Graxa_API.Graxa_API.Repository.ShowRepository;
 import com.Graxa_API.Graxa_API.dto.Hotel.HotelEventoCreateDTO;
+import com.Graxa_API.Graxa_API.dto.Logistica.HotelDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,9 +49,24 @@ public class HotelEventoService {
         return hotelEventoRepository.save(h);
     }
 
-    public List<HotelEventoEntity> listarPorShow(Long showId) {
-        return hotelEventoRepository.findByShowId(showId);
+    public List<HotelDTO> listarPorShow(Long showId) {
+        return hotelEventoRepository.findByShowId(showId)
+                .stream()
+                .map(h -> new HotelDTO(
+                        h.getId(),
+                        h.getColaborador().getId(),
+                        h.getNomeHotel(),
+                        h.getEndereco(),
+                        h.getLatitude(),
+                        h.getLongitude(),
+                        h.getDistanciaPalcoKm(),
+                        h.getDistanciaAeroportoKm(),
+                        h.getCheckin() != null ? h.getCheckin().toString() : null,
+                        h.getCheckout() != null ? h.getCheckout().toString() : null
+                ))
+                .toList();
     }
+
 
     public void remover(Long id) {
         hotelEventoRepository.deleteById(id);
