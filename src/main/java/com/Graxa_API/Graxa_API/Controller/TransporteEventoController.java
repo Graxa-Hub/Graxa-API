@@ -2,6 +2,7 @@ package com.Graxa_API.Graxa_API.Controller;
 
 import com.Graxa_API.Graxa_API.Entity.Evento.TransporteEventoEntity;
 import com.Graxa_API.Graxa_API.Service.TransporteEventoService;
+import com.Graxa_API.Graxa_API.dto.Logistica.TransporteDTO;
 import com.Graxa_API.Graxa_API.dto.Transporte.TransporteEventoCreateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class TransporteEventoController {
     }
 
     @GetMapping("/show/{showId}")
-    public ResponseEntity<List<TransporteEventoEntity>> listar(@PathVariable Long showId) {
+    public ResponseEntity<List<TransporteDTO>> listar(@PathVariable Long showId) {
         return ResponseEntity.ok(transporteEventoService.listarPorShow(showId));
     }
 

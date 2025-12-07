@@ -6,6 +6,7 @@ import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
 import com.Graxa_API.Graxa_API.Repository.ShowRepository;
 import com.Graxa_API.Graxa_API.Repository.VooEventoRepository;
+import com.Graxa_API.Graxa_API.dto.Logistica.VooDTO;
 import com.Graxa_API.Graxa_API.dto.Voo.VooEventoCreateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,20 @@ public class VooEventoService {
         return vooEventoRepository.save(v);
     }
 
-    public List<VooEventoEntity> listarPorShow(Long showId) {
-        return vooEventoRepository.findByShowId(showId);
+    public List<VooDTO> listarPorShow(Long showId) {
+        return vooEventoRepository.findByShowId(showId)
+                .stream()
+                .map(v -> new VooDTO(
+                        v.getId(),
+                        v.getColaborador().getId(),
+                        v.getCiaAerea(),
+                        v.getCodigoVoo(),
+                        v.getOrigem(),
+                        v.getDestino(),
+                        v.getPartida() != null ? v.getPartida().toString() : null,
+                        v.getChegada() != null ? v.getChegada().toString() : null
+                ))
+                .toList();
     }
 
     public void remover(Long id) {

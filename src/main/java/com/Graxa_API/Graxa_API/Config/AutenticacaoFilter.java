@@ -41,8 +41,8 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
                 || path.startsWith("/swagger")
                 || path.startsWith("/v3/api-docs")
                 || path.startsWith("/h2-console")
-                || path.startsWith("/ws/") // ✅ ADICIONAR: Liberar WebSocket
-                || path.startsWith("/notificacoes/status/websocket"); // ✅ ADICIONAR: Status WebSocket
+                || path.startsWith("/ws/")
+                || path.startsWith("/notificacoes/status/websocket");
     }
 
     @Override
