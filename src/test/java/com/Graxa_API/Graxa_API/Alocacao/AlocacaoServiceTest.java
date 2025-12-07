@@ -44,12 +44,10 @@ class AlocacaoServiceTest {
         notificacaoService = mock(NotificacaoService.class);
         alocacaoService = new AlocacaoService(alocacaoRepository, showRepository, colaboradorRepository, notificacaoService);
 
-        // Turne
         TurneEntity turne = new TurneEntity();
         turne.setId(99L);
         turne.setNomeTurne("Turnê Teste");
 
-        // Endereço do Local
         EnderecoEntity enderecoLocal = new EnderecoEntity();
         enderecoLocal.setCep("08506-000");
         enderecoLocal.setLogradouro("Rua das Flores");
@@ -65,20 +63,17 @@ class AlocacaoServiceTest {
         local.setCapacidade(5000);
         local.setEndereco(enderecoLocal);
 
-        // Responsável do evento
         ColaboradorEntity responsavel = new ColaboradorEntity();
         responsavel.setId(99L);
         responsavel.setNome("Produtor Responsável");
 
-        // Show
         show = new ShowEntity();
         show.setId(1L);
         show.setNomeEvento("Festival Graxa");
         show.setTurne(turne);
         show.setLocal(local);
-        show.setResponsavelEvento(responsavel); // ✅ evita NPE
+        show.setResponsavelEvento(responsavel);
 
-        // Colaborador da alocação
         colaborador = new ColaboradorEntity();
         colaborador.setId(5L);
         colaborador.setNome("Colaborador Teste");
@@ -99,8 +94,14 @@ class AlocacaoServiceTest {
         assertThat(response.show().nomeEvento()).isEqualTo("Festival Graxa");
         assertThat(response.colaborador().nome()).isEqualTo("Colaborador Teste");
 
-        verify(notificacaoService).criarNotificacao(eq(5L), contains("Festival Graxa"), eq("ALOCACAO_SHOW"));
+        verify(notificacaoService).criarNotificacao(
+                eq(5L),
+                contains("Festival Graxa"),
+                eq("ALOCACAO_SHOW"),
+                nullable(Long.class)   // ⭐ CORREÇÃO: aceita null
+        );
     }
+
 
     @Test
     void deveResponderAlocacaoComoAceita() {
@@ -114,9 +115,10 @@ class AlocacaoServiceTest {
         when(alocacaoRepository.findById(1L)).thenReturn(Optional.of(alocacao));
         when(alocacaoRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseAlocacaoDto response = alocacaoService.responderAlocacao(1L, true);
+        // usa o enum correto do service
+        ResponseAlocacaoDto response = alocacaoService.responderAlocacao(1L, StatusAlocacao.ACEITO);
 
-        assertThat(response.status()).isEqualTo(StatusAlocacao.ACEITA);
+        assertThat(response.status()).isEqualTo(StatusAlocacao.ACEITO);
         assertThat(response.dataHoraResposta()).isNotNull();
     }
 
@@ -131,9 +133,10 @@ class AlocacaoServiceTest {
         when(alocacaoRepository.findById(1L)).thenReturn(Optional.of(alocacao));
         when(alocacaoRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseAlocacaoDto response = alocacaoService.responderAlocacao(1L, false);
+        // usa o enum correto do service
+        ResponseAlocacaoDto response = alocacaoService.responderAlocacao(1L, StatusAlocacao.RECUSADO);
 
-        assertThat(response.status()).isEqualTo(StatusAlocacao.RECUSADA);
+        assertThat(response.status()).isEqualTo(StatusAlocacao.RECUSADO);
         assertThat(response.dataHoraResposta()).isNotNull();
     }
 
@@ -149,7 +152,7 @@ class AlocacaoServiceTest {
         alocacao2.setId(2L);
         alocacao2.setShow(show);
         alocacao2.setColaborador(colaborador);
-        alocacao2.setStatus(StatusAlocacao.ACEITA);
+        alocacao2.setStatus(StatusAlocacao.ACEITO);
 
         when(alocacaoRepository.findByShowId(1L)).thenReturn(List.of(alocacao1, alocacao2));
 
@@ -157,6 +160,6 @@ class AlocacaoServiceTest {
 
         assertThat(response).hasSize(2);
         assertThat(response.get(0).status()).isEqualTo(StatusAlocacao.PENDENTE);
-        assertThat(response.get(1).status()).isEqualTo(StatusAlocacao.ACEITA);
+        assertThat(response.get(1).status()).isEqualTo(StatusAlocacao.ACEITO);
     }
 }

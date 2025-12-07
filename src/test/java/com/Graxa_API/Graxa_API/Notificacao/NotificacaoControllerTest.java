@@ -1,7 +1,9 @@
 package com.Graxa_API.Graxa_API.Notificacao;
 
 import com.Graxa_API.Graxa_API.Controller.NotificacaoController;
-import com.Graxa_API.Graxa_API.Entity.NotificacaoEntity;
+import com.Graxa_API.Graxa_API.Service.NotificacaoWebSocketService;
+import com.Graxa_API.Graxa_API.dto.NotificacaoDto.RequestNotificacaoDto;
+import com.Graxa_API.Graxa_API.dto.NotificacaoDto.ResponseNotificacaoDto;
 import com.Graxa_API.Graxa_API.Service.NotificacaoService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -11,9 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDateTime;
 import java.util.List;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -26,35 +30,62 @@ class NotificacaoControllerTest {
 
     @MockitoBean
     private NotificacaoService notificacaoService;
+    @MockitoBean
+    private NotificacaoWebSocketService notificacaoWebSocketService;
 
-    // ✅ Caso positivo: criar notificação autenticado
+
+    // -------------------------------------------------------------
+    // ✅ Criar notificação autenticado (USANDO DTO NO BODY)
+    // -------------------------------------------------------------
     @Test
     @WithMockUser(username = "gabriel", roles = {"USER"})
     void deveCriarNotificacao() throws Exception {
-        NotificacaoEntity notif = new NotificacaoEntity();
-        notif.setMensagem("Você foi alocado no show X");
-        notif.setTipo("ALOCACAO_SHOW");
 
-        Mockito.when(notificacaoService.criarNotificacao(anyLong(), anyString(), anyString()))
-                .thenReturn(notif);
+        ResponseNotificacaoDto response = new ResponseNotificacaoDto(
+                1L,
+                "Você foi alocado no show X",
+                "ALOCACAO_SHOW",
+                false,
+                LocalDateTime.now(),
+                null
+        );
+
+        Mockito.when(notificacaoService.criarNotificacao(any(RequestNotificacaoDto.class)))
+                .thenReturn(response);
+
+        String json = """
+                {
+                    "colaboradorId": 1,
+                    "mensagem": "Você foi alocado no show X",
+                    "tipo": "ALOCACAO_SHOW",
+                    "alocacaoId": null
+                }
+                """;
 
         mockMvc.perform(post("/notificacoes")
-                        .with(csrf()) // adiciona token CSRF
-                        .param("colaboradorId", "1")
-                        .param("mensagem", "Você foi alocado no show X")
-                        .param("tipo", "ALOCACAO_SHOW")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.mensagem").value("Você foi alocado no show X"))
                 .andExpect(jsonPath("$.tipo").value("ALOCACAO_SHOW"));
     }
 
-    // ✅ Caso positivo: listar notificações autenticado
+    // -------------------------------------------------------------
+    // ✅ Listar por colaborador
+    // -------------------------------------------------------------
     @Test
     @WithMockUser(username = "gabriel", roles = {"USER"})
     void deveListarNotificacoesPorColaborador() throws Exception {
-        NotificacaoEntity notif = new NotificacaoEntity();
-        notif.setMensagem("Teste");
+
+        ResponseNotificacaoDto notif = new ResponseNotificacaoDto(
+                2L,
+                "Teste",
+                "INFO",
+                false,
+                LocalDateTime.now(),
+                null
+        );
 
         Mockito.when(notificacaoService.listarPorColaborador(1L))
                 .thenReturn(List.of(notif));
@@ -64,13 +95,21 @@ class NotificacaoControllerTest {
                 .andExpect(jsonPath("$[0].mensagem").value("Teste"));
     }
 
-    // ✅ Caso positivo: listar notificações não lidas autenticado
+    // -------------------------------------------------------------
+    // ✅ Listar não lidas
+    // -------------------------------------------------------------
     @Test
     @WithMockUser(username = "gabriel", roles = {"USER"})
     void deveListarNotificacoesNaoLidas() throws Exception {
-        NotificacaoEntity notif = new NotificacaoEntity();
-        notif.setMensagem("Não lida");
-        notif.setLida(false);
+
+        ResponseNotificacaoDto notif = new ResponseNotificacaoDto(
+                3L,
+                "Não lida",
+                "INFO",
+                false,
+                LocalDateTime.now(),
+                null
+        );
 
         Mockito.when(notificacaoService.listarNaoLidas(1L))
                 .thenReturn(List.of(notif));
@@ -81,39 +120,58 @@ class NotificacaoControllerTest {
                 .andExpect(jsonPath("$[0].lida").value(false));
     }
 
-    // ✅ Caso positivo: marcar notificação como lida autenticado
+    // -------------------------------------------------------------
+    // ✅ Marcar como lida (agora usa DTO e retorna ResponseNotificacaoDto)
+    // -------------------------------------------------------------
     @Test
     @WithMockUser(username = "gabriel", roles = {"USER"})
     void deveMarcarNotificacaoComoLida() throws Exception {
-        NotificacaoEntity notif = new NotificacaoEntity();
-        notif.setMensagem("Teste");
-        notif.setLida(true);
+
+        ResponseNotificacaoDto notif = new ResponseNotificacaoDto(
+                5L,
+                "Teste",
+                "INFO",
+                true,
+                LocalDateTime.now(),
+                null
+        );
 
         Mockito.when(notificacaoService.marcarComoLida(5L))
                 .thenReturn(notif);
 
-        mockMvc.perform(put("/notificacoes/5/lida")
-                        .with(csrf())) // adiciona token CSRF
+        mockMvc.perform(put("/notificacoes/5/lida").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lida").value(true));
     }
 
-    // ❌ Caso negativo: sem usuário autenticado → deve dar 401
+    // -------------------------------------------------------------
+    // ❌ Sem usuário autenticado → deve retornar 401
+    // -------------------------------------------------------------
     @Test
     void deveNegarAcessoSemUsuario() throws Exception {
         mockMvc.perform(get("/notificacoes/colaborador/1"))
                 .andExpect(status().isUnauthorized());
     }
 
-    // ❌ Caso negativo: sem CSRF em POST → deve dar 403
+    // -------------------------------------------------------------
+    // ❌ Sem CSRF em POST → deve retornar 403
+    // -------------------------------------------------------------
     @Test
     @WithMockUser(username = "gabriel", roles = {"USER"})
     void deveNegarAcessoSemCsrf() throws Exception {
+
+        String json = """
+                {
+                    "colaboradorId": 1,
+                    "mensagem": "Teste",
+                    "tipo": "INFO",
+                    "alocacaoId": null
+                }
+                """;
+
         mockMvc.perform(post("/notificacoes")
-                        .param("colaboradorId", "1")
-                        .param("mensagem", "Teste")
-                        .param("tipo", "ALOCACAO_SHOW")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
                 .andExpect(status().isForbidden());
     }
 }
