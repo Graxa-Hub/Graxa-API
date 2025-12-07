@@ -17,24 +17,29 @@ public class HotelEventoController {
     @Autowired
     private HotelEventoService hotelEventoService;
 
-    // 👉 Criar hotel para evento
     @PostMapping
     public ResponseEntity<?> criarHotel(@RequestBody HotelEventoCreateDTO dto) {
         HotelEventoEntity saved = hotelEventoService.criar(dto);
         return ResponseEntity.ok(saved);
     }
 
-    // 👉 Listar hotéis de um evento
     @GetMapping("/show/{showId}")
     public ResponseEntity<List<HotelEventoEntity>> listarPorShow(@PathVariable Long showId) {
         List<HotelEventoEntity> lista = hotelEventoService.listarPorShow(showId);
         return ResponseEntity.ok(lista);
     }
 
-    // 👉 Remover item de hotel
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
         hotelEventoService.remover(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<HotelEventoEntity> atualizar(
+            @PathVariable Long id,
+            @RequestBody HotelEventoEntity dto) {
+
+        return ResponseEntity.ok(hotelEventoService.atualizar(id, dto));
     }
 }

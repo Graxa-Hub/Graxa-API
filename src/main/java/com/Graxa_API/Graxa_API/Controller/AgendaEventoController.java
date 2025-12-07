@@ -33,4 +33,12 @@ public class AgendaEventoController {
         agendaEventoService.remover(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AgendaEventoEntity> atualizar(
+            @PathVariable Long id,
+            @RequestBody AgendaEventoEntity dto) {
+
+        return ResponseEntity.ok(agendaEventoService.atualizar(id, dto));
+    }
 }

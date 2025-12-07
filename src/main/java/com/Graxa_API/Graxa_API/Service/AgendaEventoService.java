@@ -54,4 +54,18 @@ public class AgendaEventoService {
     public void remover(Long id) {
         agendaEventoRepository.deleteById(id);
     }
+
+    public AgendaEventoEntity atualizar(Long id, AgendaEventoEntity dto) {
+        AgendaEventoEntity existente = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agenda não encontrada"));
+
+        existente.setTitulo(dto.getTitulo());
+        existente.setDescricao(dto.getDescricao());
+        existente.setDataHora(dto.getDataHora());
+        existente.setDuracaoMinutos(dto.getDuracaoMinutos());
+        existente.setOrdem(dto.getOrdem());
+
+        return repo.save(existente);
+    }
+
 }

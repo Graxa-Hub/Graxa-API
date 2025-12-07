@@ -33,4 +33,12 @@ public class TransporteEventoController {
         transporteEventoService.remover(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TransporteEventoEntity> atualizar(
+            @PathVariable Long id,
+            @RequestBody TransporteEventoEntity dto) {
+
+        return ResponseEntity.ok(transporteEventoService.atualizar(id, dto));
+    }
 }

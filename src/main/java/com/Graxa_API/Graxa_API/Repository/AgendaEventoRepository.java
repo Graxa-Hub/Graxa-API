@@ -8,4 +8,6 @@ import java.util.List;
 public interface AgendaEventoRepository extends JpaRepository<AgendaEventoEntity, Long> {
 
     List<AgendaEventoEntity> findByShowIdOrderByOrdemAscDataHoraAsc(Long showId);
+
+    List<AgendaEventoEntity> findByShowId(Long showId);
 }

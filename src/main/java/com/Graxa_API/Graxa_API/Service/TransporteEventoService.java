@@ -53,4 +53,17 @@ public class TransporteEventoService {
     public void remover(Long id) {
         transporteEventoRepository.deleteById(id);
     }
+
+    public TransporteEventoEntity atualizar(Long id, TransporteEventoEntity dto) {
+        TransporteEventoEntity existente = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transporte não encontrado"));
+
+        existente.setTipo(dto.getTipo());
+        existente.setSaida(dto.getSaida());
+        existente.setDestino(dto.getDestino());
+        existente.setMotorista(dto.getMotorista());
+        existente.setObservacao(dto.getObservacao());
+
+        return repo.save(existente);
+    }
 }

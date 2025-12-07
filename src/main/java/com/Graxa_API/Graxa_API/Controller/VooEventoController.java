@@ -33,4 +33,12 @@ public class VooEventoController {
         vooEventoService.remover(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<VooEventoEntity> atualizar(
+            @PathVariable Long id,
+            @RequestBody VooEventoEntity dto) {
+
+        return ResponseEntity.ok(vooEventoService.atualizar(id, dto));
+    }
 }

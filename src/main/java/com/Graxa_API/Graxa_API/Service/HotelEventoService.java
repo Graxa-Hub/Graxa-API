@@ -55,4 +55,20 @@ public class HotelEventoService {
     public void remover(Long id) {
         hotelEventoRepository.deleteById(id);
     }
+
+    public HotelEventoEntity atualizar(Long id, HotelEventoEntity dto) {
+        HotelEventoEntity existente = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hotel não encontrado"));
+
+        existente.setNomeHotel(dto.getNomeHotel());
+        existente.setEndereco(dto.getEndereco());
+        existente.setLatitude(dto.getLatitude());
+        existente.setLongitude(dto.getLongitude());
+        existente.setDistanciaPalcoKm(dto.getDistanciaPalcoKm());
+        existente.setDistanciaAeroportoKm(dto.getDistanciaAeroportoKm());
+        existente.setCheckin(dto.getCheckin());
+        existente.setCheckout(dto.getCheckout());
+
+        return repo.save(existente);
+    }
 }

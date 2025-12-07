@@ -54,4 +54,19 @@ public class VooEventoService {
     public void remover(Long id) {
         vooEventoRepository.deleteById(id);
     }
+
+    public VooEventoEntity atualizar(Long id, VooEventoEntity dto) {
+        VooEventoEntity existente = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Voo não encontrado"));
+
+        existente.setCiaAerea(dto.getCiaAerea());
+        existente.setCodigoVoo(dto.getCodigoVoo());
+        existente.setOrigem(dto.getOrigem());
+        existente.setDestino(dto.getDestino());
+        existente.setPartida(dto.getPartida());
+        existente.setChegada(dto.getChegada());
+
+        return repo.save(existente);
+    }
+
 }

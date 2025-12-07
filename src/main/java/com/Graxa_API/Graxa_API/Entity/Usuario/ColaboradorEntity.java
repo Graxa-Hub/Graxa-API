@@ -3,6 +3,7 @@ package com.Graxa_API.Graxa_API.Entity.Usuario;
 import com.Graxa_API.Graxa_API.Entity.*;
 import com.Graxa_API.Graxa_API.Enums.TipoUsuario;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class ColaboradorEntity extends UsuarioEntity{
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TelefoneEntity> telefones;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private CredenciaisUsuarioEntity credenciais;
 
