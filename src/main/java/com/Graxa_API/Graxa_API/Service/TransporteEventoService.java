@@ -55,7 +55,7 @@ public class TransporteEventoService {
     }
 
     public TransporteEventoEntity atualizar(Long id, TransporteEventoEntity dto) {
-        TransporteEventoEntity existente = repo.findById(id)
+        TransporteEventoEntity existente = transporteEventoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transporte não encontrado"));
 
         existente.setTipo(dto.getTipo());
@@ -64,6 +64,6 @@ public class TransporteEventoService {
         existente.setMotorista(dto.getMotorista());
         existente.setObservacao(dto.getObservacao());
 
-        return repo.save(existente);
+        return transporteEventoRepository.save(existente);
     }
 }

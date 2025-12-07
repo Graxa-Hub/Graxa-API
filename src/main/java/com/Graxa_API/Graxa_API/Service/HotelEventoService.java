@@ -57,7 +57,7 @@ public class HotelEventoService {
     }
 
     public HotelEventoEntity atualizar(Long id, HotelEventoEntity dto) {
-        HotelEventoEntity existente = repo.findById(id)
+        HotelEventoEntity existente = hotelEventoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hotel não encontrado"));
 
         existente.setNomeHotel(dto.getNomeHotel());
@@ -69,6 +69,6 @@ public class HotelEventoService {
         existente.setCheckin(dto.getCheckin());
         existente.setCheckout(dto.getCheckout());
 
-        return repo.save(existente);
+        return hotelEventoRepository.save(existente);
     }
 }

@@ -56,7 +56,7 @@ public class VooEventoService {
     }
 
     public VooEventoEntity atualizar(Long id, VooEventoEntity dto) {
-        VooEventoEntity existente = repo.findById(id)
+        VooEventoEntity existente = vooEventoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Voo não encontrado"));
 
         existente.setCiaAerea(dto.getCiaAerea());
@@ -66,7 +66,7 @@ public class VooEventoService {
         existente.setPartida(dto.getPartida());
         existente.setChegada(dto.getChegada());
 
-        return repo.save(existente);
+        return vooEventoRepository.save(existente);
     }
 
 }

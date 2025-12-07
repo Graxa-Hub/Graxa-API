@@ -56,7 +56,7 @@ public class AgendaEventoService {
     }
 
     public AgendaEventoEntity atualizar(Long id, AgendaEventoEntity dto) {
-        AgendaEventoEntity existente = repo.findById(id)
+        AgendaEventoEntity existente = agendaEventoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Agenda não encontrada"));
 
         existente.setTitulo(dto.getTitulo());
@@ -65,7 +65,7 @@ public class AgendaEventoService {
         existente.setDuracaoMinutos(dto.getDuracaoMinutos());
         existente.setOrdem(dto.getOrdem());
 
-        return repo.save(existente);
+        return agendaEventoRepository.save(existente);
     }
 
 }
