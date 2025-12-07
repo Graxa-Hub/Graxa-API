@@ -4,6 +4,7 @@ import com.Graxa_API.Graxa_API.Entity.AlocacaoEntity;
 import com.Graxa_API.Graxa_API.Entity.BandaEntity;
 import com.Graxa_API.Graxa_API.Entity.LocalEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class ShowEntity extends EventoEntity {
     @JoinColumn(name = "local_id", nullable = false)
     private LocalEntity local;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "show_banda",
@@ -32,11 +34,6 @@ public class ShowEntity extends EventoEntity {
     // ✅ Lista de alocações de colaboradores
     @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AlocacaoEntity> alocacoes = new ArrayList<>();
-
-
-
-
-
 
     // Construtor vazio obrigatório para JPA
     public ShowEntity() {

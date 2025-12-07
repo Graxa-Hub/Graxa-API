@@ -11,5 +11,7 @@ public record AgendaEventoCreateDTO(
         LocalDateTime dataHoraInicio,
         LocalDateTime dataHoraFim,
         Integer ordem,
-        TipoAgendaItem tipo
+        TipoAgendaItem tipo,
+        String origem,
+        String destino
 ) {}

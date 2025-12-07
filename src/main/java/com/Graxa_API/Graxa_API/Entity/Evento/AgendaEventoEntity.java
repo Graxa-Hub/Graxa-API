@@ -26,11 +26,13 @@ public class AgendaEventoEntity {
 
     private LocalDateTime dataHoraInicio;
     private LocalDateTime dataHoraFim;
-
     private Integer ordem;
 
     @Enumerated(EnumType.STRING)
     private TipoAgendaItem tipo;
+
+    private String origem;   // ← ADICIONE
+    private String destino;
 
     public AgendaEventoEntity() {}
 
@@ -93,5 +95,21 @@ public class AgendaEventoEntity {
 
     public void setTipo(TipoAgendaItem tipo) {
         this.tipo = tipo;
+    }
+
+    public String getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(String origem) {
+        this.origem = origem;
+    }
+
+    public String getDestino() {
+        return destino;
+    }
+
+    public void setDestino(String destino) {
+        this.destino = destino;
     }
 }

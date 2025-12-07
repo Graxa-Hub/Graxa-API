@@ -1,27 +1,44 @@
 package com.Graxa_API.Graxa_API.Entity.Evento;
 
 import com.Graxa_API.Graxa_API.Entity.TurneEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class EventoEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+
     private String nomeEvento;
     private LocalDateTime dataInicio;
     private LocalDateTime dataFim;
     private String descricao;
+
     @ManyToOne
     @JoinColumn(name = "turne_id")
     private TurneEntity turne;
+
     @Column(nullable = false)
     private Boolean ativo = true;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AgendaEventoEntity> agenda = new ArrayList<>();
+
+
+
+
+    public EventoEntity() {}
+
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -76,5 +93,13 @@ public abstract class EventoEntity {
 
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public List<AgendaEventoEntity> getAgenda() {
+        return agenda;
+    }
+
+    public void setAgenda(List<AgendaEventoEntity> agenda) {
+        this.agenda = agenda;
     }
 }

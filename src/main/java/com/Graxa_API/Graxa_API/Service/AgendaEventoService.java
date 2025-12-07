@@ -2,13 +2,11 @@ package com.Graxa_API.Graxa_API.Service;
 
 import com.Graxa_API.Graxa_API.Entity.Evento.AgendaEventoEntity;
 import com.Graxa_API.Graxa_API.Entity.Evento.ShowEntity;
-import com.Graxa_API.Graxa_API.Enums.TipoAgendaItem;
 import com.Graxa_API.Graxa_API.Repository.AgendaEventoRepository;
 import com.Graxa_API.Graxa_API.Repository.ShowRepository;
 import com.Graxa_API.Graxa_API.dto.Agenda.AgendaEventoCreateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -32,10 +30,9 @@ public class AgendaEventoService {
         a.setDataHoraInicio(dto.dataHoraInicio());
         a.setDataHoraFim(dto.dataHoraFim());
         a.setOrdem(dto.ordem());
-
-        if (dto.tipo() != null) {
-            a.setTipo(TipoAgendaItem.fromValue(String.valueOf(dto.tipo())));
-        }
+        a.setOrigem(dto.origem());
+        a.setDestino(dto.destino());
+        a.setTipo(dto.tipo());
 
         return agendaEventoRepository.save(a);
     }
@@ -57,10 +54,9 @@ public class AgendaEventoService {
         existente.setDataHoraInicio(dto.dataHoraInicio());
         existente.setDataHoraFim(dto.dataHoraFim());
         existente.setOrdem(dto.ordem());
-
-        if (dto.tipo() != null) {
-            existente.setTipo(TipoAgendaItem.fromValue(String.valueOf(dto.tipo())));
-        }
+        existente.setOrigem(dto.origem());
+        existente.setDestino(dto.destino());
+        existente.setTipo(dto.tipo());
 
         return agendaEventoRepository.save(existente);
     }
