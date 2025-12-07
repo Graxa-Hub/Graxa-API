@@ -30,7 +30,7 @@ public class AutenticacaoService implements UserDetailsService {
 
         return credencial
                 .map(c -> new CredencialUsuarioDetailsDto(
-                        c.getNomeUsuario(),
+                        c.getEmail(),  // ← USA EMAIL em vez de nomeUsuario
                         c.getUsuario().getId(),
                         c.getEmail(),
                         c.getSenha()

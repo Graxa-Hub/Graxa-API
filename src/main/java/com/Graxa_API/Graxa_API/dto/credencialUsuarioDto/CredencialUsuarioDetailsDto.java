@@ -36,7 +36,7 @@ public record CredencialUsuarioDetailsDto(
 
     @Override
     public String getUsername() {
-        return nomeUsuario;
+        return email;  // ✅ CORRIGIDO: Retorna email em vez de nomeUsuario
     }
 
     @Override

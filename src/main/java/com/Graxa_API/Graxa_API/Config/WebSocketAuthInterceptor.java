@@ -29,21 +29,30 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
 
         if (token != null) {
             try {
+                logger.info("🔐 Token extraído do WebSocket");
+
                 String username = jwtTokenManager.getUsernameFromToken(token);
+
+                // ✅ LOG CRÍTICO - Mostra qual username foi decodificado
+                logger.info("👤 Username decodificado do JWT: '{}'", username);
 
                 if (username != null && jwtTokenManager.validaTokenSomente(token, username)) {
                     // Armazena o username na sessão WebSocket
                     attributes.put("username", username);
                     attributes.put("token", token);
-                    logger.info("WebSocket connection authenticated for user: {}", username);
+                    logger.info("✅ WebSocket connection authenticated for user: {}", username);
                     return true;
+                } else {
+                    logger.warn("⚠️ Username NULL ou token inválido");
                 }
             } catch (Exception e) {
-                logger.error("JWT token validation failed: {}", e.getMessage());
+                logger.error("❌ JWT token validation failed: {}", e.getMessage(), e);
             }
+        } else {
+            logger.warn("⚠️ Token não encontrado na requisição WebSocket");
         }
 
-        logger.warn("WebSocket connection rejected - invalid or missing token");
+        logger.warn("🚫 WebSocket connection rejected - invalid or missing token");
         return false;
     }
 
@@ -60,7 +69,9 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
             String[] params = query.split("&");
             for (String param : params) {
                 if (param.startsWith("token=")) {
-                    return param.substring(6); // Remove "token="
+                    String token = param.substring(6); // Remove "token="
+                    logger.debug("🔑 Token extraído do query parameter");
+                    return token;
                 }
             }
         }
@@ -70,7 +81,9 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
         if (authHeaders != null && !authHeaders.isEmpty()) {
             String authHeader = authHeaders.get(0);
             if (authHeader.startsWith("Bearer ")) {
-                return authHeader.substring(7);
+                String token = authHeader.substring(7);
+                logger.debug("🔑 Token extraído do header Authorization");
+                return token;
             }
         }
 
