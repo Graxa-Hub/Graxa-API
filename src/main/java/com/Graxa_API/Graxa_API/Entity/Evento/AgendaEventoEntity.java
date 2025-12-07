@@ -1,6 +1,6 @@
 package com.Graxa_API.Graxa_API.Entity.Evento;
 
-import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
+import com.Graxa_API.Graxa_API.Enums.TipoAgendaItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -14,30 +14,23 @@ public class AgendaEventoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Referência ao show
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "show_id", nullable = false)
     private ShowEntity show;
 
-    // Opcional: item pode ter um colaborador responsável/associado
-    @ManyToOne
-    @JoinColumn(name = "colaborador_id", nullable = true)
-    private ColaboradorEntity colaborador;
-
-    // Dados da agenda
     private String titulo;
+
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
-    // Data e hora de início do item
-    private LocalDateTime dataHora;
+    private LocalDateTime dataHoraInicio;
+    private LocalDateTime dataHoraFim;
 
-    // Duração em minutos (opcional)
-    private Integer duracaoMinutos;
-
-    // Ordem para exibição (opcional)
     private Integer ordem;
+
+    @Enumerated(EnumType.STRING)
+    private TipoAgendaItem tipo;
 
     public AgendaEventoEntity() {}
 
@@ -52,14 +45,6 @@ public class AgendaEventoEntity {
 
     public void setShow(ShowEntity show) {
         this.show = show;
-    }
-
-    public ColaboradorEntity getColaborador() {
-        return colaborador;
-    }
-
-    public void setColaborador(ColaboradorEntity colaborador) {
-        this.colaborador = colaborador;
     }
 
     public String getTitulo() {
@@ -78,20 +63,20 @@ public class AgendaEventoEntity {
         this.descricao = descricao;
     }
 
-    public LocalDateTime getDataHora() {
-        return dataHora;
+    public LocalDateTime getDataHoraInicio() {
+        return dataHoraInicio;
     }
 
-    public void setDataHora(LocalDateTime dataHora) {
-        this.dataHora = dataHora;
+    public void setDataHoraInicio(LocalDateTime dataHoraInicio) {
+        this.dataHoraInicio = dataHoraInicio;
     }
 
-    public Integer getDuracaoMinutos() {
-        return duracaoMinutos;
+    public LocalDateTime getDataHoraFim() {
+        return dataHoraFim;
     }
 
-    public void setDuracaoMinutos(Integer duracaoMinutos) {
-        this.duracaoMinutos = duracaoMinutos;
+    public void setDataHoraFim(LocalDateTime dataHoraFim) {
+        this.dataHoraFim = dataHoraFim;
     }
 
     public Integer getOrdem() {
@@ -100,5 +85,13 @@ public class AgendaEventoEntity {
 
     public void setOrdem(Integer ordem) {
         this.ordem = ordem;
+    }
+
+    public TipoAgendaItem getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoAgendaItem tipo) {
+        this.tipo = tipo;
     }
 }

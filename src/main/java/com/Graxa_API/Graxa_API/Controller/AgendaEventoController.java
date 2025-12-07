@@ -18,7 +18,7 @@ public class AgendaEventoController {
     private AgendaEventoService agendaEventoService;
 
     @PostMapping
-    public ResponseEntity<?> criar(@RequestBody AgendaEventoCreateDTO dto) {
+    public ResponseEntity<AgendaEventoEntity> criar(@RequestBody AgendaEventoCreateDTO dto) {
         AgendaEventoEntity saved = agendaEventoService.criar(dto);
         return ResponseEntity.ok(saved);
     }
@@ -29,16 +29,17 @@ public class AgendaEventoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> remover(@PathVariable Long id) {
+    public ResponseEntity<Void> remover(@PathVariable Long id) {
         agendaEventoService.remover(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AgendaEventoEntity> atualizar(
             @PathVariable Long id,
-            @RequestBody AgendaEventoEntity dto) {
+            @RequestBody AgendaEventoCreateDTO dto) {
 
-        return ResponseEntity.ok(agendaEventoService.atualizar(id, dto));
+        AgendaEventoEntity updated = agendaEventoService.atualizar(id, dto);
+        return ResponseEntity.ok(updated);
     }
 }

@@ -18,7 +18,7 @@ public class LogisticaEventoService {
         var hotels = hotelRepo.findByShowId(showId).stream()
                 .map(h -> new HotelDTO(
                         h.getId(),
-                        h.getColaborador().getId(),
+                        h.getColaborador() != null ? h.getColaborador().getId() : null,
                         h.getNomeHotel(),
                         h.getEndereco(),
                         h.getLatitude(),
@@ -32,7 +32,7 @@ public class LogisticaEventoService {
         var voos = vooRepo.findByShowId(showId).stream()
                 .map(v -> new VooDTO(
                         v.getId(),
-                        v.getColaborador().getId(),
+                        v.getColaborador() != null ? v.getColaborador().getId() : null,
                         v.getCiaAerea(),
                         v.getCodigoVoo(),
                         v.getOrigem(),
@@ -44,7 +44,7 @@ public class LogisticaEventoService {
         var transportes = transpRepo.findByShowId(showId).stream()
                 .map(t -> new TransporteDTO(
                         t.getId(),
-                        t.getColaborador().getId(),
+                        t.getColaborador() != null ? t.getColaborador().getId() : null,
                         t.getTipo(),
                         t.getSaida() != null ? t.getSaida().toString() : null,
                         t.getDestino(),
@@ -55,15 +55,14 @@ public class LogisticaEventoService {
         var agenda = agendaRepo.findByShowId(showId).stream()
                 .map(a -> new AgendaDTO(
                         a.getId(),
-                        a.getColaborador() != null ? a.getColaborador().getId() : null,
                         a.getTitulo(),
                         a.getDescricao(),
-                        a.getDataHora() != null ? a.getDataHora().toString() : null,
-                        a.getDuracaoMinutos(),
-                        a.getOrdem()
+                        a.getDataHoraInicio() != null ? a.getDataHoraInicio().toString() : null,
+                        a.getDataHoraFim() != null ? a.getDataHoraFim().toString() : null,
+                        a.getOrdem(),
+                        a.getTipo() != null ? a.getTipo().getValue() : null
                 )).toList();
 
         return new LogisticaEventoResponseDTO(hotels, voos, transportes, agenda);
     }
-
 }
