@@ -30,6 +30,7 @@ public class ColaboradorEntity extends UsuarioEntity{
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private CredenciaisUsuarioEntity credenciais;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "responsavelAcao")
     private List<AcaoEntity> acoes = new ArrayList<>();
 
