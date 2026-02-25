@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,10 +55,30 @@ public class ImagemService {
     }
 
     public byte[] baixarImagem(String nomeArquivo) throws IOException {
-        Path caminho = Paths.get(pastaUpload).resolve(nomeArquivo);
+        // Pasta base normalizada
+        Path pastaBase = Paths.get(pastaUpload).toAbsolutePath().normalize();
+
+        // Caminho alvo normalizado
+        Path caminho = pastaBase.resolve(nomeArquivo).normalize();
+
+        // ✅ Verifica se o caminho está dentro da pasta base
+        if (!caminho.startsWith(pastaBase)) {
+            throw new SecurityException("Tentativa de path traversal detectada!");
+        }
+
+        // ✅ Whitelist de extensões permitidas
+        List<String> extensoesPermitidas = Arrays.asList(".png", ".jpg", ".jpeg", ".webp");
+        boolean permitido = extensoesPermitidas.stream().anyMatch(nomeArquivo::endsWith);
+        if (!permitido) {
+            throw new SecurityException("Extensão não permitida!");
+        }
+
+        // ✅ Verifica se o arquivo existe
         if (!Files.exists(caminho)) {
             throw new IOException("Imagem não encontrada");
         }
+
         return Files.readAllBytes(caminho);
     }
+
 }

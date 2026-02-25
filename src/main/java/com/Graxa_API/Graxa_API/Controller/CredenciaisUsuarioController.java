@@ -38,11 +38,11 @@ public class CredenciaisUsuarioController {
         return service.enviarCodigoRecuperacao(dto.email());
     }
 
-    @Operation(summary = "Realiza login com credenciais do usuário")
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
-        return service.login(dto.identificador(), dto.senha());
-    }
+//    @Operation(summary = "Realiza login com credenciais do usuário")
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
+//        return service.login(dto.identificador(), dto.senha());
+//    }
 
     @Operation(summary = "Busca credencial de usuário pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/{id}")

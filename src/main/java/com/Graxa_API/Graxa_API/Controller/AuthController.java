@@ -7,6 +7,7 @@ import com.Graxa_API.Graxa_API.Service.ColaboradorService;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestLoginDto;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -63,8 +64,10 @@ public class AuthController {
 
     @Operation(summary = "Realiza login e retorna o token de autenticação")
     @PostMapping("/login")
+    @RateLimiter(name = "login")
     public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
-
         return credenciaisService.login(dto.identificador(), dto.senha());
     }
+
+
 }

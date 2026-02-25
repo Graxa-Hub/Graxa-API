@@ -191,7 +191,7 @@ public class CredenciaisUsuarioService {
                 new UsernamePasswordAuthenticationToken(identificador, senha);
 
         Authentication authentication = authenticationManager.authenticate(credentials);
-        System.out.println(authentication);
+
         // Usa o principal retornado pela autenticação
         CredencialUsuarioDetailsDto usuarioLogado = (CredencialUsuarioDetailsDto) authentication.getPrincipal();
 
