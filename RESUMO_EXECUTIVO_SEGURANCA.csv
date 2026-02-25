@@ -1,0 +1,72 @@
+RESUMO EXECUTIVO - ANÁLISE DE SEGURANÇA OWASP TOP 10
+Data da Análise,22/02/2026
+Aplicação,Graxa-API
+Total de Vulnerabilidades,18
+Vulnerabilidades Críticas,12
+Vulnerabilidades Altas,6
+
+DISTRIBUIÇÃO POR CATEGORIA OWASP
+Categoria,Quantidade,Severidade Média
+A01 - Broken Access Control,4,CRÍTICA
+A02 - Cryptographic Failures,4,CRÍTICA
+A03 - Injection,1,CRÍTICA
+A05 - Security Misconfiguration,4,CRÍTICA
+A07 - Authentication Failures,3,CRÍTICA
+A09 - Logging Failures,2,ALTA
+
+PLANO DE AÇÃO PRIORIZADO
+Prioridade,ID,Vulnerabilidade,Prazo,Esforço Estimado
+URGENTE,5,Credenciais Hardcoded em Texto Claro,24-48h,2 horas
+URGENTE,6,Secret JWT Fraco e Versionado,24-48h,1 hora
+URGENTE,7,Banco de Dados Sem Senha,24-48h,1 hora
+URGENTE,9,Path Traversal em Download de Imagens,24-48h,3 horas
+URGENTE,11,H2 Console Exposto Publicamente,24-48h,30 min
+URGENTE,3,Endpoints de Teste em Produção,24-48h,1 hora
+ALTA,1,Ausência Total de Autorização Baseada em Roles,Semana 1,16 horas
+ALTA,10,CORS Permite Todas Origens,Semana 1,2 horas
+ALTA,12,Actuator Exposto Sem Proteção,Semana 1,1 hora
+ALTA,14,Ausência de Rate Limiting,Semana 1,8 horas
+ALTA,2,Sem Validação de Ownership,Semana 2,12 horas
+ALTA,15,Código de Recuperação Fraco,Semana 2,3 horas
+MÉDIA,17,Ausência de Logging de Segurança,Semana 2-3,8 horas
+MÉDIA,18,Stacktraces Expostos ao Cliente,Semana 2-3,4 horas
+MÉDIA,4,WebSocket sem Validação de Roles,Semana 3,6 horas
+MÉDIA,8,Senhas em Data.sql,Semana 3,2 horas
+MÉDIA,13,Logs de Debug em Produção,Semana 3,1 hora
+MÉDIA,16,Token JWT com Validade Longa,Semana 3,4 horas
+
+ARQUIVOS MAIS VULNERÁVEIS
+Arquivo,Vulnerabilidades,Ações Necessárias
+application.properties,5,"Remover credenciais, configurar variáveis de ambiente, desabilitar console H2"
+SecurityConfiguracao.java,3,"Implementar roles, corrigir CORS, proteger Actuator"
+CredenciaisUsuarioController.java,2,"Implementar rate limiting, adicionar logging"
+CredenciaisUsuarioService.java,3,"Melhorar código de recuperação, adicionar logging, remover debug"
+ImagemService.java,1,"Adicionar validação de path traversal"
+NotificacaoController.java,2,"Remover endpoints de teste, melhorar tratamento de erros"
+GlobalExceptionHandler.java,1,"Não expor stacktraces ao cliente"
+
+ESTIMATIVA TOTAL DE ESFORÇO
+Fase,Horas
+Correções Urgentes,8.5h
+Correções Alta Prioridade,39h
+Correções Média Prioridade,25h
+Total,72.5h
+Equipe Recomendada,"2 desenvolvedores + 1 revisor de segurança"
+Prazo Estimado,3-4 semanas
+
+RISCOS ATUAIS
+Risco,Probabilidade,Impacto,Mitigação Imediata
+Acesso não autorizado ao banco H2,ALTA,CRÍTICO,Desabilitar console H2 imediatamente
+Vazamento de credenciais de email,ALTA,CRÍTICO,Mover para variáveis de ambiente hoje
+Path Traversal - leitura de arquivos,MÉDIA,CRÍTICO,Adicionar validação de paths
+Força bruta em login,ALTA,ALTO,Implementar rate limiting
+Token JWT comprometido,MÉDIA,ALTO,Reduzir validade e implementar refresh tokens
+
+RECOMENDAÇÕES GERAIS
+Categoria,Recomendação
+Treinamento,Capacitar equipe em OWASP Top 10 e secure coding
+Processo,Implementar code review focado em segurança
+Ferramentas,Integrar SAST (SonarQube) e DAST no CI/CD
+Testes,Criar suite de testes de segurança automatizados
+Monitoramento,Implementar SIEM para detecção de ataques
+Compliance,Verificar conformidade com LGPD antes de produção

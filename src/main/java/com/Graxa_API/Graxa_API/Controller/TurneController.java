@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,7 @@ public class TurneController {
 
     @Operation(summary = "Cria uma nova turnê", security = @SecurityRequirement(name = "BearerAuth"))
     @PostMapping
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseTurneDto> criarTurne(
             @RequestPart("dados") @Valid RequestTurneDto dto,
             @RequestPart("imagem") MultipartFile imagem
@@ -49,6 +51,7 @@ public class TurneController {
 
     @Operation(summary = "Atualiza uma turnê existente", security = @SecurityRequirement(name = "BearerAuth"))
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseTurneDto> atualizar(
             @PathVariable Long id,
             @RequestPart("dados") @Valid RequestTurneDto dto,
@@ -60,6 +63,7 @@ public class TurneController {
 
     @Operation(summary = "Deleta uma turnê pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return turneService.deletarTurne(id);
     }

@@ -33,7 +33,8 @@ public class AutenticacaoService implements UserDetailsService {
                         c.getEmail(),  // ← USA EMAIL em vez de nomeUsuario
                         c.getUsuario().getId(),
                         c.getEmail(),
-                        c.getSenha()
+                        c.getSenha(),
+                        c.getRoles()
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + identificador));
     }

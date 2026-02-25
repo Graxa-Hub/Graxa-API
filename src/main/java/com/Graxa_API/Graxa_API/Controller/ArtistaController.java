@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,18 +38,21 @@ public class ArtistaController {
 
     @Operation(summary = "Cria um novo artista", security = @SecurityRequirement(name = "BearerAuth"))
     @PostMapping
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseArtistaDto> criar(@RequestBody @Valid RequestArtistaDto dto) {
         return service.criarArtista(dto);
     }
 
     @Operation(summary = "Atualiza os dados de um artista", security = @SecurityRequirement(name = "BearerAuth"))
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseArtistaDto> atualizar(@PathVariable Long id, @RequestBody @Valid RequestArtistaDto dto) {
         return service.atualizarArtista(id, dto);
     }
 
     @Operation(summary = "Deleta um artista pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return service.deletarArtista(id);
     }

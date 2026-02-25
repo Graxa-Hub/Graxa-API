@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class ShowController {
 
     @Operation(summary = "Cria um novo show", security = @SecurityRequirement(name = "BearerAuth"))
     @PostMapping
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseShowDto> criar(@RequestBody @Valid RequestShowDto dto) {
         return service.criar(dto);
     }
@@ -44,18 +46,21 @@ public class ShowController {
 
     @Operation(summary = "Atualiza um show existente", security = @SecurityRequirement(name = "BearerAuth"))
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseShowDto> atualizar(@PathVariable Long id, @RequestBody @Valid RequestShowDto dto) {
         return service.atualizar(id, dto);
     }
 
     @Operation(summary = "Deleta um show pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return service.deletar(id);
     }
 
     @Operation(summary = "Adiciona bandas a um show existente", security = @SecurityRequirement(name = "BearerAuth"))
     @PutMapping("/bandas")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseShowDto> adicionarBandas(@RequestBody @Valid RequestBandasShowDto dto) {
         return service.adicionarBandasAoShow(dto);
     }

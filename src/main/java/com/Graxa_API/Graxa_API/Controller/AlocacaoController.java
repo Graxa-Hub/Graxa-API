@@ -5,6 +5,7 @@ import com.Graxa_API.Graxa_API.Service.AlocacaoService;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.RequestAlocacaoDto;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.ResponseAlocacaoDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class AlocacaoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseAlocacaoDto> criarAlocacao(@RequestBody RequestAlocacaoDto dto) {
         ResponseAlocacaoDto response = alocacaoService.criarAlocacao(dto);
         return ResponseEntity.status(201).body(response);

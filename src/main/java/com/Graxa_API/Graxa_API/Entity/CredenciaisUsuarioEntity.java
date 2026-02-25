@@ -1,9 +1,12 @@
 package com.Graxa_API.Graxa_API.Entity;
 
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
+import com.Graxa_API.Graxa_API.Utils.RoleMapper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class CredenciaisUsuarioEntity {
@@ -30,7 +33,20 @@ public class CredenciaisUsuarioEntity {
 
     private LocalDateTime codigoExpiraEm;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles = new HashSet<>();
+
     public CredenciaisUsuarioEntity() {}
+
+    @PostLoad
+    @PostPersist
+    @PostUpdate
+    public void atribuirRole() {
+        this.roles.clear();
+        if (this.usuario != null && this.usuario.getTipoUsuario() != null) {
+            this.roles.add(RoleMapper.toRole(this.usuario.getTipoUsuario()));
+        }
+    }
 
 
     public Long getId() {
@@ -67,6 +83,14 @@ public class CredenciaisUsuarioEntity {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
     public LocalDateTime getDataHoraUltimoAcesso() {

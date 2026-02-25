@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,12 +49,14 @@ public class RepresentanteController {
 
     @PostMapping
     @Operation(summary = "Criar novo representante")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseRepresentanteDto> criarRepresentante(@RequestBody @Valid RequestRepresentanteDto dto) {
         return service.criarRepresentante(dto);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar representante")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseRepresentanteDto> atualizarRepresentante(
             @PathVariable Long id,
             @RequestBody @Valid RequestRepresentanteDto dto
@@ -61,6 +64,7 @@ public class RepresentanteController {
         return service.atualizarRepresentante(id, dto);
     }
 
+    @PreAuthorize("hasRole('PRODUTOR')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar representante")
     public ResponseEntity<Void> deletarRepresentante(@PathVariable Long id) {

@@ -1,7 +1,6 @@
 package com.Graxa_API.Graxa_API.Service;
 
 import com.Graxa_API.Graxa_API.Entity.Usuario.RepresentanteEntity;
-import com.Graxa_API.Graxa_API.Exception.DuplicationException;
 import com.Graxa_API.Graxa_API.Exception.EmailDuplicadoException;
 import com.Graxa_API.Graxa_API.Exception.UsuarioNaoEncontradoException;
 import com.Graxa_API.Graxa_API.Factory.UsuarioFactory;

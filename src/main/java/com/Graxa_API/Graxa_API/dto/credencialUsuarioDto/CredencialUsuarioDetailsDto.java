@@ -3,10 +3,13 @@ package com.Graxa_API.Graxa_API.dto.credencialUsuarioDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public record CredencialUsuarioDetailsDto(
 
@@ -20,13 +23,16 @@ public record CredencialUsuarioDetailsDto(
         String email,
 
         @NotBlank(message = "A senha é obrigatória")
-        String senha
+        String senha,
 
+        Set<String> roles // ← agora o DTO carrega as roles
 ) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(); // você pode retornar roles futuramente
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -36,7 +42,7 @@ public record CredencialUsuarioDetailsDto(
 
     @Override
     public String getUsername() {
-        return email;  // ✅ CORRIGIDO: Retorna email em vez de nomeUsuario
+        return email;  // ✅ usa email como identificador
     }
 
     @Override

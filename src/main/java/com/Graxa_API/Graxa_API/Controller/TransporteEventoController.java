@@ -6,6 +6,7 @@ import com.Graxa_API.Graxa_API.dto.Logistica.TransporteDTO;
 import com.Graxa_API.Graxa_API.dto.Transporte.TransporteEventoCreateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class TransporteEventoController {
     private TransporteEventoService transporteEventoService;
 
     @PostMapping
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<?> criar(@RequestBody TransporteEventoCreateDTO dto) {
         TransporteEventoEntity saved = transporteEventoService.criar(dto);
         return ResponseEntity.ok(saved);
@@ -30,12 +32,14 @@ public class TransporteEventoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<?> remover(@PathVariable Long id) {
         transporteEventoService.remover(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<TransporteEventoEntity> atualizar(
             @PathVariable Long id,
             @RequestBody TransporteEventoEntity dto) {

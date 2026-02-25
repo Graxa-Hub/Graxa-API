@@ -6,6 +6,7 @@ import com.Graxa_API.Graxa_API.dto.Logistica.VooDTO;
 import com.Graxa_API.Graxa_API.dto.Voo.VooEventoCreateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class VooEventoController {
     private VooEventoService vooEventoService;
 
     @PostMapping
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<?> criar(@RequestBody VooEventoCreateDTO dto) {
         VooEventoEntity saved = vooEventoService.criar(dto);
         return ResponseEntity.ok(saved);

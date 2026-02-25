@@ -5,6 +5,7 @@ import com.Graxa_API.Graxa_API.Service.AgendaEventoService;
 import com.Graxa_API.Graxa_API.dto.Agenda.AgendaEventoCreateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class AgendaEventoController {
     private AgendaEventoService agendaEventoService;
 
     @PostMapping
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<AgendaEventoEntity> criar(@RequestBody AgendaEventoCreateDTO dto) {
         AgendaEventoEntity saved = agendaEventoService.criar(dto);
         return ResponseEntity.ok(saved);
@@ -29,12 +31,14 @@ public class AgendaEventoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
         agendaEventoService.remover(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<AgendaEventoEntity> atualizar(
             @PathVariable Long id,
             @RequestBody AgendaEventoCreateDTO dto) {

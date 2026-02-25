@@ -71,6 +71,7 @@ public enum TipoUsuario {
     TENOR("tenor"),
     BARITONO("baritono"),
     BAIXO("baixo"),
+    ADMIN("admin")
     // Adicione outros conforme necessário
     ;
 

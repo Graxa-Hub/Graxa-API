@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class LocalController {
 
     @Operation(summary = "Cria um novo local", security = @SecurityRequirement(name = "BearerAuth"))
     @PostMapping
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseLocalDto> criar(@Valid @RequestBody RequestLocalDto dto) {
         return service.criarLocal(dto);
     }
@@ -37,12 +39,14 @@ public class LocalController {
 
     @Operation(summary = "Atualiza um local existente", security = @SecurityRequirement(name = "BearerAuth"))
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<ResponseLocalDto> atualizar(@PathVariable Long id, @Valid @RequestBody RequestLocalDto dto) {
         return service.atualizarLocal(id, dto);
     }
 
     @Operation(summary = "Deleta um local pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUTOR')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return service.deletarLocal(id);
     }
