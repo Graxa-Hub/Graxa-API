@@ -67,8 +67,9 @@ public class SecurityConfiguracao {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        frame.sameOrigin()
 
-        http.headers(headers -> headers.frameOptions(frame -> frame.disable()))
+        http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
@@ -110,9 +111,11 @@ public class SecurityConfiguracao {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuracao = new CorsConfiguration();
 
-        // ✅ CORRIGIR: Permitir origens específicas do frontend
-        configuracao.setAllowedOriginPatterns(Arrays.asList("*")); // Permite todas as origens
-        // Ou específico: configuracao.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173"));
+        configuracao.setAllowedOrigins(Arrays.asList(
+                "http://localhost:5173",
+                "https://seu-dominio.com"
+        ));
+
 
         configuracao.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
