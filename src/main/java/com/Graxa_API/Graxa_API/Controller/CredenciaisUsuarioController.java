@@ -20,24 +20,6 @@ public class CredenciaisUsuarioController {
         this.service = service;
     }
 
-    @Operation(summary = "Valida o código enviado ao usuário")
-    @PostMapping("/validar-codigo")
-    public ResponseEntity<?> validarCodigo(@RequestBody ValidarCodigoDto dto) {
-        return service.validarCodigo(dto.email(), dto.codigo());
-    }
-
-    @Operation(summary = "Reseta a senha do usuário")
-    @PostMapping("/resetar-senha")
-    public ResponseEntity<?> resetarSenha(@RequestBody ResetarSenhaDto dto) {
-        return service.resetarSenha(dto.email(), dto.novaSenha());
-    }
-
-    @Operation(summary = "Envia código de recuperação para o e-mail informado")
-    @PostMapping("/recuperar-senha")
-    public ResponseEntity<?> recuperarSenha(@RequestBody RecuperarSenhaDto dto) {
-        return service.enviarCodigoRecuperacao(dto.email());
-    }
-
     @Operation(summary = "Realiza login com credenciais do usuário")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
@@ -61,8 +43,5 @@ public class CredenciaisUsuarioController {
     public ResponseEntity<?> deletarCredencial(@PathVariable Long id) {
         return service.deletarCredencial(id);
     }
-
-
-
 
 }
