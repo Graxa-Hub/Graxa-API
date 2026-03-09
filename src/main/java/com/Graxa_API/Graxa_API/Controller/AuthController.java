@@ -7,11 +7,13 @@ import com.Graxa_API.Graxa_API.Service.ColaboradorService;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.UsuarioDto.ResponseUsuarioDto;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.RequestLoginDto;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -64,10 +66,14 @@ public class AuthController {
 
     @Operation(summary = "Realiza login e retorna o token de autenticação")
     @PostMapping("/login")
-    @RateLimiter(name = "login")
+    @RateLimiter(name = "login", fallbackMethod = "loginBloqueado")
     public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
         return credenciaisService.login(dto.identificador(), dto.senha());
     }
 
+    private ResponseEntity<?> loginBloqueado(RequestLoginDto dto, RequestNotPermitted ex) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .body("Muitas tentativas de login. Aguarde 15 segundos.");
+    }
 
 }

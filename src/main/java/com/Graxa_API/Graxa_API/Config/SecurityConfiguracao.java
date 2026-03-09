@@ -112,8 +112,7 @@ public class SecurityConfiguracao {
         CorsConfiguration configuracao = new CorsConfiguration();
 
         configuracao.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173",
-                "https://seu-dominio.com"
+                "http://localhost:5173"
         ));
 
 
@@ -127,8 +126,13 @@ public class SecurityConfiguracao {
                 HttpMethod.HEAD.name()
         ));
 
-        // ✅ CORRIGIR: Headers e credenciais para CORS
-        configuracao.setAllowedHeaders(Arrays.asList("*"));
+        // ✅ Headers específicos permitidos para CORS
+        configuracao.setAllowedHeaders(Arrays.asList(
+                HttpHeaders.AUTHORIZATION,
+                HttpHeaders.CONTENT_TYPE,
+                HttpHeaders.ACCEPT,
+                "X-Requested-With"
+        ));
         configuracao.setAllowCredentials(true);
         configuracao.setExposedHeaders(Arrays.asList(
                 HttpHeaders.CONTENT_DISPOSITION,
