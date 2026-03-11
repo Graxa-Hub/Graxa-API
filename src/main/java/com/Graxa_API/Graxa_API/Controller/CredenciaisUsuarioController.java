@@ -2,13 +2,10 @@ package com.Graxa_API.Graxa_API.Controller;
 
 import com.Graxa_API.Graxa_API.Service.CredenciaisUsuarioService;
 import com.Graxa_API.Graxa_API.dto.credencialUsuarioDto.*;
-import io.github.resilience4j.ratelimiter.RequestNotPermitted;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,31 +20,29 @@ public class CredenciaisUsuarioController {
         this.service = service;
     }
 
-//    @Operation(summary = "Valida o código enviado ao usuário")
-//    @PostMapping("/validar-codigo")
-//    @RateLimiter(name = "validacao", fallbackMethod = "validacaoBloqueada")
-//    public ResponseEntity<?> validarCodigo(@RequestBody ValidarCodigoDto dto) {
-//        return service.validarCodigo(dto.email(), dto.codigo());
-//    }
-//
-//    @Operation(summary = "Reseta a senha do usuário")
-//    @PostMapping("/resetar-senha")
-//    public ResponseEntity<?> resetarSenha(@RequestBody ResetarSenhaDto dto) {
-//        return service.resetarSenha(dto.email(), dto.novaSenha());
-//    }
-//
-//    @Operation(summary = "Envia código de recuperação para o e-mail informado")
-//    @PostMapping("/recuperar-senha")
-//    @RateLimiter(name = "recuperacao", fallbackMethod = "recuperacaoBloqueada")
-//    public ResponseEntity<?> recuperarSenha(@RequestBody RecuperarSenhaDto dto) {
-//        return service.enviarCodigoRecuperacao(dto.email());
-//    }
+    @Operation(summary = "Valida o código enviado ao usuário")
+    @PostMapping("/validar-codigo")
+    public ResponseEntity<?> validarCodigo(@RequestBody ValidarCodigoDto dto) {
+        return service.validarCodigo(dto.email(), dto.codigo());
+    }
 
-//    @Operation(summary = "Realiza login com credenciais do usuário")
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
-//        return service.login(dto.identificador(), dto.senha());
-//    }
+    @Operation(summary = "Reseta a senha do usuário")
+    @PostMapping("/resetar-senha")
+    public ResponseEntity<?> resetarSenha(@RequestBody ResetarSenhaDto dto) {
+        return service.resetarSenha(dto.email(), dto.novaSenha());
+    }
+
+    @Operation(summary = "Envia código de recuperação para o e-mail informado")
+    @PostMapping("/recuperar-senha")
+    public ResponseEntity<?> recuperarSenha(@RequestBody RecuperarSenhaDto dto) {
+        return service.enviarCodigoRecuperacao(dto.email());
+    }
+
+    @Operation(summary = "Realiza login com credenciais do usuário")
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody RequestLoginDto dto) {
+        return service.login(dto.identificador(), dto.senha());
+    }
 
     @Operation(summary = "Busca credencial de usuário pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/{id}")
@@ -67,15 +62,7 @@ public class CredenciaisUsuarioController {
         return service.deletarCredencial(id);
     }
 
-    // Métodos fallback para Rate Limiting
-    private ResponseEntity<?> validacaoBloqueada(ValidarCodigoDto dto, RequestNotPermitted ex) {
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
-                .body("Muitas tentativas de validação. Aguarde 5 minutos.");
-    }
 
-    private ResponseEntity<?> recuperacaoBloqueada(RecuperarSenhaDto dto, RequestNotPermitted ex) {
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
-                .body("Muitas tentativas de recuperação. Aguarde 1 hora.");
-    }
+
 
 }
