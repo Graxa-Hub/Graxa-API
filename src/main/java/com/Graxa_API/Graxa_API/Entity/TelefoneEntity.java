@@ -4,7 +4,7 @@ import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Enums.TipoTelefone;
 import jakarta.persistence.*;
 @Entity
-public class TelefoneEntity {
+public class TelefoneEntity implements Identifiable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

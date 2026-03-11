@@ -1,10 +1,11 @@
 package com.Graxa_API.Graxa_API.Entity.Evento;
 
+import com.Graxa_API.Graxa_API.Entity.Identifiable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-public class ExtraEventoEntity {
+public class ExtraEventoEntity implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

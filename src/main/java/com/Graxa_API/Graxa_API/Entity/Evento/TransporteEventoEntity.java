@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Entity.Evento;
 
+import com.Graxa_API.Graxa_API.Entity.Identifiable;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transporte_evento")
-public class TransporteEventoEntity {
+public class TransporteEventoEntity implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

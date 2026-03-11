@@ -1,5 +1,6 @@
 package com.Graxa_API.Graxa_API.Entity.Evento;
 
+import com.Graxa_API.Graxa_API.Entity.Identifiable;
 import com.Graxa_API.Graxa_API.Entity.TurneEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class EventoEntity {
+public abstract class EventoEntity implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

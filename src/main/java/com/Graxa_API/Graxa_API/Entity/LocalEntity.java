@@ -5,7 +5,7 @@
 
     @Entity
 
-    public class LocalEntity {
+    public class LocalEntity implements Identifiable{
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

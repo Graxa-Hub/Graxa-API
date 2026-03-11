@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class AlocacaoEntity {
+public class AlocacaoEntity implements Identifiable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

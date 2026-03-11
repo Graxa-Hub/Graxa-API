@@ -1,9 +1,10 @@
 package com.Graxa_API.Graxa_API.Entity.Usuario;
 
+import com.Graxa_API.Graxa_API.Entity.Identifiable;
 import jakarta.persistence.*;
 
 @MappedSuperclass
-public abstract class   UsuarioEntity {
+public abstract class   UsuarioEntity implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

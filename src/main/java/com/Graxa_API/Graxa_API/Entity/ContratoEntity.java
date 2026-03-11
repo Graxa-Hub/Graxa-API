@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class ContratoEntity {
+public class ContratoEntity implements Identifiable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

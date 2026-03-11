@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 
-public class BandaEntity {
+public class BandaEntity implements Identifiable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,7 +43,7 @@ public class BandaEntity {
     private List<ArtistaEntity> integrantes = new ArrayList<>();
 
     public BandaEntity() {}
-
+    @Override
     public Long getId() {
         return id;
     }

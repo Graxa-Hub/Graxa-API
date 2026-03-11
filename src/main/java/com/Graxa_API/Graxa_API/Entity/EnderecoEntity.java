@@ -4,7 +4,7 @@ import com.Graxa_API.Graxa_API.Enums.TipoEndereco;
 import jakarta.persistence.*;
 
 @Entity
-public class EnderecoEntity {
+public class EnderecoEntity implements Identifiable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

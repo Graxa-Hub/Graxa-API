@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class TurneEntity {
+public class TurneEntity implements Identifiable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

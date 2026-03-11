@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class CredenciaisUsuarioEntity {
+public class CredenciaisUsuarioEntity implements Identifiable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
