@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -39,35 +40,39 @@ public class ImagemController {
     @GetMapping("/download/{nomeArquivo}")
     public ResponseEntity<Resource> downloadImagem(@PathVariable String nomeArquivo) throws IOException {
         Path pastaBase = Paths.get("uploads").toAbsolutePath().normalize();
-        Path caminho = pastaBase.resolve(nomeArquivo).normalize();
 
-        // Bloqueio de Path Traversal
-        if (!caminho.startsWith(pastaBase)) {
+        if (nomeArquivo.contains("..") || nomeArquivo.contains("/") || nomeArquivo.contains("\\") || nomeArquivo.contains("%00")) {
             throw new PathTraversalException("Tentativa de Path Traversal detectada");
         }
 
-        if (!Files.exists(caminho)) {
+        Path caminho;
+        try {
+            caminho = pastaBase.resolve(nomeArquivo).toRealPath();
+        } catch (NoSuchFileException e) {
             return ResponseEntity.notFound().build();
         }
 
+        // ✅ Garante que o caminho real ainda está dentro de uploads/
+        if (!caminho.startsWith(pastaBase.toRealPath())) {
+            throw new PathTraversalException("Tentativa de Path Traversal detectada");
+        }
 
-            Resource recurso = new UrlResource(caminho.toUri());
-            if (!recurso.exists() || !recurso.isReadable()) {
-                return ResponseEntity.notFound().build();
-            }
+        Resource recurso = new UrlResource(caminho.toUri());
+        if (!recurso.exists() || !recurso.isReadable()) {
+            return ResponseEntity.notFound().build();
+        }
 
-            String contentType = Files.probeContentType(caminho);
-            if (contentType == null) {
-                contentType = "application/octet-stream";
-            }
+        String contentType = Files.probeContentType(caminho);
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
 
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .body(recurso);
-
-
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(recurso);
     }
+
 
 
 

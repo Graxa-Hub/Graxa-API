@@ -1,8 +1,10 @@
     package com.Graxa_API.Graxa_API.Entity;
 
+
     import jakarta.persistence.*;
 
     @Entity
+
     public class LocalEntity {
 
         @Id

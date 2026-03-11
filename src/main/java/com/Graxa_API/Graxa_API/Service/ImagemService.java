@@ -1,6 +1,7 @@
 package com.Graxa_API.Graxa_API.Service;
 
 import com.Graxa_API.Graxa_API.Entity.ImagemEntity;
+import com.Graxa_API.Graxa_API.Exception.PathTraversalException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,30 +56,27 @@ public class ImagemService {
     }
 
     public byte[] baixarImagem(String nomeArquivo) throws IOException {
-        // Pasta base normalizada
         Path pastaBase = Paths.get(pastaUpload).toAbsolutePath().normalize();
-
-        // Caminho alvo normalizado
-        Path caminho = pastaBase.resolve(nomeArquivo).normalize();
+        Path caminho = pastaBase.resolve(nomeArquivo).toAbsolutePath().normalize();
 
         // ✅ Verifica se o caminho está dentro da pasta base
         if (!caminho.startsWith(pastaBase)) {
-            throw new SecurityException("Tentativa de path traversal detectada!");
+            throw new PathTraversalException("Tentativa de Path Traversal detectada");
         }
 
         // ✅ Whitelist de extensões permitidas
         List<String> extensoesPermitidas = Arrays.asList(".png", ".jpg", ".jpeg", ".webp");
         boolean permitido = extensoesPermitidas.stream().anyMatch(nomeArquivo::endsWith);
         if (!permitido) {
-            throw new SecurityException("Extensão não permitida!");
+            throw new PathTraversalException("Extensão não permitida");
         }
 
-        // ✅ Verifica se o arquivo existe
-        if (!Files.exists(caminho)) {
+        if (!Files.exists(caminho) || !Files.isReadable(caminho)) {
             throw new IOException("Imagem não encontrada");
         }
 
         return Files.readAllBytes(caminho);
     }
+
 
 }

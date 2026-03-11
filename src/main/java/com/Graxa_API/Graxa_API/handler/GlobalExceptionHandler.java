@@ -33,6 +33,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(429).body("Muitas tentativas de login. Tente novamente em alguns segundos.");
     }
 
+    @ExceptionHandler(org.springframework.security.authentication.BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentials(org.springframework.security.authentication.BadCredentialsException e) {
+        log.warn("Tentativa de login com credenciais inválidas"); // WARNING, não ERROR
+
+        Map<String, String> erro = new HashMap<>();
+        erro.put("mensagem", "Email ou senha inválidos"); // mensagem controlada e genérica
+        erro.put("codigo", "ERR_401");
+
+        return ErrorUtils.buildErrorResponse(HttpStatus.UNAUTHORIZED, "Credenciais inválidas", List.of(erro));
+    }
+
     @ExceptionHandler(UsuariosNaoEncontradosException.class)
     public ResponseEntity<Object> handleUsuariosNaoEncontradosException(UsuariosNaoEncontradosException e) {
         Map<String, String> erro = new HashMap<>();
@@ -104,5 +115,49 @@ public class GlobalExceptionHandler {
         erro.put("codigo", "ERR_500");
 
         return ErrorUtils.buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno", List.of(erro));
+    }
+
+    @ExceptionHandler(CredencialNaoEncontradaException.class)
+    public ResponseEntity<Object> handleCredencialNaoEncontrada(CredencialNaoEncontradaException e) {
+        log.error("Credencial não encontrada", e); // log interno
+
+        Map<String, String> erro = new HashMap<>();
+        erro.put("campo", "credencial");
+        erro.put("mensagem", "Credencial não encontrada"); // mensagem controlada
+
+        return ErrorUtils.buildErrorResponse(HttpStatus.NOT_FOUND, "Erro de credencial", List.of(erro));
+    }
+
+    @ExceptionHandler(SenhaInvalidaException.class)
+    public ResponseEntity<Object> handleSenhaInvalida(SenhaInvalidaException e) {
+        log.warn("Tentativa de login com senha inválida", e); // log interno
+
+        Map<String, String> erro = new HashMap<>();
+        erro.put("campo", "senha");
+        erro.put("mensagem", "Senha inválida"); // mensagem controlada
+
+        return ErrorUtils.buildErrorResponse(HttpStatus.UNAUTHORIZED, "Senha inválida", List.of(erro));
+    }
+
+    @ExceptionHandler(LoginInvalidoException.class)
+    public ResponseEntity<Object> handleLoginInvalido(LoginInvalidoException e) {
+        log.warn("Tentativa de login inválida", e); // log interno
+
+        Map<String, String> erro = new HashMap<>();
+        erro.put("campo", "login");
+        erro.put("mensagem", "Login inválido"); // mensagem controlada
+
+        return ErrorUtils.buildErrorResponse(HttpStatus.UNAUTHORIZED, "Login inválido", List.of(erro));
+    }
+
+    @ExceptionHandler(NomeUsuarioDuplicadoException.class)
+    public ResponseEntity<Object> handleNomeUsuarioDuplicado(NomeUsuarioDuplicadoException e) {
+        log.error("Nome de usuário duplicado", e); // log interno
+
+        Map<String, String> erro = new HashMap<>();
+        erro.put("campo", "nomeUsuario");
+        erro.put("mensagem", "Nome de usuário já cadastrado"); // mensagem controlada
+
+        return ErrorUtils.buildErrorResponse(HttpStatus.CONFLICT, "Nome de usuário duplicado", List.of(erro));
     }
 }
