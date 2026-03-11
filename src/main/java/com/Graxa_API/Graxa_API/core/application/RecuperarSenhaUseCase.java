@@ -1,7 +1,7 @@
 package com.Graxa_API.Graxa_API.core.application;
 
 import com.Graxa_API.Graxa_API.Entity.CredenciaisUsuarioEntity;
-import com.Graxa_API.Graxa_API.Service.EmailService;
+import com.Graxa_API.Graxa_API.core.application.gateway.EmailGateway;
 import com.Graxa_API.Graxa_API.core.application.repository.IRecuperarSenhaRepository;
 import com.Graxa_API.Graxa_API.core.exception.*;
 import com.Graxa_API.Graxa_API.core.recuperarSenha.valueObject.CodigoRecuperacao;
@@ -10,16 +10,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class RecuperarSenhaUseCase {
 
     private final IRecuperarSenhaRepository repository;
-    private final EmailService emailService;
+    private final EmailGateway  emailGateway;
     private final PasswordEncoder passwordEncoder;
 
     public RecuperarSenhaUseCase(
             IRecuperarSenhaRepository repository,
-            EmailService emailService,
+            EmailGateway emailGateway,
             PasswordEncoder passwordEncoder
     ) {
         this.repository = repository;
-        this.emailService = emailService;
+        this.emailGateway = emailGateway;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -33,7 +33,7 @@ public class RecuperarSenhaUseCase {
         credencial.setCodigoExpiraEm(codigo.getExpiraEm());
         repository.salvar(credencial);
 
-        emailService.enviar(
+        emailGateway.enviar(
                 credencial.getEmail(),
                 "Código de Recuperação de Senha",
                 "Seu código de recuperação é: " + codigo.getValor()
