@@ -24,7 +24,7 @@ public class AuditLog {
 
     // Relacionamento com usuário
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "usuario_id")
     private ColaboradorEntity usuario;
 
     @Column(nullable = false)
