@@ -7,6 +7,9 @@ import com.Graxa_API.Graxa_API.dto.BandaDto.ResponseBandaDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,11 +28,23 @@ public class BandaController {
         this.service = service;
     }
 
-    @GetMapping
     @Operation(summary = "Listar todas as bandas")
-    public ResponseEntity<List<ResponseBandaDto>> getBandas() {
-        return service.getBandas();
+    @GetMapping()
+    public ResponseEntity<Page<ResponseBandaDto>> getBandas(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int size) { // size padrão = 1
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ResponseBandaDto> bandas = service.getBandas(pageable);
+
+        if (bandas.isEmpty()) {
+            return ResponseEntity.ok(Page.empty(pageable));
+        }
+
+        return ResponseEntity.ok(bandas);
     }
+
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar banda por ID")

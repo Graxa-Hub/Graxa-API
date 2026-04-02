@@ -10,10 +10,13 @@ import com.Graxa_API.Graxa_API.Repository.TurneRepository;
 import com.Graxa_API.Graxa_API.dto.TurneDto.RequestTurneDto;
 import com.Graxa_API.Graxa_API.dto.TurneDto.ResponseTurneDto;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -105,12 +108,10 @@ public class TurneService {
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<List<ResponseTurneDto>> listarAtivas() {
-        List<ResponseTurneDto> turnes = turneRepository.findAllByAtivoTrue()
-                .stream()
-                .map(ResponseTurneDto::toResponse)
-                .toList();
+    public Page<ResponseTurneDto> listarAtivas(Pageable pageable) {
+        Page<ResponseTurneDto> turnes = turneRepository.findAllByAtivoTrue(pageable)
+                .map(ResponseTurneDto::toResponse);
 
-        return ResponseEntity.ok(turnes);
+        return turnes;
     }
 }

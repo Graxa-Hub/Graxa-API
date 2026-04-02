@@ -5,13 +5,18 @@ meta {
 }
 
 get {
-  url: http:/localhost:8080/turnes
+  url: http:/localhost:8080/turnes?page=0&size=1
   body: none
   auth: inherit
 }
 
+params:query {
+  page: 0
+  size: 1
+}
+
 headers {
-  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsc291c2EiLCJpYXQiOjE3NjE4NTM4NTAsImV4cCI6MTc2NTQ1Mzg1MH0.tkqRuDtI0hSOFCyUQQOEMdCVdmEMe03oZtKMmPHBQCGiqwpCuH2hTQDtHPl087ah4Qrdp8-pxdtaccNBXhsSbg
+  Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnYWJyaWVsLnNvdXNhQGV4YW1wbGUyMDI2LmNvbSIsImlhdCI6MTc3NTA5ODA4NiwiZXhwIjoxNzc1NDU4MDg2fQ.k8clgP3CKbGj7LupX4UXT_kJaOLQA3u_RnS_r0-O5iK84ve8u4ZfeB_qeQbrRBxKeVkdC8Zo0Z_gemdVBpvDfA
 }
 
 settings {

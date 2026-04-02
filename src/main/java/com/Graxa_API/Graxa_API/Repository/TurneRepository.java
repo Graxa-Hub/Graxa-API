@@ -1,6 +1,8 @@
 package com.Graxa_API.Graxa_API.Repository;
 
 import com.Graxa_API.Graxa_API.Entity.TurneEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,5 +14,5 @@ public interface TurneRepository extends JpaRepository<TurneEntity, Long> {
 
     Optional<TurneEntity> findByIdAndAtivoTrue(Long id);
 
-    List<TurneEntity> findAllByAtivoTrue();
+    Page<TurneEntity> findAllByAtivoTrue(Pageable pageable);
 }

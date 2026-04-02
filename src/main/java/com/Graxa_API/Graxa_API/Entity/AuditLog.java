@@ -100,4 +100,3 @@ public class AuditLog {
         this.details = details;
     }
 }
-
