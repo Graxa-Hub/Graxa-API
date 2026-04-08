@@ -68,6 +68,20 @@ public class TurneService {
         return ResponseEntity.ok(ResponseTurneDto.toResponse(turne));
     }
 
+    public Page<ResponseTurneDto> buscarPorBanda(Long bandaId, Pageable pageable) {
+        var banda = bandaRepository.findById(bandaId)
+                .orElseThrow(() -> new BandaNaoEncontradaException(bandaId));
+
+        Page<TurneEntity> turnes = turneRepository.findByBandaIdAndAtivoTrue(banda.getId(), pageable);
+
+        if (turnes.isEmpty()) {
+            throw new TurneNaoEncontradaException("Nenhuma turnê encontrada para a banda " + banda.getNome());
+        }
+
+        return turnes.map(ResponseTurneDto::toResponse);
+    }
+
+
     public ResponseEntity<ResponseTurneDto> buscarPorNome(String nome) {
         TurneEntity turne = turneRepository.findByNomeTurneAndAtivoTrue(nome)
                 .orElseThrow(() -> new TurneNaoEncontradaException(nome));

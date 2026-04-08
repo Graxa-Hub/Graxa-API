@@ -45,6 +45,14 @@ public class BandaController {
         return ResponseEntity.ok(bandas);
     }
 
+    @GetMapping("/buscar")
+    @Operation(summary = "Buscar bandas por nome")
+    public ResponseEntity<List<ResponseBandaDto>> getBandasPorNome(@RequestParam String nome) {
+        List<ResponseBandaDto> bandas = service.getBandasPorNome(nome);
+        return ResponseEntity.ok(bandas);
+    }
+
+
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar banda por ID")

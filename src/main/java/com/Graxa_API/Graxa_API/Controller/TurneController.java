@@ -50,6 +50,20 @@ public class TurneController {
         return turneService.buscarPorNome(nome);
     }
 
+    @Operation(summary = "Lista todas as turnês de uma banda pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
+    @GetMapping("/banda/{bandaId}")
+    public ResponseEntity<Page<ResponseTurneDto>> buscarPorBanda(
+            @PathVariable Long bandaId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ResponseTurneDto> turnes = turneService.buscarPorBanda(bandaId, pageable);
+
+        return ResponseEntity.ok(turnes);
+    }
+
+
     @Operation(summary = "Atualiza uma turnê existente", security = @SecurityRequirement(name = "BearerAuth"))
     @PutMapping("/{id}")
     public ResponseEntity<ResponseTurneDto> atualizar(

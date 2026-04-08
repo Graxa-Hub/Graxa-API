@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface BandaRepository extends JpaRepository<BandaEntity, Long> {
     boolean existsByNome(String nome);
     Page<BandaEntity> findByAtivoTrue(Pageable pageable);
+    List<BandaEntity> findByNomeContainingIgnoreCaseAndAtivoTrue(String nome);
+
 }

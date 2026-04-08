@@ -152,4 +152,17 @@ public class BandaService {
             }
         }
     }
+    public List<ResponseBandaDto> getBandasPorNome(String nome) {
+        List<BandaEntity> bandas = repository.findByNomeContainingIgnoreCaseAndAtivoTrue(nome);
+
+        if (bandas.isEmpty()) {
+            throw new BandasNaoEncontradasException();
+        }
+
+        return bandas.stream()
+                .map(ResponseBandaDto::toResponse)
+                .toList();
+    }
+
 }
+
