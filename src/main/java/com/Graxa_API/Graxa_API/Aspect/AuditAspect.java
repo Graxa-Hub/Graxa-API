@@ -21,7 +21,7 @@ public class AuditAspect {
     @AfterReturning(pointcut = "execution(* com.Graxa_API.Graxa_API.Repository.*.save(..))", returning = "entity")
     public void logSave(Object entity) {
         AuditRequestContext ctx = AuditRequestContext.get();
-        if (entity instanceof Identifiable && ctx != null) {
+        if (entity instanceof Identifiable && ctx != null && ctx.getUsuario() != null) {
             Long id = ((Identifiable) entity).getId();
 
             auditLogService.log(
@@ -39,7 +39,7 @@ public class AuditAspect {
     @After("execution(* com.Graxa_API.Graxa_API.Repository.*.deleteById(..)) && args(id,..)")
     public void logDelete(Long id) {
         AuditRequestContext ctx = AuditRequestContext.get();
-        if (ctx != null) {
+        if (ctx != null && ctx.getUsuario() != null) {
             auditLogService.log(
                     "DELETE",
                     "Entidade",
@@ -55,7 +55,7 @@ public class AuditAspect {
     @After("execution(* com.Graxa_API.Graxa_API.Repository.*.delete(..)) && args(entity,..)")
     public void logDeleteEntity(Object entity) {
         AuditRequestContext ctx = AuditRequestContext.get();
-        if (entity instanceof Identifiable && ctx != null) {
+        if (entity instanceof Identifiable && ctx != null && ctx.getUsuario() != null) {
             Long id = ((Identifiable) entity).getId();
             auditLogService.log(
                     "DELETE",

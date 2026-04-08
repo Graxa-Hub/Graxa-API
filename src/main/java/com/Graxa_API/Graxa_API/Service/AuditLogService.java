@@ -22,6 +22,10 @@ public class AuditLogService {
                     String ip,
                     String details) {
 
+        if (usuario == null) {
+            return;
+        }
+
         AuditLog log = new AuditLog();
         log.setAction(action);
         log.setEntity(entity);

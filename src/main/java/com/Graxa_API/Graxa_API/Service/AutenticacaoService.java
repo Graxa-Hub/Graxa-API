@@ -18,7 +18,7 @@ public class AutenticacaoService implements UserDetailsService {
     @Autowired
     private CredenciaisUsuarioRepository repository;
 
-    @Cacheable(value = "users", key = "#identificador")
+    //@Cacheable(value = "users", key = "#identificador")
     @Override
     public UserDetails loadUserByUsername(String identificador) throws UsernameNotFoundException {
         System.out.println("loadUserByUsername chamado para: " + identificador);
