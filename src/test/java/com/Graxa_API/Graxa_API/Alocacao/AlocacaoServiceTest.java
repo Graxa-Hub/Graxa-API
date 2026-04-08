@@ -1,6 +1,7 @@
 package com.Graxa_API.Graxa_API.Alocacao;
 
 import com.Graxa_API.Graxa_API.Entity.AlocacaoEntity;
+import com.Graxa_API.Graxa_API.Entity.CredenciaisUsuarioEntity;
 import com.Graxa_API.Graxa_API.Entity.Evento.ShowEntity;
 import com.Graxa_API.Graxa_API.Entity.TurneEntity;
 import com.Graxa_API.Graxa_API.Entity.LocalEntity;
@@ -12,6 +13,7 @@ import com.Graxa_API.Graxa_API.Repository.ShowRepository;
 import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
 import com.Graxa_API.Graxa_API.Service.AlocacaoService;
 import com.Graxa_API.Graxa_API.Service.NotificacaoService;
+import com.Graxa_API.Graxa_API.messaging.EmailAlocacaoPublisher;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.RequestAlocacaoDto;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.ResponseAlocacaoDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +33,7 @@ class AlocacaoServiceTest {
     private ShowRepository showRepository;
     private ColaboradorRepository colaboradorRepository;
     private NotificacaoService notificacaoService;
+    private EmailAlocacaoPublisher emailAlocacaoPublisher;
     private AlocacaoService alocacaoService;
 
     private ShowEntity show;
@@ -42,7 +45,8 @@ class AlocacaoServiceTest {
         showRepository = mock(ShowRepository.class);
         colaboradorRepository = mock(ColaboradorRepository.class);
         notificacaoService = mock(NotificacaoService.class);
-        alocacaoService = new AlocacaoService(alocacaoRepository, showRepository, colaboradorRepository, notificacaoService);
+        emailAlocacaoPublisher = mock(EmailAlocacaoPublisher.class);
+        alocacaoService = new AlocacaoService(alocacaoRepository, showRepository, colaboradorRepository, notificacaoService, emailAlocacaoPublisher);
 
         TurneEntity turne = new TurneEntity();
         turne.setId(99L);
@@ -78,6 +82,9 @@ class AlocacaoServiceTest {
         colaborador.setId(5L);
         colaborador.setNome("Colaborador Teste");
         colaborador.setDataNascimento(LocalDate.of(1990, 5, 15));
+        CredenciaisUsuarioEntity credenciais = new CredenciaisUsuarioEntity();
+        credenciais.setEmail("colaborador@graxa.com");
+        colaborador.setCredenciais(credenciais);
     }
 
     @Test
@@ -100,6 +107,7 @@ class AlocacaoServiceTest {
                 eq("ALOCACAO_SHOW"),
                 nullable(Long.class)   // ⭐ CORREÇÃO: aceita null
         );
+        verify(emailAlocacaoPublisher).publicarEmailDeAlocacao(eq(colaborador), eq(show));
     }
 
 

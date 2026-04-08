@@ -7,6 +7,7 @@ import com.Graxa_API.Graxa_API.Enums.StatusAlocacao;
 import com.Graxa_API.Graxa_API.Repository.AlocacaoRepository;
 import com.Graxa_API.Graxa_API.Repository.ShowRepository;
 import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
+import com.Graxa_API.Graxa_API.messaging.EmailAlocacaoPublisher;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.RequestAlocacaoDto;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.ResponseAlocacaoDto;
 import jakarta.transaction.Transactional;
@@ -17,20 +18,22 @@ import java.util.List;
 
 @Service
 public class AlocacaoService {
-
     private final AlocacaoRepository alocacaoRepository;
     private final ShowRepository showRepository;
     private final ColaboradorRepository colaboradorRepository;
     private final NotificacaoService notificacaoService;
+    private final EmailAlocacaoPublisher emailAlocacaoPublisher;
 
     public AlocacaoService(AlocacaoRepository alocacaoRepository,
                            ShowRepository showRepository,
                            ColaboradorRepository colaboradorRepository,
-                           NotificacaoService notificacaoService) {
+                           NotificacaoService notificacaoService,
+                           EmailAlocacaoPublisher emailAlocacaoPublisher) {
         this.alocacaoRepository = alocacaoRepository;
         this.showRepository = showRepository;
         this.colaboradorRepository = colaboradorRepository;
         this.notificacaoService = notificacaoService;
+        this.emailAlocacaoPublisher = emailAlocacaoPublisher;
     }
 
     @Transactional
@@ -56,6 +59,7 @@ public class AlocacaoService {
                 "ALOCACAO_SHOW",
                 salvo.getId()
         );
+        emailAlocacaoPublisher.publicarEmailDeAlocacao(colaborador, show);
 
         return ResponseAlocacaoDto.toResponse(salvo);
     }
