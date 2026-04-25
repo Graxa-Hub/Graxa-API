@@ -18,6 +18,10 @@ import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -147,13 +151,11 @@ class TurneServiceTest {
         turne.setNomeTurne("Rock Brasil");
         turne.setAtivo(true);
 
-        when(turneRepository.findAllByAtivoTrue()).thenReturn(List.of(turne));
+        when(turneRepository.findAllByAtivoTrue(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(turne)));
 
-        ResponseEntity<List<ResponseTurneDto>> response = turneService.listarAtivas();
+        Page<ResponseTurneDto> response = turneService.listarAtivas(Pageable.unpaged());
 
-        assertEquals(200, response.getStatusCode().value());
-
-        assertEquals(1, response.getBody().size());
-        assertEquals("Rock Brasil", response.getBody().get(0).nomeTurne());
+        assertEquals(1, response.getContent().size());
+        assertEquals("Rock Brasil", response.getContent().get(0).nomeTurne());
     }
 }

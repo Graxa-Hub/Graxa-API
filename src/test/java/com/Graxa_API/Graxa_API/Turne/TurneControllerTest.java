@@ -15,6 +15,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -120,11 +124,12 @@ class TurneControllerTest {
     @Test
     @WithMockUser
     void deveListarAtivas() throws Exception {
-        Mockito.when(turneService.listarAtivas()).thenReturn(ResponseEntity.ok(List.of(mockResponse())));
+        Page<ResponseTurneDto> page = new PageImpl<>(List.of(mockResponse()));
+        Mockito.when(turneService.listarAtivas(any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/turnes"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].nomeTurne").value("Rock Brasil"));
+                .andExpect(jsonPath("$.content[0].nomeTurne").value("Rock Brasil"));
     }
 
     @Test
