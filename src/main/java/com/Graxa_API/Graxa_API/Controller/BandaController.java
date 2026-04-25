@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,9 +33,13 @@ public class BandaController {
     @GetMapping()
     public ResponseEntity<Page<ResponseBandaDto>> getBandas(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "1") int size) { // size padrão = 1
+            @RequestParam(defaultValue = "10") int size) { // size padrão = 10
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(Sort.Direction.DESC, "id") // ordena pelo id decrescente
+        );
 
         Page<ResponseBandaDto> bandas = service.getBandas(pageable);
 
@@ -44,6 +49,15 @@ public class BandaController {
 
         return ResponseEntity.ok(bandas);
     }
+
+
+    @GetMapping("/buscar")
+    @Operation(summary = "Buscar bandas por nome")
+    public ResponseEntity<List<ResponseBandaDto>> getBandasPorNome(@RequestParam String nome) {
+        List<ResponseBandaDto> bandas = service.getBandasPorNome(nome);
+        return ResponseEntity.ok(bandas);
+    }
+
 
 
     @GetMapping("/{id}")

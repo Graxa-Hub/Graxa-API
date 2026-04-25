@@ -17,13 +17,16 @@ public class AuditAspect {
     @Autowired
     private AuditLogService auditLogService;
 
-    // Intercepta qualquer save em repositories
     @AfterReturning(pointcut = "execution(* com.Graxa_API.Graxa_API.Repository.*.save(..))", returning = "entity")
     public void logSave(Object entity) {
         AuditRequestContext ctx = AuditRequestContext.get();
         if (entity instanceof Identifiable && ctx != null) {
-            Long id = ((Identifiable) entity).getId();
+            // não logar se for endpoint de login
+            if (ctx.getEndpoint() != null && ctx.getEndpoint().contains("/login")) {
+                return;
+            }
 
+            Long id = ((Identifiable) entity).getId();
             auditLogService.log(
                     "SAVE",
                     entity.getClass().getSimpleName(),
@@ -34,6 +37,7 @@ public class AuditAspect {
             );
         }
     }
+
 
     // Intercepta deleteById nos repositories
     @After("execution(* com.Graxa_API.Graxa_API.Repository.*.deleteById(..)) && args(id,..)")

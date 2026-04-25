@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +51,20 @@ public class TurneController {
         return turneService.buscarPorNome(nome);
     }
 
+    @Operation(summary = "Lista todas as turnês de uma banda pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
+    @GetMapping("/banda/{bandaId}")
+    public ResponseEntity<Page<ResponseTurneDto>> buscarPorBanda(
+            @PathVariable Long bandaId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id") );
+        Page<ResponseTurneDto> turnes = turneService.buscarPorBanda(bandaId, pageable);
+
+        return ResponseEntity.ok(turnes);
+    }
+
+
     @Operation(summary = "Atualiza uma turnê existente", security = @SecurityRequirement(name = "BearerAuth"))
     @PutMapping("/{id}")
     public ResponseEntity<ResponseTurneDto> atualizar(
@@ -73,7 +88,7 @@ public class TurneController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "1") int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id") );
         Page<ResponseTurneDto> turnes = turneService.listarAtivas(pageable);
 
         return ResponseEntity.ok(turnes);
