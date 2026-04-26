@@ -6,6 +6,7 @@ import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Repository.AlocacaoRepository;
 import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
 import com.Graxa_API.Graxa_API.Repository.NotificacaoRepository;
+import com.Graxa_API.Graxa_API.core.application.gateway.EmailGateway;
 import com.Graxa_API.Graxa_API.dto.NotificacaoDto.RequestNotificacaoDto;
 import com.Graxa_API.Graxa_API.dto.NotificacaoDto.ResponseNotificacaoDto;
 import org.slf4j.Logger;
@@ -28,6 +29,9 @@ public class NotificacaoService {
 
     @Autowired
     private NotificacaoWebSocketService webSocketService;
+
+    @Autowired
+    private EmailGateway emailGateway;
 
     public NotificacaoService(NotificacaoRepository notificacaoRepository,
                               ColaboradorRepository colaboradorRepository,
@@ -62,6 +66,8 @@ public class NotificacaoService {
             long contador = contarNaoLidas(request.colaboradorId());
             logger.info("📊 Enviando contador: {} não lidas", contador);
             webSocketService.enviarContadorParaColaborador(username, contador);
+
+            enviarEmailNotificacao(username, request.tipo(), request.mensagem());
         } else {
             logger.warn("⚠️ Username NULL para colaboradorId={}", request.colaboradorId());
         }
@@ -101,6 +107,8 @@ public class NotificacaoService {
             long contador = contarNaoLidas(alocacao.getColaborador().getId());
             logger.info("📊 Enviando contador: {} não lidas", contador);
             webSocketService.enviarContadorParaColaborador(username, contador);
+
+            enviarEmailNotificacao(username, "ALOCACAO_SHOW", mensagem);
         } else {
             logger.warn("⚠️ Username NULL para alocação ID={}", alocacaoId);
         }
@@ -253,7 +261,15 @@ public class NotificacaoService {
 
     @Transactional
     public NotificacaoEntity criarNotificacao(Long colaboradorId, String mensagem, String tipo, Long alocacaoId) {
-        return criarNotificacaoEntity(colaboradorId, mensagem, tipo, alocacaoId);
+        NotificacaoEntity notificacao = criarNotificacaoEntity(colaboradorId, mensagem, tipo, alocacaoId);
+        String username = obterUsernameDoColaborador(notificacao.getColaborador());
+        if (username != null) {
+            ResponseNotificacaoDto response = ResponseNotificacaoDto.toResponse(notificacao);
+            webSocketService.enviarNotificacaoParaColaborador(username, response);
+            webSocketService.enviarContadorParaColaborador(username, contarNaoLidas(colaboradorId));
+            enviarEmailNotificacao(username, tipo, mensagem);
+        }
+        return notificacao;
     }
 
     public List<NotificacaoEntity> listarPorColaboradorEntity(Long colaboradorId) {
@@ -270,5 +286,22 @@ public class NotificacaoService {
                 .orElseThrow(() -> new RuntimeException("Notificação não encontrada"));
         notificacao.setLida(true);
         return notificacaoRepository.save(notificacao);
+    }
+
+    private void enviarEmailNotificacao(String email, String tipo, String mensagem) {
+        try {
+            String assunto = resolverAssunto(tipo);
+            emailGateway.enviar(email, assunto, mensagem);
+            logger.info("📧 E-mail de notificação enviado para {}", email);
+        } catch (Exception e) {
+            logger.error("❌ Falha ao enviar e-mail de notificação para {}: {}", email, e.getMessage(), e);
+        }
+    }
+
+    private String resolverAssunto(String tipo) {
+        return switch (tipo) {
+            case "ALOCACAO_SHOW" -> "Graxa - Você foi alocado para um show";
+            default -> "Graxa - Nova notificação";
+        };
     }
 }

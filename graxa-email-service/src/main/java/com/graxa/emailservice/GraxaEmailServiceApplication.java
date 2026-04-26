@@ -1,12 +1,12 @@
-package com.graxa.allocationemail;
+package com.graxa.emailservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AllocationEmailServiceApplication {
+public class GraxaEmailServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AllocationEmailServiceApplication.class, args);
+        SpringApplication.run(GraxaEmailServiceApplication.class, args);
     }
 }
