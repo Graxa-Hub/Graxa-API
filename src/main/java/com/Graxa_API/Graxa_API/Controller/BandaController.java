@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bandas")
+@PreAuthorize("hasRole('PRODUCAO')")
 @Tag(name = "Bandas", description = "Endpoints para gerenciamento de bandas")
 public class BandaController {
 
@@ -29,45 +31,36 @@ public class BandaController {
         this.service = service;
     }
 
+    @GetMapping
     @Operation(summary = "Listar todas as bandas")
-    @GetMapping()
+
     public ResponseEntity<Page<ResponseBandaDto>> getBandas(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) { // size padrão = 10
-
-        Pageable pageable = PageRequest.of(
-                page,
-                size,
-                Sort.by(Sort.Direction.DESC, "id") // ordena pelo id decrescente
-        );
-
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<ResponseBandaDto> bandas = service.getBandas(pageable);
-
-        if (bandas.isEmpty()) {
-            return ResponseEntity.ok(Page.empty(pageable));
-        }
-
-        return ResponseEntity.ok(bandas);
+        return bandas.isEmpty()
+                ? ResponseEntity.ok(Page.empty(pageable))
+                : ResponseEntity.ok(bandas);
     }
-
 
     @GetMapping("/buscar")
     @Operation(summary = "Buscar bandas por nome")
+
     public ResponseEntity<List<ResponseBandaDto>> getBandasPorNome(@RequestParam String nome) {
-        List<ResponseBandaDto> bandas = service.getBandasPorNome(nome);
-        return ResponseEntity.ok(bandas);
+        return ResponseEntity.ok(service.getBandasPorNome(nome));
     }
-
-
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar banda por ID")
+
     public ResponseEntity<ResponseBandaDto> getBandaPorId(@PathVariable Long id) {
         return service.getBandaPorId(id);
     }
 
     @PostMapping
     @Operation(summary = "Criar nova banda")
+
     public ResponseEntity<ResponseBandaDto> criarBanda(
             @RequestPart("dados") @Valid RequestBandaDto dto,
             @RequestPart(value = "foto", required = false) MultipartFile foto
@@ -77,6 +70,7 @@ public class BandaController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar banda")
+
     public ResponseEntity<ResponseBandaDto> atualizarBanda(
             @PathVariable Long id,
             @RequestPart("dados") @Valid RequestBandaDto dto,
@@ -87,6 +81,7 @@ public class BandaController {
 
     @PostMapping("/{id}/integrantes")
     @Operation(summary = "Adicionar integrantes à banda")
+
     public ResponseEntity<ResponseBandaDto> adicionarIntegrante(
             @PathVariable Long id,
             @RequestBody @Valid RequestIntegrantesDto dto
@@ -95,8 +90,9 @@ public class BandaController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Realizer um safe delete á banda")
-    public ResponseEntity<Void> deletarBanda(@PathVariable Long id){
+    @Operation(summary = "Realizar um safe delete à banda")
+
+    public ResponseEntity<Void> deletarBanda(@PathVariable Long id) {
         service.deletarBanda(id);
         return ResponseEntity.noContent().build();
     }

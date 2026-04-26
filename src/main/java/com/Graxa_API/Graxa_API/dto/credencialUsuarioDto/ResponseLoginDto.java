@@ -5,10 +5,14 @@
 
     public record ResponseLoginDto(
             String token,
+            String role,              // ← novo
             ResponseUsuarioDto usuario
     ) {
-        public static ResponseLoginDto toResponse(CredenciaisUsuarioEntity credenciais, String token) {
-            ResponseUsuarioDto usuarioDto = ResponseUsuarioDto.toResponse(credenciais.getUsuario());
-            return new ResponseLoginDto(token, usuarioDto);
+        public static ResponseLoginDto toResponse(CredenciaisUsuarioEntity credenciais, String token, String role) {
+            return new ResponseLoginDto(
+                    token,
+                    role,
+                    ResponseUsuarioDto.toResponse(credenciais.getUsuario())
+            );
         }
     }

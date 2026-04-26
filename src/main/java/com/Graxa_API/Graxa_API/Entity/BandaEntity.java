@@ -2,6 +2,7 @@ package com.Graxa_API.Graxa_API.Entity;
 
 import com.Graxa_API.Graxa_API.Entity.Evento.EventoEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ArtistaEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.RepresentanteEntity;
 import com.Graxa_API.Graxa_API.Enums.Genero;
 import com.Graxa_API.Graxa_API.dto.BandaDto.RequestBandaDto;
@@ -41,6 +42,10 @@ public class BandaEntity implements Identifiable{
             inverseJoinColumns = @JoinColumn(name = "artista_id")
     )
     private List<ArtistaEntity> integrantes = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "criador_id", nullable = false)
+    private ColaboradorEntity criadoPor;
+
 
     public BandaEntity() {}
     @Override
@@ -107,4 +112,6 @@ public class BandaEntity implements Identifiable{
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
+    public ColaboradorEntity getCriadoPor() { return criadoPor; }
+    public void setCriadoPor(ColaboradorEntity criadoPor) { this.criadoPor = criadoPor; }
 }

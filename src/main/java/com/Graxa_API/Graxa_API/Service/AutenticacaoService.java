@@ -30,10 +30,11 @@ public class AutenticacaoService implements UserDetailsService {
 
         return credencial
                 .map(c -> new CredencialUsuarioDetailsDto(
-                        c.getEmail(),  // ← USA EMAIL em vez de nomeUsuario
+                        c.getEmail(),
                         c.getUsuario().getId(),
                         c.getEmail(),
-                        c.getSenha()
+                        c.getSenha(),
+                        c.getUsuario().getTipoUsuario()   // ← adiciona essa linha
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + identificador));
     }

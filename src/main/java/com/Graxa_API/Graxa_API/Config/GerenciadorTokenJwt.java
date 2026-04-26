@@ -30,11 +30,23 @@ public class GerenciadorTokenJwt {
         return getClaimForToken(token, Claims::getExpiration);
     }
 
-    public String generateToken(final Authentication authentication){
-        final String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+    public String generateToken(final Authentication authentication) {
+        final String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
 
-        return Jwts.builder().setSubject(authentication.getName()).signWith(parseSecret()).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+jwtTokenValidity * 1_000)).compact();
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim("roles", authorities)           // ← adiciona essa linha
+                .signWith(parseSecret())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtTokenValidity * 1_000))
+                .compact();
+    }
+
+    // Adiciona esse método novo
+    public String getRolesFromToken(String token) {
+        return getClaimForToken(token, claims -> claims.get("roles", String.class));
     }
 
     public <T> T getClaimForToken(String token, Function<Claims, T> claimsResolver){

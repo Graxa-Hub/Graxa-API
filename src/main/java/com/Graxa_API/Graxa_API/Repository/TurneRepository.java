@@ -16,6 +16,6 @@ public interface TurneRepository extends JpaRepository<TurneEntity, Long> {
 
     Page<TurneEntity> findAllByAtivoTrue(Pageable pageable);
     Page<TurneEntity> findByBandaIdAndAtivoTrue(Long bandaId, Pageable pageable);
-
+    Page<TurneEntity> findByAtivoTrueAndCriadoPorId(Long criadoPorId, Pageable pageable);
 
 }
