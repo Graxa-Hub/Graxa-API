@@ -14,6 +14,6 @@ public interface AlocacaoRepository extends JpaRepository<AlocacaoEntity, Long> 
     List<AlocacaoEntity> findByColaboradorId(Long colaboradorId);
 
     List<AlocacaoEntity> findByStatus(String status);
-
+    List<AlocacaoEntity> findByShowIdAndColaboradorId(Long showId, Long colaboradorId);
     boolean existsByShowIdAndColaboradorId(Long showId, Long colaboradorId);
 }

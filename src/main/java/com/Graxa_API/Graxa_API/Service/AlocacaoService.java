@@ -7,8 +7,10 @@ import com.Graxa_API.Graxa_API.Enums.StatusAlocacao;
 import com.Graxa_API.Graxa_API.Repository.AlocacaoRepository;
 import com.Graxa_API.Graxa_API.Repository.ShowRepository;
 import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
+import com.Graxa_API.Graxa_API.Security.SecurityUtils;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.RequestAlocacaoDto;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.ResponseAlocacaoDto;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -22,23 +24,34 @@ public class AlocacaoService {
     private final ShowRepository showRepository;
     private final ColaboradorRepository colaboradorRepository;
     private final NotificacaoService notificacaoService;
+    private final SecurityUtils securityUtils;  // ← novo
 
     public AlocacaoService(AlocacaoRepository alocacaoRepository,
                            ShowRepository showRepository,
                            ColaboradorRepository colaboradorRepository,
-                           NotificacaoService notificacaoService) {
+                           NotificacaoService notificacaoService,
+                           SecurityUtils securityUtils) {  // ← novo
         this.alocacaoRepository = alocacaoRepository;
         this.showRepository = showRepository;
         this.colaboradorRepository = colaboradorRepository;
         this.notificacaoService = notificacaoService;
+        this.securityUtils = securityUtils;  // ← novo
     }
 
     @Transactional
     public ResponseAlocacaoDto criarAlocacao(RequestAlocacaoDto dto) {
+        ColaboradorEntity usuarioLogado = securityUtils.getUsuarioLogado();
+
         ShowEntity show = showRepository.findById(dto.showId())
-                .orElseThrow(() -> new RuntimeException("Show não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Show não encontrado"));
+
+        // Verifica se o usuário logado é o criador do show
+        if (!show.getCriadoPor().getId().equals(usuarioLogado.getId())) {
+            throw new RuntimeException("Apenas o criador do show pode criar alocações");
+        }
+
         ColaboradorEntity colaborador = colaboradorRepository.findById(dto.colaboradorId())
-                .orElseThrow(() -> new RuntimeException("Colaborador não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Colaborador não encontrado"));
 
         AlocacaoEntity alocacao = new AlocacaoEntity();
         alocacao.setShow(show);
@@ -49,7 +62,6 @@ public class AlocacaoService {
 
         AlocacaoEntity salvo = alocacaoRepository.save(alocacao);
 
-        // Dispara notificação
         notificacaoService.criarNotificacao(
                 colaborador.getId(),
                 "Você foi alocado para o show " + show.getNomeEvento(),
@@ -62,18 +74,35 @@ public class AlocacaoService {
 
     @Transactional
     public ResponseAlocacaoDto responderAlocacao(Long alocacaoId, StatusAlocacao status) {
+        ColaboradorEntity usuarioLogado = securityUtils.getUsuarioLogado();
+
         AlocacaoEntity alocacao = alocacaoRepository.findById(alocacaoId)
-                .orElseThrow(() -> new RuntimeException("Alocação não encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Alocação não encontrada"));
+
+        // Verifica se é o destinatário da alocação
+        if (!alocacao.getColaborador().getId().equals(usuarioLogado.getId())) {
+            throw new RuntimeException("Apenas o colaborador alocado pode responder esta alocação");
+        }
 
         alocacao.setStatus(status);
         alocacao.setDataHoraResposta(LocalDateTime.now());
 
-        AlocacaoEntity atualizado = alocacaoRepository.save(alocacao);
-        return ResponseAlocacaoDto.toResponse(atualizado);
+        return ResponseAlocacaoDto.toResponse(alocacaoRepository.save(alocacao));
     }
 
     public List<ResponseAlocacaoDto> listarPorShow(Long showId) {
-        List<AlocacaoEntity> alocacoes = alocacaoRepository.findByShowId(showId);
+        ColaboradorEntity usuarioLogado = securityUtils.getUsuarioLogado();
+
+        ShowEntity show = showRepository.findById(showId)
+                .orElseThrow(() -> new EntityNotFoundException("Show não encontrado"));
+
+        // Criador vê todas, outros veem só as suas
+        boolean ehCriador = show.getCriadoPor().getId().equals(usuarioLogado.getId());
+
+        List<AlocacaoEntity> alocacoes = ehCriador
+                ? alocacaoRepository.findByShowId(showId)
+                : alocacaoRepository.findByShowIdAndColaboradorId(showId, usuarioLogado.getId());
+
         return ResponseAlocacaoDto.toResponse(alocacoes);
     }
 }

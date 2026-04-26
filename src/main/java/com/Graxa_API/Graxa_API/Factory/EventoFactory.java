@@ -7,6 +7,7 @@ import com.Graxa_API.Graxa_API.Entity.LocalEntity;
 import com.Graxa_API.Graxa_API.Entity.TurneEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.Graxa_API.Graxa_API.Repository.LocalRepository;
+import com.Graxa_API.Graxa_API.Repository.ShowRepository;
 import com.Graxa_API.Graxa_API.Repository.TurneRepository;
 import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
 import com.Graxa_API.Graxa_API.dto.ShowDto.RequestShowDto;
@@ -29,6 +30,9 @@ public class EventoFactory {
 
     @Autowired
     private TurneRepository turneRepository;
+
+    @Autowired
+    private ShowRepository showRepository;
 
     @Autowired
     private LocalRepository localRepository;
@@ -70,10 +74,10 @@ public class EventoFactory {
         viagem.setDataInicio(dto.dataInicio());
         viagem.setDataFim(dto.dataFim());
         viagem.setDescricao(dto.descricao());
-        TurneEntity turne = turneRepository
-                .findById(dto.turneId())
-                .orElseThrow(() -> new EntityNotFoundException("Turnê não encontrado"));
-        viagem.setTurne(turne);
+        ShowEntity show = showRepository
+                .findById(dto.showId())
+                .orElseThrow(() -> new EntityNotFoundException("Show não encontrado"));
+        viagem.setShow(show);
         viagem.setTipoViagem(dto.tipoViagem());
 
         return viagem;

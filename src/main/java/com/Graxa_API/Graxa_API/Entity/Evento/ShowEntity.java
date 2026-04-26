@@ -3,6 +3,7 @@ package com.Graxa_API.Graxa_API.Entity.Evento;
 import com.Graxa_API.Graxa_API.Entity.AlocacaoEntity;
 import com.Graxa_API.Graxa_API.Entity.BandaEntity;
 import com.Graxa_API.Graxa_API.Entity.LocalEntity;
+import com.Graxa_API.Graxa_API.Entity.TurneEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -12,6 +13,10 @@ import java.util.List;
 
 @Entity
 public class ShowEntity extends EventoEntity {
+
+    @ManyToOne
+    @JoinColumn(name = "turne_id")
+    private TurneEntity turne;
 
     @ManyToOne
     @JoinColumn(name = "local_id", nullable = false)
@@ -71,5 +76,13 @@ public class ShowEntity extends EventoEntity {
 
     public void setAlocacoes(List<AlocacaoEntity> alocacoes) {
         this.alocacoes = alocacoes;
+    }
+
+    public TurneEntity getTurne() {
+        return turne;
+    }
+
+    public void setTurne(TurneEntity turne) {
+        this.turne = turne;
     }
 }

@@ -29,7 +29,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 usuario.getNomeUsuario(),
                 usuario.getUsuario().getId(),
                 usuario.getEmail(),
-                usuario.getSenha()  // HASH CORRETA!
+                usuario.getSenha(),
+                usuario.getUsuario().getTipoUsuario()  // ← adiciona esse
         );
     }
 }

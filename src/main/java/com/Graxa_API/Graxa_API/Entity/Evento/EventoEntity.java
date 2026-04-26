@@ -2,6 +2,7 @@ package com.Graxa_API.Graxa_API.Entity.Evento;
 
 import com.Graxa_API.Graxa_API.Entity.Identifiable;
 import com.Graxa_API.Graxa_API.Entity.TurneEntity;
+import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -23,9 +24,6 @@ public abstract class EventoEntity implements Identifiable {
     private LocalDateTime dataFim;
     private String descricao;
 
-    @ManyToOne
-    @JoinColumn(name = "turne_id")
-    private TurneEntity turne;
 
     @Column(nullable = false)
     private Boolean ativo = true;
@@ -34,7 +32,12 @@ public abstract class EventoEntity implements Identifiable {
     @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AgendaEventoEntity> agenda = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "criador_id", nullable = false)
+    private ColaboradorEntity criadoPor;
 
+    public ColaboradorEntity getCriadoPor() { return criadoPor; }
+    public void setCriadoPor(ColaboradorEntity criadoPor) { this.criadoPor = criadoPor; }
 
 
     public EventoEntity() {}
@@ -78,14 +81,6 @@ public abstract class EventoEntity implements Identifiable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public TurneEntity getTurne() {
-        return turne;
-    }
-
-    public void setTurne(TurneEntity turne) {
-        this.turne = turne;
     }
 
     public Boolean getAtivo() {
