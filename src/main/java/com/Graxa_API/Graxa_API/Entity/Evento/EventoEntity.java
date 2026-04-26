@@ -24,9 +24,6 @@ public abstract class EventoEntity implements Identifiable {
     private LocalDateTime dataFim;
     private String descricao;
 
-    @ManyToOne
-    @JoinColumn(name = "turne_id")
-    private TurneEntity turne;
 
     @Column(nullable = false)
     private Boolean ativo = true;
@@ -84,14 +81,6 @@ public abstract class EventoEntity implements Identifiable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public TurneEntity getTurne() {
-        return turne;
-    }
-
-    public void setTurne(TurneEntity turne) {
-        this.turne = turne;
     }
 
     public Boolean getAtivo() {

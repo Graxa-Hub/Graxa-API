@@ -1,6 +1,7 @@
 package com.Graxa_API.Graxa_API.Entity;
 
 import com.Graxa_API.Graxa_API.Entity.Evento.EventoEntity;
+import com.Graxa_API.Graxa_API.Entity.Evento.ShowEntity;
 import com.Graxa_API.Graxa_API.Entity.Usuario.ColaboradorEntity;
 import jakarta.persistence.*;
 
@@ -19,7 +20,7 @@ public class TurneEntity implements Identifiable{
     private LocalDateTime dataHoraFimTurne;
 
     @OneToMany(mappedBy = "turne", cascade = CascadeType.ALL)
-    private List<EventoEntity> eventos;
+    private List<ShowEntity> eventos;
 
     private boolean ativo = true;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -70,13 +71,14 @@ public class TurneEntity implements Identifiable{
         this.banda = banda;
     }
 
-    public List<EventoEntity> getEventos() {
+    public List<ShowEntity> getEventos() {
         return eventos;
     }
 
-    public void setEventos(List<EventoEntity> eventos) {
+    public void setEventos(List<ShowEntity> eventos) {
         this.eventos = eventos;
     }
+
     public ColaboradorEntity getCriadoPor() { return criadoPor; }
     public void setCriadoPor(ColaboradorEntity criadoPor) { this.criadoPor = criadoPor; }
 }

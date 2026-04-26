@@ -14,5 +14,5 @@ public interface BandaRepository extends JpaRepository<BandaEntity, Long> {
     Page<BandaEntity> findByAtivoTrue(Pageable pageable);
     List<BandaEntity> findByNomeContainingIgnoreCaseAndAtivoTrue(String nome);
     Page<BandaEntity> findByAtivoTrueAndCriadoPorId(Long criadoPorId, Pageable pageable);
-
+    boolean existsByNomeAndCriadoPorId(String nome, Long criadoPorId);
 }

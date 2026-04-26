@@ -27,7 +27,7 @@ public record RequestViagemDto(
 
         @NotNull(message = "O ID da turnê é obrigatório")
         @Schema(description = "ID da turnê vinculada à viagem", example = "1")
-        Long turneId,
+        Long showId,
 
         @NotNull(message = "O tipo da viagem é obrigatório")
         @Schema(description = "Tipo da viagem (ex: aereo, terrestre)", example = "aereo")

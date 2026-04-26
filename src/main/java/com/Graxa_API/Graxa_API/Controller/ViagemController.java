@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,36 +26,42 @@ public class ViagemController {
 
     @Operation(summary = "Cria uma nova viagem", security = @SecurityRequirement(name = "BearerAuth"))
     @PostMapping
+    @PreAuthorize("hasRole('PRODUCAO')")
     public ResponseEntity<ResponseViagemDto> criar(@RequestBody @Valid RequestViagemDto dto) {
         return viagemService.criar(dto);
     }
 
     @Operation(summary = "Busca uma viagem pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ResponseViagemDto> buscarPorId(@PathVariable Long id) {
         return viagemService.buscarPorId(id);
     }
 
     @Operation(summary = "Lista todas as viagens", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ResponseViagemDto>> listarTodos() {
         return viagemService.listarTodos();
     }
 
     @Operation(summary = "Busca viagens pelo nome", security = @SecurityRequirement(name = "BearerAuth"))
     @GetMapping("/buscar")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ResponseViagemDto>> buscarPorNome(@RequestParam String nome) {
         return viagemService.buscarPorNome(nome);
     }
 
     @Operation(summary = "Atualiza uma viagem existente", security = @SecurityRequirement(name = "BearerAuth"))
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUCAO')")
     public ResponseEntity<ResponseViagemDto> atualizar(@PathVariable Long id, @RequestBody @Valid RequestViagemDto dto) {
         return viagemService.atualizar(id, dto);
     }
 
     @Operation(summary = "Deleta uma viagem pelo ID", security = @SecurityRequirement(name = "BearerAuth"))
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('PRODUCAO')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return viagemService.deletar(id);
     }

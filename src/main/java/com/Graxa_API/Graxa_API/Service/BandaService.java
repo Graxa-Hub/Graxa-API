@@ -72,7 +72,10 @@ public class BandaService {
 
     @Transactional
     public ResponseEntity<ResponseBandaDto> criarBanda(RequestBandaDto dto, MultipartFile foto) throws IOException {
-        if (repository.existsByNome(dto.nome())) {
+        ColaboradorEntity logado = securityUtils.getUsuarioLogado();
+
+        // Duplicada apenas se for do mesmo criador
+        if (repository.existsByNomeAndCriadoPorId(dto.nome(), logado.getId())) {
             throw new BandaDuplicadaException(dto.nome());
         }
 
@@ -84,7 +87,7 @@ public class BandaService {
         banda.setDescricao(dto.descricao());
         banda.setGenero(dto.genero());
         banda.setRepresentante(representante);
-        banda.setCriadoPor(securityUtils.getUsuarioLogado());  // ← seta criador
+        banda.setCriadoPor(logado);
 
         if (foto != null && !foto.isEmpty()) {
             ImagemEntity imagemSalva = imagemService.salvarImagem(foto);

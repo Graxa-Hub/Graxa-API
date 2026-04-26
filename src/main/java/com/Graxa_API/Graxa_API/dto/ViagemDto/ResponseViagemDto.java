@@ -2,6 +2,7 @@ package com.Graxa_API.Graxa_API.dto.ViagemDto;
 
 import com.Graxa_API.Graxa_API.Entity.Evento.ViagemEntity;
 import com.Graxa_API.Graxa_API.Enums.TipoViagem;
+import com.Graxa_API.Graxa_API.dto.ShowDto.ResponseShowDto;
 import com.Graxa_API.Graxa_API.dto.TurneDto.ResponseTurneDto;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public record ResponseViagemDto(
         LocalDateTime dataFim,
         String descricao,
         TipoViagem tipoViagem,
-        ResponseTurneDto turne
+        ResponseShowDto show
 ) {
     public static ResponseViagemDto toResponse(ViagemEntity entity) {
         return new ResponseViagemDto(
@@ -24,7 +25,7 @@ public record ResponseViagemDto(
                 entity.getDataFim(),
                 entity.getDescricao(),
                 entity.getTipoViagem(),
-                ResponseTurneDto.toResponse(entity.getTurne())
+                ResponseShowDto.toResponse(entity.getShow())
         );
     }
 

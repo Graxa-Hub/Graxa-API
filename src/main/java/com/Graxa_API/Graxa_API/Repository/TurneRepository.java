@@ -11,11 +11,11 @@ import java.util.Optional;
 public interface TurneRepository extends JpaRepository<TurneEntity, Long> {
     boolean existsByNomeTurne(String nome);
     Optional<TurneEntity> findByNomeTurneAndAtivoTrue(String nomeTurne);
-
     Optional<TurneEntity> findByIdAndAtivoTrue(Long id);
-
+    boolean existsByNomeTurneAndCriadoPorId(String nomeTurne, Long criadoPorId);
     Page<TurneEntity> findAllByAtivoTrue(Pageable pageable);
     Page<TurneEntity> findByBandaIdAndAtivoTrue(Long bandaId, Pageable pageable);
     Page<TurneEntity> findByAtivoTrueAndCriadoPorId(Long criadoPorId, Pageable pageable);
-
+    // TurneRepository — adiciona esse método
+    Optional<TurneEntity> findByNomeTurneAndAtivoTrueAndCriadoPorId(String nomeTurne, Long criadoPorId);
 }

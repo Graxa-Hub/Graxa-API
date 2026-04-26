@@ -43,18 +43,18 @@ public class TurneService {
 
     @Transactional
     public ResponseEntity<ResponseTurneDto> criarTurne(RequestTurneDto dto, MultipartFile imagem) throws IOException {
-        if (turneRepository.existsByNomeTurne(dto.nomeTurne())) {
-            throw new TurneJaExistenteException(dto.nomeTurne());
-        }
-
         ColaboradorEntity logado = securityUtils.getUsuarioLogado();
 
         var banda = bandaRepository.findById(dto.bandaId())
                 .orElseThrow(() -> new BandaNaoEncontradaException(dto.bandaId()));
 
-        // Só quem criou a banda pode criar turnê para ela
         if (!banda.getCriadoPor().getId().equals(logado.getId())) {
             throw new RuntimeException("Apenas o criador da banda pode criar turnês");
+        }
+
+        // Duplicada apenas se for do mesmo criador
+        if (turneRepository.existsByNomeTurneAndCriadoPorId(dto.nomeTurne(), logado.getId())) {
+            throw new TurneJaExistenteException(dto.nomeTurne());
         }
 
         ImagemEntity imagemSalva = imagemService.salvarImagem(imagem);
@@ -67,7 +67,7 @@ public class TurneService {
         turne.setAtivo(true);
         turne.setNomeImagem(imagemSalva.getNomeArquivo());
         turne.setBanda(banda);
-        turne.setCriadoPor(logado);  // ← seta criador
+        turne.setCriadoPor(logado);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ResponseTurneDto.toResponse(turneRepository.save(turne)));
@@ -94,12 +94,8 @@ public class TurneService {
 
     public ResponseEntity<ResponseTurneDto> buscarPorNome(String nome) {
         ColaboradorEntity logado = securityUtils.getUsuarioLogado();
-        TurneEntity turne = turneRepository.findByNomeTurneAndAtivoTrue(nome)
+        TurneEntity turne = turneRepository.findByNomeTurneAndAtivoTrueAndCriadoPorId(nome, logado.getId())
                 .orElseThrow(() -> new TurneNaoEncontradaException(nome));
-
-        if (!turne.getCriadoPor().getId().equals(logado.getId())) {
-            throw new RuntimeException("Acesso negado");
-        }
 
         return ResponseEntity.ok(ResponseTurneDto.toResponse(turne));
     }
