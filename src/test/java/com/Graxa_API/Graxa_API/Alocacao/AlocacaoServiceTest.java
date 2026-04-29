@@ -10,6 +10,7 @@ import com.Graxa_API.Graxa_API.Enums.StatusAlocacao;
 import com.Graxa_API.Graxa_API.Repository.AlocacaoRepository;
 import com.Graxa_API.Graxa_API.Repository.ShowRepository;
 import com.Graxa_API.Graxa_API.Repository.ColaboradorRepository;
+import com.Graxa_API.Graxa_API.Security.SecurityUtils;
 import com.Graxa_API.Graxa_API.Service.AlocacaoService;
 import com.Graxa_API.Graxa_API.Service.NotificacaoService;
 import com.Graxa_API.Graxa_API.dto.AlocacaoDto.RequestAlocacaoDto;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class AlocacaoServiceTest {
@@ -31,10 +33,12 @@ class AlocacaoServiceTest {
     private ShowRepository showRepository;
     private ColaboradorRepository colaboradorRepository;
     private NotificacaoService notificacaoService;
+    private SecurityUtils securityUtils;
     private AlocacaoService alocacaoService;
 
-    private ShowEntity show;
+    private ColaboradorEntity produtor;
     private ColaboradorEntity colaborador;
+    private ShowEntity show;
 
     @BeforeEach
     void setUp() {
@@ -42,7 +46,17 @@ class AlocacaoServiceTest {
         showRepository = mock(ShowRepository.class);
         colaboradorRepository = mock(ColaboradorRepository.class);
         notificacaoService = mock(NotificacaoService.class);
-        alocacaoService = new AlocacaoService(alocacaoRepository, showRepository, colaboradorRepository, notificacaoService);
+        securityUtils = mock(SecurityUtils.class);
+        alocacaoService = new AlocacaoService(alocacaoRepository, showRepository, colaboradorRepository, notificacaoService, securityUtils);
+
+        produtor = new ColaboradorEntity();
+        produtor.setId(1L);
+        produtor.setNome("Produtor Responsável");
+
+        colaborador = new ColaboradorEntity();
+        colaborador.setId(5L);
+        colaborador.setNome("Colaborador Teste");
+        colaborador.setDataNascimento(LocalDate.of(1990, 5, 15));
 
         TurneEntity turne = new TurneEntity();
         turne.setId(99L);
@@ -63,31 +77,23 @@ class AlocacaoServiceTest {
         local.setCapacidade(5000);
         local.setEndereco(enderecoLocal);
 
-        ColaboradorEntity responsavel = new ColaboradorEntity();
-        responsavel.setId(99L);
-        responsavel.setNome("Produtor Responsável");
-
         show = new ShowEntity();
         show.setId(1L);
         show.setNomeEvento("Festival Graxa");
         show.setTurne(turne);
         show.setLocal(local);
-        show.setResponsavelEvento(responsavel);
-
-        colaborador = new ColaboradorEntity();
-        colaborador.setId(5L);
-        colaborador.setNome("Colaborador Teste");
-        colaborador.setDataNascimento(LocalDate.of(1990, 5, 15));
+        show.setResponsavelEvento(produtor);
+        show.setCriadoPor(produtor);  // produtor é o criador do show
     }
 
     @Test
     void deveCriarAlocacaoComStatusPendente() {
-        RequestAlocacaoDto dto = new RequestAlocacaoDto(1L, 5L);
-
+        when(securityUtils.getUsuarioLogado()).thenReturn(produtor);
         when(showRepository.findById(1L)).thenReturn(Optional.of(show));
         when(colaboradorRepository.findById(5L)).thenReturn(Optional.of(colaborador));
         when(alocacaoRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
+        RequestAlocacaoDto dto = new RequestAlocacaoDto(1L, 5L);
         ResponseAlocacaoDto response = alocacaoService.criarAlocacao(dto);
 
         assertThat(response.status()).isEqualTo(StatusAlocacao.PENDENTE);
@@ -98,13 +104,15 @@ class AlocacaoServiceTest {
                 eq(5L),
                 contains("Festival Graxa"),
                 eq("ALOCACAO_SHOW"),
-                nullable(Long.class)   // ⭐ CORREÇÃO: aceita null
+                nullable(Long.class)
         );
     }
 
-
     @Test
     void deveResponderAlocacaoComoAceita() {
+        // O colaborador é quem responde à alocação (ele é o destinatário)
+        when(securityUtils.getUsuarioLogado()).thenReturn(colaborador);
+
         AlocacaoEntity alocacao = new AlocacaoEntity();
         alocacao.setId(1L);
         alocacao.setShow(show);
@@ -115,7 +123,6 @@ class AlocacaoServiceTest {
         when(alocacaoRepository.findById(1L)).thenReturn(Optional.of(alocacao));
         when(alocacaoRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // usa o enum correto do service
         ResponseAlocacaoDto response = alocacaoService.responderAlocacao(1L, StatusAlocacao.ACEITO);
 
         assertThat(response.status()).isEqualTo(StatusAlocacao.ACEITO);
@@ -124,6 +131,8 @@ class AlocacaoServiceTest {
 
     @Test
     void deveResponderAlocacaoComoRecusada() {
+        when(securityUtils.getUsuarioLogado()).thenReturn(colaborador);
+
         AlocacaoEntity alocacao = new AlocacaoEntity();
         alocacao.setId(1L);
         alocacao.setShow(show);
@@ -133,7 +142,6 @@ class AlocacaoServiceTest {
         when(alocacaoRepository.findById(1L)).thenReturn(Optional.of(alocacao));
         when(alocacaoRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // usa o enum correto do service
         ResponseAlocacaoDto response = alocacaoService.responderAlocacao(1L, StatusAlocacao.RECUSADO);
 
         assertThat(response.status()).isEqualTo(StatusAlocacao.RECUSADO);
@@ -141,7 +149,47 @@ class AlocacaoServiceTest {
     }
 
     @Test
+    void deveLancarExcecaoAoCriarAlocacaoParaShowDeOutroProdutor() {
+        ColaboradorEntity outroProduto = new ColaboradorEntity();
+        outroProduto.setId(99L);
+
+        // logado é diferente do criador do show
+        when(securityUtils.getUsuarioLogado()).thenReturn(outroProduto);
+        when(showRepository.findById(1L)).thenReturn(Optional.of(show));
+
+        RequestAlocacaoDto dto = new RequestAlocacaoDto(1L, 5L);
+
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> alocacaoService.criarAlocacao(dto));
+        assertThat(ex.getMessage()).contains("criador do show");
+    }
+
+    @Test
+    void deveLancarExcecaoAoResponderAlocacaoDeOutroColaborador() {
+        ColaboradorEntity outroColaborador = new ColaboradorEntity();
+        outroColaborador.setId(77L);
+
+        // logado é diferente do colaborador da alocação
+        when(securityUtils.getUsuarioLogado()).thenReturn(outroColaborador);
+
+        AlocacaoEntity alocacao = new AlocacaoEntity();
+        alocacao.setId(1L);
+        alocacao.setShow(show);
+        alocacao.setColaborador(colaborador); // colaborador.id = 5, outroColaborador.id = 77
+        alocacao.setStatus(StatusAlocacao.PENDENTE);
+
+        when(alocacaoRepository.findById(1L)).thenReturn(Optional.of(alocacao));
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> alocacaoService.responderAlocacao(1L, StatusAlocacao.ACEITO));
+        assertThat(ex.getMessage()).contains("colaborador alocado");
+    }
+
+    @Test
     void deveListarAlocacoesPorShow() {
+        // Produtor lista alocações do seu show
+        when(securityUtils.getUsuarioLogado()).thenReturn(produtor);
+        when(showRepository.findById(1L)).thenReturn(Optional.of(show));
+
         AlocacaoEntity alocacao1 = new AlocacaoEntity();
         alocacao1.setId(1L);
         alocacao1.setShow(show);

@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.Graxa_API.Graxa_API.Repository.CredenciaisUsuarioRepository;
+
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,6 +34,8 @@ class NotificacaoControllerTest {
     private NotificacaoService notificacaoService;
     @MockitoBean
     private NotificacaoWebSocketService notificacaoWebSocketService;
+    @MockitoBean
+    private CredenciaisUsuarioRepository credenciaisUsuarioRepository;
 
 
     // -------------------------------------------------------------

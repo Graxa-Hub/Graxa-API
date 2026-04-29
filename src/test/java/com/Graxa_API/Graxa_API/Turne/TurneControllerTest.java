@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.Graxa_API.Graxa_API.Repository.CredenciaisUsuarioRepository;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -36,6 +38,9 @@ class TurneControllerTest {
 
     @MockitoBean
     private TurneService turneService;
+
+    @MockitoBean
+    private CredenciaisUsuarioRepository credenciaisUsuarioRepository;
 
     private final String jsonTurne = """
         {

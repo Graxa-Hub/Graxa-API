@@ -108,5 +108,35 @@ class NotificacaoServiceTest {
         when(notificacaoRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
         NotificacaoEntity result = notificacaoService.marcarComoLidaEntity(10L);
+
+        assertTrue(result.isLida());
+        verify(notificacaoRepository).save(notif);
+    }
+
+    @Test
+    void naoDeveSalvarNotificacaoQuandoColaboradorNaoExiste() {
+        when(colaboradorRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class,
+                () -> notificacaoService.criarNotificacao(999L, "Mensagem", "TIPO"));
+
+        verifyNoInteractions(notificacaoRepository);
+    }
+
+    @Test
+    void deveRetornarListaVaziaQuandoNaoHaNotificacoes() {
+        when(notificacaoRepository.findByColaboradorId(1L)).thenReturn(List.of());
+
+        List<NotificacaoEntity> result = notificacaoService.listarPorColaboradorEntity(1L);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoNotificacaoNaoEncontradaParaMarcarComoLida() {
+        when(notificacaoRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> notificacaoService.marcarComoLidaEntity(999L));
+        verify(notificacaoRepository, never()).save(any());
     }
 }
