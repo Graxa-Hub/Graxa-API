@@ -35,8 +35,18 @@ public class RecuperarSenhaUseCase {
 
         emailGateway.enviar(
                 credencial.getEmail(),
-                "Código de Recuperação de Senha",
-                "Seu código de recuperação é: " + codigo.getValor()
+                "Recuperação de senha - Graxa",
+                """
+                Olá,
+            
+                Recebemos uma solicitação para redefinir sua senha.
+            
+                🔐 Código de verificação: %s
+            
+                Este código expira em alguns minutos. Caso você não tenha solicitado a recuperação, ignore este e-mail.
+            
+                — Equipe Graxa
+                """.formatted(codigo.getValor())
         );
     }
 

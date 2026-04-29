@@ -291,7 +291,21 @@ public class NotificacaoService {
     private void enviarEmailNotificacao(String email, String tipo, String mensagem) {
         try {
             String assunto = resolverAssunto(tipo);
-            emailGateway.enviar(email, assunto, mensagem);
+
+            String corpo = """
+        Olá,
+
+        Você recebeu uma nova notificação no sistema Graxa:
+
+        📢 %s
+
+        Acesse o sistema para mais detalhes.
+
+        — Equipe Graxa
+        """.formatted(mensagem);
+
+            emailGateway.enviar(email, assunto, corpo);
+
             logger.info("📧 E-mail de notificação enviado para {}", email);
         } catch (Exception e) {
             logger.error("❌ Falha ao enviar e-mail de notificação para {}: {}", email, e.getMessage(), e);
