@@ -30,6 +30,14 @@ public class CredenciaisUsuarioEntity implements Identifiable{
 
     private LocalDateTime codigoExpiraEm;
 
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean lgpdConsentimento = false;
+
+    private LocalDateTime dataConsentimentoLgpd;
+
+    @Column(length = 45)
+    private String ipConsentimento;
+
     public CredenciaisUsuarioEntity() {}
 
 
@@ -91,5 +99,29 @@ public class CredenciaisUsuarioEntity implements Identifiable{
 
     public void setCodigoExpiraEm(LocalDateTime codigoExpiraEm) {
         this.codigoExpiraEm = codigoExpiraEm;
+    }
+
+    public boolean isLgpdConsentimento() {
+        return lgpdConsentimento;
+    }
+
+    public void setLgpdConsentimento(boolean lgpdConsentimento) {
+        this.lgpdConsentimento = lgpdConsentimento;
+    }
+
+    public LocalDateTime getDataConsentimentoLgpd() {
+        return dataConsentimentoLgpd;
+    }
+
+    public void setDataConsentimentoLgpd(LocalDateTime dataConsentimentoLgpd) {
+        this.dataConsentimentoLgpd = dataConsentimentoLgpd;
+    }
+
+    public String getIpConsentimento() {
+        return ipConsentimento;
+    }
+
+    public void setIpConsentimento(String ipConsentimento) {
+        this.ipConsentimento = ipConsentimento;
     }
 }

@@ -38,12 +38,12 @@ public class ColaboradorService {
         return ResponseEntity.ok(ResponseUsuarioDto.toResponse(usuario));
     }
 
-    public ResponseEntity<ResponseUsuarioDto> cadastrar(RequestUsuarioDto dto) {
+    public ResponseEntity<ResponseUsuarioDto> cadastrar(RequestUsuarioDto dto, String ipConsentimento) {
         if (repository.existsByCpfAllIgnoreCase(dto.cpf())) {
             throw new CpfDuplicadoException();
         }
 
-        ColaboradorEntity colaborador = (ColaboradorEntity) factory.criarUsuario(dto);
+        ColaboradorEntity colaborador = (ColaboradorEntity) factory.criarUsuario(dto, ipConsentimento);
         ColaboradorEntity salvo = repository.save(colaborador);
         return ResponseEntity.status(201).body(ResponseUsuarioDto.toResponse(salvo));
     }

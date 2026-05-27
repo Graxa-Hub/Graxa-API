@@ -78,6 +78,9 @@ CREATE TABLE IF NOT EXISTS credenciais_usuario_entity (
   data_hora_ultimo_acesso DATETIME(6),
   codigo_recuperacao      VARCHAR(255),
   codigo_expira_em        DATETIME(6),
+  lgpd_consentimento      BOOLEAN NOT NULL DEFAULT FALSE,
+  data_consentimento_lgpd DATETIME(6),
+  ip_consentimento        VARCHAR(45),
   CONSTRAINT fk_cred_usuario FOREIGN KEY (usuario_id)
     REFERENCES colaborador_entity(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

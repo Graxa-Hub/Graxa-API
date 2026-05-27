@@ -11,6 +11,7 @@ import com.Graxa_API.Graxa_API.dto.UsuarioDto.RequestUsuarioDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -23,14 +24,17 @@ public class UsuarioFactory {
     }
 
     public Object criarUsuario(Object dto) {
+        return criarUsuario(dto, null);
+    }
+
+    public Object criarUsuario(Object dto, String ipConsentimento) {
         if (dto instanceof RequestArtistaDto artistaDto) {
             return criarArtista(artistaDto);
         } else if (dto instanceof RequestUsuarioDto colaboradorDto) {
-            return criarColaborador(colaboradorDto);
-        }else if(dto instanceof RequestRepresentanteDto representanteDto){
+            return criarColaborador(colaboradorDto, ipConsentimento);
+        } else if (dto instanceof RequestRepresentanteDto representanteDto) {
             return criarRepresentante(representanteDto);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Tipo de DTO desconhecido");
         }
     }
@@ -51,7 +55,7 @@ public class UsuarioFactory {
         return representante;
     }
 
-    private ColaboradorEntity criarColaborador(RequestUsuarioDto dto) {
+    private ColaboradorEntity criarColaborador(RequestUsuarioDto dto, String ipConsentimento) {
         ColaboradorEntity colaborador = new ColaboradorEntity();
         colaborador.setNome(dto.nome());
         colaborador.setCpf(dto.cpf());
@@ -65,6 +69,14 @@ public class UsuarioFactory {
         credenciais.setEmail(dto.email());
         credenciais.setSenha(passwordEncoder.encode(dto.senha()));
         credenciais.setUsuario(colaborador);
+
+        // LGPD
+        if (Boolean.TRUE.equals(dto.lgpdConsentimento())) {
+            credenciais.setLgpdConsentimento(true);
+            credenciais.setDataConsentimentoLgpd(LocalDateTime.now());
+            credenciais.setIpConsentimento(ipConsentimento);
+        }
+
         colaborador.setCredenciais(credenciais);
 
         // Telefone

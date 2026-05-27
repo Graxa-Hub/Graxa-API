@@ -11,6 +11,7 @@ import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,8 +45,9 @@ public class AuthController {
 
     @Operation(summary = "Registra um novo usuário e retorna o token de autenticação")
     @PostMapping("/register")
-    public ResponseEntity<?> registrar(@Valid @RequestBody RequestUsuarioDto usuarioDto) {
-        ResponseEntity<ResponseUsuarioDto> usuarioCriado = colaboradorService.cadastrar(usuarioDto);
+    public ResponseEntity<?> registrar(@Valid @RequestBody RequestUsuarioDto usuarioDto, HttpServletRequest request) {
+        String ip = resolverIpCliente(request);
+        ResponseEntity<ResponseUsuarioDto> usuarioCriado = colaboradorService.cadastrar(usuarioDto, ip);
 
         if (usuarioCriado.getBody() == null) {
             return ResponseEntity.badRequest().body("Erro ao cadastrar usuário");
@@ -74,6 +76,14 @@ public class AuthController {
     private ResponseEntity<?> loginBloqueado(RequestLoginDto dto, RequestNotPermitted ex) {
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                 .body("Muitas tentativas de login. Aguarde 15 segundos.");
+    }
+
+    private String resolverIpCliente(HttpServletRequest request) {
+        String forwarded = request.getHeader("X-Forwarded-For");
+        if (forwarded != null && !forwarded.isBlank()) {
+            return forwarded.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
     }
 
 }

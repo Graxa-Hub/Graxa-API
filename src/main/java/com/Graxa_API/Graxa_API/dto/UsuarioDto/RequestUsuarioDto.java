@@ -3,6 +3,7 @@ package com.Graxa_API.Graxa_API.dto.UsuarioDto;
 import com.Graxa_API.Graxa_API.Enums.TipoUsuario;
 import com.Graxa_API.Graxa_API.dto.TelefoneDto.RequestTelefoneDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -49,7 +50,11 @@ public record RequestUsuarioDto(
 
         @Schema(description = "Telefone principal do usuário")
         @NotNull(message = "Telefone obrigatório")
-        RequestTelefoneDto telefone
+        RequestTelefoneDto telefone,
 
+        @Schema(description = "Aceite dos termos de uso e política de privacidade (LGPD)", example = "true")
+        @NotNull(message = "É necessário informar o aceite dos termos LGPD")
+        @AssertTrue(message = "Você deve aceitar os termos da LGPD para prosseguir")
+        Boolean lgpdConsentimento
 
 ) {}
