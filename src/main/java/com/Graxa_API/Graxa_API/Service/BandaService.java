@@ -17,16 +17,16 @@ import com.Graxa_API.Graxa_API.dto.BandaDto.RequestBandaDto;
 import com.Graxa_API.Graxa_API.dto.BandaDto.RequestIntegrantesDto;
 import com.Graxa_API.Graxa_API.dto.BandaDto.ResponseBandaDto;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BandaService {
@@ -35,14 +35,14 @@ public class BandaService {
     private final ArtistaRepository artistaRepository;
     private final RepresentanteRepository representanteRepository;
     private final ImagemService imagemService;
-    private final SecurityUtils securityUtils;  // ← novo
+    private final SecurityUtils securityUtils;
 
     public BandaService(
             BandaRepository repository,
             ArtistaRepository artistaRepository,
             RepresentanteRepository representanteRepository,
             ImagemService imagemService,
-            SecurityUtils securityUtils  // ← novo
+            SecurityUtils securityUtils
     ) {
         this.repository = repository;
         this.artistaRepository = artistaRepository;
@@ -51,14 +51,14 @@ public class BandaService {
         this.securityUtils = securityUtils;
     }
 
-    // Produtor só vê suas próprias bandas
     public Page<ResponseBandaDto> getBandas(Pageable pageable) {
         ColaboradorEntity logado = securityUtils.getUsuarioLogado();
         Page<BandaEntity> bandas = repository.findByAtivoTrueAndCriadoPorId(logado.getId(), pageable);
         return bandas.map(ResponseBandaDto::toResponse);
     }
 
-    public ResponseEntity<ResponseBandaDto> getBandaPorId(Long id) {
+    @Cacheable(cacheNames = "bandas", key = "#id + '-' + @securityUtils.getUsuarioLogado().getId()")
+    public ResponseBandaDto getBandaPorId(Long id) {
         ColaboradorEntity logado = securityUtils.getUsuarioLogado();
         BandaEntity banda = repository.findById(id)
                 .orElseThrow(() -> new BandaNaoEncontradaException(id));
@@ -67,14 +67,14 @@ public class BandaService {
             throw new RuntimeException("Acesso negado");
         }
 
-        return ResponseEntity.ok(ResponseBandaDto.toResponse(banda));
+        return ResponseBandaDto.toResponse(banda);
     }
 
+    @CachePut(cacheNames = "bandas", key = "#result.id() + '-' + @securityUtils.getUsuarioLogado().getId()")
     @Transactional
-    public ResponseEntity<ResponseBandaDto> criarBanda(RequestBandaDto dto, MultipartFile foto) throws IOException {
+    public ResponseBandaDto criarBanda(RequestBandaDto dto, MultipartFile foto) throws IOException {
         ColaboradorEntity logado = securityUtils.getUsuarioLogado();
 
-        // Duplicada apenas se for do mesmo criador
         if (repository.existsByNomeAndCriadoPorId(dto.nome(), logado.getId())) {
             throw new BandaDuplicadaException(dto.nome());
         }
@@ -94,15 +94,16 @@ public class BandaService {
             if (imagemSalva != null) banda.setNomeFoto(imagemSalva.getNomeArquivo());
         }
 
-        return ResponseEntity.status(201).body(ResponseBandaDto.toResponse(repository.save(banda)));
+        return ResponseBandaDto.toResponse(repository.save(banda));
     }
+
+    @CachePut(cacheNames = "bandas", key = "#bandaId + '-' + @securityUtils.getUsuarioLogado().getId()")
     @Transactional
-    public ResponseEntity<ResponseBandaDto> adicionarIntegranteBanda(Long bandaId, RequestIntegrantesDto dto) {
+    public ResponseBandaDto adicionarIntegranteBanda(Long bandaId, RequestIntegrantesDto dto) {
         ColaboradorEntity logado = securityUtils.getUsuarioLogado();
         BandaEntity banda = repository.findById(bandaId)
                 .orElseThrow(() -> new BandaNaoEncontradaException(bandaId));
 
-        // Só o criador pode adicionar integrantes
         if (!banda.getCriadoPor().getId().equals(logado.getId())) {
             throw new RuntimeException("Acesso negado");
         }
@@ -115,16 +116,16 @@ public class BandaService {
         banda.getIntegrantes().addAll(integrantes);
         repository.save(banda);
 
-        return ResponseEntity.ok(ResponseBandaDto.toResponse(banda));
+        return ResponseBandaDto.toResponse(banda);
     }
 
+    @CachePut(cacheNames = "bandas", key = "#id + '-' + @securityUtils.getUsuarioLogado().getId()")
     @Transactional
-    public ResponseEntity<ResponseBandaDto> atualizarBanda(Long id, RequestBandaDto dto, MultipartFile foto) throws IOException {
+    public ResponseBandaDto atualizarBanda(Long id, RequestBandaDto dto, MultipartFile foto) throws IOException {
         ColaboradorEntity logado = securityUtils.getUsuarioLogado();
         BandaEntity banda = repository.findById(id)
                 .orElseThrow(() -> new BandaNaoEncontradaException(id));
 
-        // Só o criador pode atualizar
         if (!banda.getCriadoPor().getId().equals(logado.getId())) {
             throw new RuntimeException("Acesso negado");
         }
@@ -144,16 +145,16 @@ public class BandaService {
             if (imagemSalva != null) banda.setNomeFoto(imagemSalva.getNomeArquivo());
         }
 
-        return ResponseEntity.ok(ResponseBandaDto.toResponse(repository.save(banda)));
+        return ResponseBandaDto.toResponse(repository.save(banda));
     }
 
+    @CacheEvict(cacheNames = "bandas", key = "#bandaId + '-' + @securityUtils.getUsuarioLogado().getId()")
     @Transactional
     public void deletarBanda(Long bandaId) {
         ColaboradorEntity logado = securityUtils.getUsuarioLogado();
         BandaEntity banda = repository.findById(bandaId)
                 .orElseThrow(() -> new BandaNaoEncontradaException(bandaId));
 
-        // Só o criador pode deletar
         if (!banda.getCriadoPor().getId().equals(logado.getId())) {
             throw new RuntimeException("Acesso negado");
         }
@@ -164,6 +165,7 @@ public class BandaService {
         }
         repository.save(banda);
     }
+
     public List<ResponseBandaDto> getBandasPorNome(String nome) {
         List<BandaEntity> bandas = repository.findByNomeContainingIgnoreCaseAndAtivoTrue(nome);
 
@@ -175,6 +177,4 @@ public class BandaService {
                 .map(ResponseBandaDto::toResponse)
                 .toList();
     }
-
 }
-

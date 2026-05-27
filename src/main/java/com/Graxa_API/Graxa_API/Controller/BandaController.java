@@ -33,7 +33,6 @@ public class BandaController {
 
     @GetMapping
     @Operation(summary = "Listar todas as bandas")
-
     public ResponseEntity<Page<ResponseBandaDto>> getBandas(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -46,52 +45,50 @@ public class BandaController {
 
     @GetMapping("/buscar")
     @Operation(summary = "Buscar bandas por nome")
-
     public ResponseEntity<List<ResponseBandaDto>> getBandasPorNome(@RequestParam String nome) {
         return ResponseEntity.ok(service.getBandasPorNome(nome));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar banda por ID")
-
     public ResponseEntity<ResponseBandaDto> getBandaPorId(@PathVariable Long id) {
-        return service.getBandaPorId(id);
+        long inicio = System.currentTimeMillis();
+        ResponseBandaDto banda = service.getBandaPorId(id);
+        long fim = System.currentTimeMillis();
+        System.out.println("GET /bandas/" + id + " demorou " + (fim - inicio) + "ms");
+        return ResponseEntity.ok(banda);
     }
 
     @PostMapping
     @Operation(summary = "Criar nova banda")
-
     public ResponseEntity<ResponseBandaDto> criarBanda(
             @RequestPart("dados") @Valid RequestBandaDto dto,
             @RequestPart(value = "foto", required = false) MultipartFile foto
     ) throws IOException {
-        return service.criarBanda(dto, foto);
+        return ResponseEntity.status(201).body(service.criarBanda(dto, foto));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar banda")
-
     public ResponseEntity<ResponseBandaDto> atualizarBanda(
             @PathVariable Long id,
             @RequestPart("dados") @Valid RequestBandaDto dto,
             @RequestPart(value = "foto", required = false) MultipartFile foto
     ) throws IOException {
-        return service.atualizarBanda(id, dto, foto);
+        return ResponseEntity.ok(service.atualizarBanda(id, dto, foto));
     }
 
     @PostMapping("/{id}/integrantes")
     @Operation(summary = "Adicionar integrantes à banda")
-
     public ResponseEntity<ResponseBandaDto> adicionarIntegrante(
             @PathVariable Long id,
             @RequestBody @Valid RequestIntegrantesDto dto
     ) {
-        return service.adicionarIntegranteBanda(id, dto);
+        return ResponseEntity.ok(service.adicionarIntegranteBanda(id, dto));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Realizar um safe delete à banda")
-
     public ResponseEntity<Void> deletarBanda(@PathVariable Long id) {
         service.deletarBanda(id);
         return ResponseEntity.noContent().build();
